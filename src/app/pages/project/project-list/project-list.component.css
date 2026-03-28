@@ -1,0 +1,30 @@
+.contenido{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap:15px
+}
+
+.item{
+    display: flex;
+    
+}
+
+
+.busc{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-group-append,
+.selecttyp,
+.inputb{
+    display: flex;
+}
+
+.doctor-refresh{
+    border-radius: 100px;
+}

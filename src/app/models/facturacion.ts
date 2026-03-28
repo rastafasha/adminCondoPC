@@ -1,0 +1,38 @@
+import { User } from "./user"
+
+export interface DetalleFactura {
+    origen: 'RESIDENCIA' | 'LOCAL' | 'OFICINA' | 'EXTRA';
+    propiedadId: string; 
+    montoBase: number;
+    descripcion: string;
+}
+
+export class Facturacion {
+    _id?: string; 
+    usuario?: User;
+    nroFactura?: string;
+    mes!: number; 
+    anio!: number;
+    
+    detalles: DetalleFactura[]; 
+
+    // --- Campos de Impuestos ---
+    porcentajeIva: number;
+    aplicaRetencion: boolean;
+    montoRetencion: number;
+    otrosCargos: number;
+
+    // --- Calculado (Virtual en el Backend) ---
+    totalPagar?: number; // Lo marcamos opcional porque viene del backend
+
+    estado: 'PENDIENTE' | 'PAGADO' | 'ANULADO';
+
+    constructor() {
+        this.estado = 'PENDIENTE';
+        this.detalles = [];
+        this.aplicaRetencion = false;
+        this.porcentajeIva = 16;
+        this.otrosCargos = 0;
+        this.montoRetencion = 0;
+    }
+}  

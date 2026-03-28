@@ -1,0 +1,164 @@
+<div class="modal fade" id="editProject" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="projectModalLabel">{{title}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="onClose()"></button>
+            </div>
+            <div class="modal-body">
+                <app-loading *ngIf="isLoading"></app-loading>
+                <div class="container" *ngIf="!isLoading">
+
+                    <form *ngIf="projectForm" class="form-horizontal form-material" (ngSubmit)="handleSubmit()"
+                        [formGroup]="projectForm" >
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <label>Nombre del Proyecto <span class="required">*</span></label>
+                                <input type="text" formControlName="name" class="form-control" required>
+                                <div *ngIf="projectForm.get('name')?.touched" class="text-danger">
+                                    <div *ngIf="projectForm.get('name')?.errors?.['required']">
+                                        Campo Requerido
+                                    </div>
+                                    <div *ngIf="projectForm.get('name')?.errors?.['minlength']">
+                                        Mínimo 3 Caracteres
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <label>Instagram<span class="required">*</span></label>
+                                <input type="text" formControlName="rrss" class="form-control">
+                                <div *ngIf="projectForm.get('rrss')?.touched && projectForm.get('rrss')?.errors?.['required']"
+                                    class="text-danger">Campo Requerido</div>
+
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <label>¿Tiene sitio Web?</label>
+                                <input type="text" formControlName="url" class="form-control">
+
+                            </div>
+
+                            <!-- <div class="col-xs-12 col-md-6 ">
+                                <label>Categoría<span class="required">*</span></label>
+                                <div class="input-group">
+                                    <select class="form-control" formControlName="category">
+                                        <option value="">Seleccione</option>
+                                        <option *ngFor="let data of categorias" [value]="data._id">
+                                            {{data.nombre}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="projectForm.get('category')?.touched && projectForm.get('category')?.errors?.['required']"
+                                        class="text-danger">Campo Requerido</div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 ">
+                                <label>Pais<span class="required">*</span></label>
+                                <div class="input-group">
+                                    <select class="form-control" formControlName="pais">
+                                        <option value="">Seleccione</option>
+                                        <option *ngFor="let data of paises" [value]="data._id">
+                                            {{data.pais}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="projectForm.get('pais')?.touched && projectForm.get('pais')?.errors?.['required']"
+                                        class="text-danger">Campo Requerido</div>
+                                </div>
+                            </div> -->
+                            <div class="col-xs-12 col-md-6">
+                                <label>Ubicación <span class="required">*</span></label>
+                                <input type="text" formControlName="ubicacion" class="form-control">
+                                <div *ngIf="projectForm.get('ubicacion')?.touched && projectForm.get('ubicacion')?.errors?.['required']"
+                                    class="text-danger">Campo Requerido</div>
+
+                            </div>
+
+                            <div class="clear"></div>
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" formControlName="hasMenu" type="checkbox"
+                                            id="flexCheckhasMenu">
+                                        <label class="form-check-label" for="flexCheckhasMenu">
+                                            ¿Tiene Menú ? <span class="required">*</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-6">
+                                    <label>Tipo Menu <span class="required">*</span></label>
+                                    <input type="text" formControlName="tipoMenu" class="form-control">
+                                    <div *ngIf="projectForm.get('tipoMenu')?.touched && projectForm.get('tipoMenu')?.errors?.['required']"
+                                        class="text-danger">Campo Requerido</div>
+
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            <br>
+
+
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" formControlName="notificado" type="checkbox"
+                                        id="flexChecknotificado">
+                                    <label class="form-check-label" for="flexChecknotificado">
+                                        ¿Se le envio propuesta?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" formControlName="status" type="checkbox"
+                                        id="flexCheckstatus">
+                                    <label class="form-check-label" for="flexCheckstatus">
+                                        ¿Aprobado Cliente?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            <br>
+                            <div class="col-xs-12 col-md-6">
+                                <label>Fecha de Visitado<span class="required">*</span></label>
+                                <input type="date" formControlName="dateVisita" class="form-control">
+                                <div *ngIf="projectForm.get('dateVisita')?.touched && projectForm.get('dateVisita')?.errors?.['required']"
+                                    class="text-danger">Campo Requerido</div>
+
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <label>Fecha Aprobaciǿn<span class="required">*</span></label>
+                                <input type="date" formControlName="dateAprobado" class="form-control">
+                                <div *ngIf="projectForm.get('dateAprobado')?.touched && projectForm.get('dateAprobado')?.errors?.['required']"
+                                    class="text-danger">Campo Requerido</div>
+
+                            </div>
+
+                            <!-- <div class="col-xs-12 col-md-6">
+                                <label>Subir PDF<span class="required">*</span></label>
+                                <input type="file" class="cz-file-drop-input"
+                                    (change)="cambiarImagen($event.target.files[0])">
+                                <br>
+                                <br>
+                                <button type="button" [disabled]="!imagenSubir" (click)="subirImagen()"
+                                    class="btn btn-success waves-effect waves-light m-r-10 ">
+                                    <i class="fa fa-save"></i> Cambiar imagen
+                                </button>
+
+                            </div> -->
+
+                        </div>
+
+                        <button class="btn btn-outline-success waves-effect waves-light m-r-10"
+                            type="submit">Guardar</button>
+
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="onClose()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
