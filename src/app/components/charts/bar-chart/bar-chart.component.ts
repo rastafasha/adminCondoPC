@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { PaymentService } from '../../../services/payment.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-bar-chart',
-  imports:[CommonModule ],
+  imports:[CommonModule, FormsModule ],
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.css']
 })

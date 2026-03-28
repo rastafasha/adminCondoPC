@@ -1,0 +1,95 @@
+<!-- =======| Main |======= -->
+<div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
+    <!-- <app-backbreadcum [title]="title" ></app-backbreadcum> -->
+    <app-loading *ngIf="isLoading"></app-loading>
+    <div class="row animated fadeInUp" *ngIf="!isLoading">
+
+
+        <section class="section dashboard">
+            <div class="row mb-5">
+                <div class="col-xs-12 col-sm-8">
+                    <!-- <app-bar-chart [payments]="payments"></app-bar-chart> -->
+                    <!-- <app-line-chart  ></app-line-chart> -->
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <!-- <app-pie-chart2 [payments]="payments"></app-pie-chart2> -->
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- buscador -->
+                    <form class="form-horizontal">
+                        <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+                            <div class="input-group">
+                                <input type="search" name="search" type="text" class="form-control col-xs-12"
+                                    placeholder="Buscar.." [(ngModel)]="query" aria-describedby="button-addon1"
+                                    class="form-control border-0 bg-light">
+                                <div class="input-group-append">
+                                    <button id="button-addon1" type="submit" class="btn btn-link text-primary circle"
+                                        (click)="search()" name="submit" data-toggle="tooltip" title="mostrar todos"><i
+                                            class="fa fa-search"></i></button>
+                                    <a href="javascript:;" (click)="PageSize()"
+                                        class="btn btn-primary doctor-refresh ms-2 circle"><i
+                                            class="fa fa-refresh"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- buscador -->
+                </div>
+            </div>
+            <div class="card recent-sales overflow-auto border-radio">
+                <div class="card-body">
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <table class="table table-borderless datatable">
+                        <thead>
+                            <tr>
+                                <th scope="col">nroFactura</th>
+                                <th scope="col">usuario</th>
+                                <th scope="col">mes</th>
+                                <th scope="col">anio</th>
+                                <th scope="col">aplicaRetencion </th>
+                                <th scope="col">porcentajeIva </th>
+                                <th scope="col">montoRetencion </th>
+                                <th scope="col">otrosCargos </th>
+                                <th scope="col">estado</th>
+                                <th scope="col">Creado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let factura of facturas |  paginate: { itemsPerPage: count, currentPage: p }">
+                                
+                                <th scope="row">
+                                    <a [routerLink]="['/dashboard/payment-detail', factura._id]">{{factura.nroFactura}}</a>
+                                </th>
+                                <th><a [routerLink]="['/dashboard/user/detail/', factura.usuario]">{{factura.usuario}}</a>
+                                </th>
+                                
+                                <td>{{factura.mes}}</td>
+                                <td>{{factura.anio}}</td>
+                                <td>{{factura.aplicaRetencion}}</td>
+                                <td>% {{factura.porcentajeIva}}</td>
+                                <td>% {{factura.montoRetencion}}</td>
+                                <td>{{factura.otrosCargos|currency:'Bs.'}}</td>
+                                <td>
+                                    <span class="badge bg-success" *ngIf="factura.estado === 'PAGADO'">Pagado</span>
+                                    <span class="badge bg-primary" *ngIf="factura.estado === 'PENDIENTE'">Pendiente</span>
+                                    <span class="badge bg-danger" *ngIf="factura.estado === 'ANULADO'">Anulado</span>
+                                </td>
+                                <td>{{factura.createdAt | date:'MMM d, y, h:mm:ss a'}}</td>
+
+                                
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>
+<!-- End #main-->

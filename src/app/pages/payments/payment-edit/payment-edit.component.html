@@ -1,0 +1,74 @@
+<!-- =======| Main |======= -->
+<div class="container animated fadeInUp" id="main" class="main" role="main" name="users">
+
+    <div class="col-xs-12">
+        <div class="leftside">
+            <!-- Page Title -->
+            <div class="pagetitle">
+                <h1><i class="bx bxs-user-account"></i> {{title}}</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/"><i class="fa fa-home"></i> Inicio</a></li>
+                        <li class="breadcrumb-item"><a routerLink="/dashboard/payments">Pagos</a></li>
+                        <li class="breadcrumb-item active">{{title}}</li>
+                    </ol>
+                </nav>
+            </div>
+            <!-- End Page Title -->
+        </div>
+        <div class="buton">
+            <button class="btn btn-outline-danger pull-right" href="javascript:void(0)" (click)="goBack()">Volver</button>
+        </div>
+        <div class="clear"></div>
+
+        <section class="section dashboard">
+
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- <h4 class="card-title" *ngIf="paymentSeleccionado">{{title}}: {{planSeleccionado.name}}</h4> -->
+                            <h4 class="card-title">{{title}}</h4>
+                            <form class="form p-t-20 form-horizontal form-material" [formGroup]="paymentForm" (submit)="updateBlog()">
+                                <div class="form-group" style="margin-bottom: 25px;">
+                                    <label for="exampleInputuname">Status<span class="required">*</span></label>
+                                    <div class="input-group">
+                                        <select name="" id="input" class="form-control" formControlName="status" required="required">
+                                      <option value="">Seleccione</option>
+                                      <option value="APPROVED">Aprobado</option>
+                                      <option value="PENDING">Pendiente</option>
+                                      <option value="REJECTED">Rechazado</option>
+                                    </select>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="form-group" style="margin-bottom: 25px;">
+                                    <label for="exampleInputuname">Validación<span class="required">*</span></label>
+                                    <div class="input-group">
+                                        <select name="" id="input" class="form-control" formControlName="validacion" required="required">
+                                    <option value="">Seleccione</option>
+                                    <option value="APPROVED">Aprobado</option>
+                                      <option value="PENDING">Pendiente</option>
+                                      <option value="REJECTED">Rechazado</option>
+                                  </select>
+
+                                    </div>
+                                </div>
+
+                                <button type="submit" [disabled]="paymentForm.invalid" class="btn btn-success waves-effect waves-light m-r-10 btn-block">
+                   <i class="fa fa-save"></i> Guardar cambios
+                  </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+</div>
+<!--/main-->

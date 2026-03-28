@@ -14,7 +14,7 @@ export class Payment {
     
     metodo_pago?: 'TRANSFERENCIA'| 'PAGO_MOVIL'| 'EFECTIVO'| 'ZELLE';
     status?: 'PENDIENTE'| 'APROBADO'| 'RECHAZADO';
-    fecha_verificacion?: Date;
+    fecha_pago?: Date;
     createdAt?: Date;
     updatedAt?: Date;
 

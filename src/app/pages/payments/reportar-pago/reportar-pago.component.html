@@ -1,0 +1,220 @@
+<!-- =======| Main |======= -->
+<div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
+
+    <div class="row">
+        <div class="leftside">
+            <!-- Page Title -->
+            <div class="pagetitle">
+                <h1><i class="bx bxs-user-account"></i> {{title}}</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/"><i class="bi bi-house"></i> Inicio</a></li>
+                        <li class="breadcrumb-item active">{{title}}</li>
+                    </ol>
+                </nav>
+            </div>
+            <!-- End Page Title -->
+        </div>
+        <div class="buton">
+            <button class="btn btn-outline-danger pull-right pull-right" href="javascript:void(0)" (click)="goBack()">Volver</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body pt-3">
+            <!--external Bordered Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered">
+
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#instrucci">Instrucciones</button>
+                </li>
+
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#formulario">Formulario</button>
+                </li>
+
+
+            </ul>
+            <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="instrucci">
+                    <div class="instruccioness pagarinfo shadow ">
+                        <!-- <img src="./assets/img/paypal-pay01.png" alt=""> -->
+                        <div class="info">
+                            <h2>¿Cómo reportar el pago?</h2>
+                            <ol>
+                                <li>Copie los datos suministrados para procesar el pago: <br>
+                                    <span>
+                                    <b>Metodo</b><br>
+                                    <b>Banco</b><br>
+                                   <b>Correo o Número de Cuenta</b><br>
+                                 <b>Monto</b><br>
+                                </span>
+                                </li><br>
+                                <li>Ingrese a la app o web del metodo de su preferencia,
+                                    <ul>
+                                        <li class="badge bg-primary">Paypal</li>
+                                        <li class="badge bg-primary">Zelle</li>
+                                        <li class="badge bg-primary">Pago Móvil</li>
+                                        <li class="badge bg-primary">Transferencia</li>
+                                    </ul>
+                                </li>
+                                <li>Ingrese los datos correctamente, y verifique antes de pagar </li>
+                                <li>Copiar el <b>Número de referencia</b> del pago o transferencia </li>
+                                <li>Dirigirse a nuestro <b>Formulario</b> y llenar los datos requeridos </li>
+                                <li>Pegar el <b>Número de referencia</b> en el campo correspondido </li>
+                                <li>Adjuntar la foto del pago </li>
+                                <li>Le indicaremos el cambio de status. </li>
+                            </ol>
+                        </div>
+
+                    </div>
+                    <div class="clear"></div>
+                    <div class="datosTranf">
+                        <div class="datos">
+                            <h3>Paypal</h3>
+                            <div class="clear"></div>
+                            <p><b>Metodo:</b> Paypal</p>
+                            <p><b>Correo:</b> correopaypal&#64;gmail.com</p>
+                            <p><b>Banco:</b> Paypal</p>
+                            <p><b>Requerido:</b> reference y photo</p>
+                        </div>
+                        <div class="datos">
+                            <h3>Zelle</h3>
+                            <div class="clear"></div>
+                            <p> <b>Metodo:</b> Zelle</p>
+                            <p><b>Correo:</b> correozelle&#64;gmail.com</p>
+                            <p><b>Banco:</b> nombre del banco</p>
+                            <p><b>Requerido:</b> reference y photo</p>
+                        </div>
+                        <div class="datos">
+                            <h3>Transferencia Bancaria</h3>
+                            <div class="clear"></div>
+                            <p> <b>Metodo:</b> Transferencia</p>
+                            <p><b>Banco:</b> nombre del banco</p>
+                            <p><b>Cuenta:</b> 0000-020320320320329</p>
+                            <p><b>CI o Rif:</b> J-123456789</p>
+                            <p><b>Requerido:</b> reference y photo</p>
+                        </div>
+                        <div class="datos">
+                            <h3>Pago Movil</h3>
+                            <div class="clear"></div>
+                            <p> <b>Metodo:</b> Pago Movil</p>
+                            <p><b>Banco:</b> banco</p>
+                            <p><b>Telf:</b> 0424-123345567</p>
+                            <p><b>CI o Rif:</b> J-123456789</p>
+                            <p><b>Requerido:</b> reference y photo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade pt-3" id="formulario">
+
+
+                    <section class="section dashboard">
+
+                        <form class="form-horizontal form-material formPagar" (submit)="updateForm()" enctype="multipart/form-data" [formGroup]="PaymentRegisterForm">
+                            <div class="container">
+
+                                <div class="col-xs-12 col-md-8 " style="float: left;">
+                                    <div class="formcompr">
+                                        <div class="div1">
+                                            <div class="form-group ">
+                                                <label for="">Tipo De transferencia</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" formControlName="metodo" (click)="verpaypal()" type="radio" value="Paypal" id="radiotipo1">
+                                                    <label class="form-check-label" for="radiotipo1">Paypal</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" formControlName="metodo" (click)="hidepaypal()" type="radio" value="Zelle" id="radiotipo2">
+                                                    <label class="form-check-label" for="radiotipo2">Zelle</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" formControlName="metodo" (click)="hidepaypal()" type="radio" value="Transferencia" id="radiotipo3">
+                                                    <label class="form-check-label" for="radiotipo3">Transferencia</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" formControlName="metodo" (click)="hidepaypal()" type="radio" value="Pago Movil" id="radiotipo4">
+                                                    <label class="form-check-label" for="radiotipo4">Pago Movil</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="div2">
+                                            <div class="form-group ">
+                                                <label for="">Nombre Banco </label>
+                                                <input type="text" formControlName="bank_name" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="div3">
+                                            <div class="form-group ">
+                                                <label for="">Num. referencia </label>
+                                                <input type="text" formControlName="referencia" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="div4">
+                                            <div class="form-group " *ngIf="!total">
+                                                <label for="">Monto</label>
+                                                <input type="text" formControlName="monto" class="form-control">
+                                            </div>
+                                            <div class="form-group " *ngIf="total">
+                                                <label for="">Monto</label>
+                                                <p>{{currenciesAll[0].name}} {{total}}</p>
+                                                <input type="text" formControlName="monto" class="form-control" placeholder="Ingrese el monto mostrado arriba">
+                                            </div>
+                                        </div>
+                                        <div class="div7">
+                                            <div class="form-group ">
+                                                <label for="">Nombre y Apellido(en cuenta pagadora) </label>
+                                                <input type="text" formControlName="nombre" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="div8">
+                                            <div class="form-group ">
+                                                <label for="">Email (en cuenta pagadora)</label>
+                                                <input type="text" formControlName="email" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-xs-12 col-md-4 imagenypaypal">
+                                    <div class="form-group form-row">
+
+                                        <p>Imagen del pago (requerido) <br> (peso max: 500kb )</p>
+                                       
+                                    </div>
+                                    <div class="vibiblepayp">
+                                        <!-- <app-cart></app-cart> -->
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="clear"></div><br>
+
+                            <button class="btn btn-outline-success " type="submit">Registrar Pago</button>
+
+
+                        </form>
+                    </section>
+                    <!-- Form -->
+
+                </div>
+
+
+
+            </div>
+            <!-- End Bordered Tabs -->
+
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+<!-- End #main-->

@@ -7,8 +7,6 @@ import { AuthGuard } from '../guards/auth.guard';
 import { ChildRoutesModule } from './child-routes.module';
 import {DashboardComponent} from './dashboard/dashboard.component';
 
-
-
 const routes: Routes = [
     {
         path: '',

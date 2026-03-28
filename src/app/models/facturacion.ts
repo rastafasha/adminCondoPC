@@ -26,6 +26,8 @@ export class Facturacion {
     totalPagar?: number; // Lo marcamos opcional porque viene del backend
 
     estado: 'PENDIENTE' | 'PAGADO' | 'ANULADO';
+    createdAt?: Date;
+    updatedAt?: Date;
 
     constructor() {
         this.estado = 'PENDIENTE';

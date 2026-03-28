@@ -1,3 +1,5 @@
+import { Facturacion } from "./facturacion";
+import { User } from "./user";
 
 export class Transferencia{
   constructor(
@@ -7,12 +9,18 @@ export class Transferencia{
         public metodo_pago: string,
         public amount: number,
         public referencia: string,
+        public factura: string,
         public paymentday: Date,
-        public status: boolean,
+        public status: 'PENDING'| 'APPROVED'| 'REJECTED',
         public createdAt: Date,
         public updatedAt: Date,
-        public _id?: string
+        public _id?: string,
+        public comprobante_img?: string
+      
+  ){
+    this.status = 'PENDING'; // Valor por defecto
+  }
 
-  ){}
+   
 
 }

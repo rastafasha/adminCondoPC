@@ -1,0 +1,8 @@
+.imagecircle{
+    width:40px; 
+    height:40px;
+    padding: 2px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    border-radius: 100px;
+}

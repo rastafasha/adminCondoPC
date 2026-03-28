@@ -11,6 +11,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
 import { ProjectListComponent } from './project/project-list/project-list.component';
 import { ProjectEditComponent } from './project/project-edit/project-edit.component';
+import { PaymentsComponent } from './payments/payments.component';
+import { TransferenciasComponent } from './payments/transferencias/transferencias.component';
+import { FacturacionComponent } from './payments/facturacion/facturacion.component';
 // import { CondicionesComponent } from './condiciones/condiciones.component';
 
 
@@ -33,12 +36,14 @@ const childRoutes: Routes = [
     { path: 'project/crear', component: ProjectEditComponent, data:{title:'Crear Proyecto'} },
     { path: 'project/edit/:id', component: ProjectEditComponent, data:{title:'Editar Proyecto'} },
     
-    // { path: 'payments', component: PaymentsComponent, data:{title:'Pago'} },
+    { path: 'payments', component: PaymentsComponent, data:{title:'Pagos'} },
     // { path: 'payments/:id', component: PaymentDetailsComponent, data:{title:'Pago'} },
     // { path: 'payment/crear', component: ReportarPagoComponent, data:{title:'Crear Pago'} },
     // { path: 'payment/edit/:id', component: ReportarPagoComponent, data:{title:'Editar Pago'} },
     // { path: 'payment-detail/:id', component: PaymentDetailsComponent, data:{title:'Revisar Pago'} },
-
+    
+    { path: 'trasnferencias', component: TransferenciasComponent, data:{title:'Transferencias'} },
+    { path: 'facturacion', component: FacturacionComponent, data:{title:'Facturación'} },
   
     //user
     { path: 'users', component: UsersComponent, data:{title:'Usuarios'} },

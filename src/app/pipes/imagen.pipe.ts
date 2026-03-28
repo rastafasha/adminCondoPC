@@ -8,7 +8,7 @@ const base_url = environment.apiUrlMedia;
 })
 export class ImagenPipe implements PipeTransform {
 
-  transform(img: string, tipo: 'profiles'|'payments'): string {
+  transform(img: string, tipo: 'profiles'|'payments'|'transferencias'): string {
 
     if(!img){
       return `${base_url}/${tipo}/no-image.jpg`;
