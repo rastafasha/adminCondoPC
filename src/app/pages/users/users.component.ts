@@ -14,10 +14,13 @@ import { BackButtnComponent } from '../../shared/backButtn/backButtn.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { UserRolePipe } from '../../pipes/user-role.pipe';
+import { AdminRolesPipe } from '../../pipes/admin-roles.pipe';
+
 @Component({
   selector: 'app-users',
   imports:[CommonModule, RouterLink, BackButtnComponent, NgxPaginationModule,
-    ReactiveFormsModule, FormsModule
+    ReactiveFormsModule, FormsModule, UserRolePipe, AdminRolesPipe
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']

@@ -1,0 +1,5 @@
+.preciodia{
+    display: flex;
+    flex-direction: row;
+    gap: 13px;
+}

@@ -34,7 +34,7 @@ export class TasabcvService {
       const url = `${baseUrl}/tasabcv`;
       return this.http.get<any>(url,this.headers)
         .pipe(
-          map((resp:{ok: boolean, tasabcvs: Tasabcv}) => resp.tasabcvs)
+          map((resp:{ok: boolean, tasas: Tasabcv}) => resp.tasas)
         )
     }
   
@@ -42,24 +42,24 @@ export class TasabcvService {
       const url = `${baseUrl}/tasabcv/${tasabcv}`;
       return this.http.get<any>(url, this.headers)
         .pipe(
-          map((resp:{ok: boolean, tasabcv: Tasabcv}) => resp.tasabcv)
+          map((resp:{ok: boolean, tasa: Tasabcv}) => resp.tasa)
           );
     }
   
   
-    createTasaBcv(tasabcv:any) {
-      const url = `${baseUrl}/tasabcv/crear`;
-      return this.http.post(url, tasabcv, this.headers);
+    createTasaBcv(tasa:any) {
+      const url = `${baseUrl}/tasa/crear`;
+      return this.http.post(url, tasa, this.headers);
     }
   
   
-    updateTasaBcv(tasabcv:Tasabcv, id: number) {
-      return this.http.put<any>(baseUrl + '/tasabcv/editar/' + id, tasabcv, this.headers)
+    updateTasaBcv(tasa:Tasabcv, id: number) {
+      return this.http.put<any>(baseUrl + '/tasa/editar/' + id, tasa, this.headers)
   
     }
   
-    deleteTasaBcv(tasabcv: any) {
-      const url = `${baseUrl}/tasabcv/borrar/${tasabcv}`;
+    deleteTasaBcv(tasa: any) {
+      const url = `${baseUrl}/tasa/borrar/${tasa}`;
       return this.http.delete(url, this.headers);
     }
 }

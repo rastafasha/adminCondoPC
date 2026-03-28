@@ -42,7 +42,6 @@ export class TasabcvComponent {
     this.tasaBcvService.getTasas().subscribe((resp: any) => {
       this.tasasbcv = resp;
       this.isLoading = false;
-      // console.log(this.tiposdepagos);
     });
   }
 

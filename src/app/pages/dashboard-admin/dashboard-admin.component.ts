@@ -5,10 +5,11 @@ import { PaymentService } from '../../services/payment.service';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { MenuiconosComponent } from '../../shared/menuiconos/menuiconos.component';
+import { TasadiabcvComponent } from '../../components/tasadiabcv/tasadiabcv.component';
 
 @Component({
   selector: 'app-dashboard-admin',
-  imports:[CommonModule, MenuiconosComponent],
+  imports:[CommonModule, MenuiconosComponent, TasadiabcvComponent],
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css']
 })
