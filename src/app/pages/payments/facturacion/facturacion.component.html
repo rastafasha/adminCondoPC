@@ -1,6 +1,7 @@
 <!-- =======| Main |======= -->
 <div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
-    <!-- <app-backbreadcum [title]="title" ></app-backbreadcum> -->
+    <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
+    <div class="clear"></div>
     <app-loading *ngIf="isLoading"></app-loading>
     <div class="row animated fadeInUp" *ngIf="!isLoading">
 

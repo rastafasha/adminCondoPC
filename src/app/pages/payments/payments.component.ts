@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule, Location, NgFor } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
@@ -11,6 +11,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { PieChart2Component } from '../../components/charts/pie-chart2/pie-chart2.component';
 import { BarChartComponent } from '../../components/charts/bar-chart/bar-chart.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
+import { BackButtnComponent } from '../../shared/backButtn/backButtn.component';
 
 @Component({
   selector: 'app-payments',
@@ -20,11 +21,13 @@ import { LoadingComponent } from '../../shared/loading/loading.component';
     // PieChart2Component, BarChartComponent,
     LoadingComponent,
     NgxPaginationModule, 
+    BackButtnComponent
    ],
   templateUrl: './payments.component.html',
   styleUrls: ['./payments.component.css'],
 })
 export class PaymentsComponent implements OnInit {
+  @Input() displaycomponent: string = 'block';
   title = 'Pagos';
 
   payments!: Payment[];

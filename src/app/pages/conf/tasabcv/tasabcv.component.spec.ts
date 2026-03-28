@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClientitemComponent } from './clientitem.component';
+import { TasabcvComponent } from './tasabcv.component';
 
-describe('ClientitemComponent', () => {
-  let component: ClientitemComponent;
-  let fixture: ComponentFixture<ClientitemComponent>;
+describe('TasabcvComponent', () => {
+  let component: TasabcvComponent;
+  let fixture: ComponentFixture<TasabcvComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClientitemComponent ]
+      declarations: [ TasabcvComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ClientitemComponent);
+    fixture = TestBed.createComponent(TasabcvComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

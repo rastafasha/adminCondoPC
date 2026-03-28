@@ -11,7 +11,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { BackButtnComponent } from '../../../shared/backButtn/backButtn.component';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
-import { ProjectitemComponent } from '../../../components/projectitem/projectitem.component';
 
 @Component({
   selector: 'app-project-list',

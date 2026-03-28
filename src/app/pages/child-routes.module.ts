@@ -14,6 +14,8 @@ import { ProjectEditComponent } from './project/project-edit/project-edit.compon
 import { PaymentsComponent } from './payments/payments.component';
 import { TransferenciasComponent } from './payments/transferencias/transferencias.component';
 import { FacturacionComponent } from './payments/facturacion/facturacion.component';
+import { TiposdepagoComponent } from './conf/tiposdepago/tiposdepago.component';
+import { TasabcvComponent } from './conf/tasabcv/tasabcv.component';
 // import { CondicionesComponent } from './condiciones/condiciones.component';
 
 
@@ -44,6 +46,8 @@ const childRoutes: Routes = [
     
     { path: 'trasnferencias', component: TransferenciasComponent, data:{title:'Transferencias'} },
     { path: 'facturacion', component: FacturacionComponent, data:{title:'Facturación'} },
+    { path: 'metodos_de_pago', component: TiposdepagoComponent, data:{title:'Metodos de Pago'} },
+    { path: 'tasaBCV', component: TasabcvComponent, data:{title:'Tasa BCV'} },
   
     //user
     { path: 'users', component: UsersComponent, data:{title:'Usuarios'} },

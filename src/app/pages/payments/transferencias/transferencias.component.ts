@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TransferenciaService } from '../../../services/transferencia.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +10,7 @@ import { UserService } from '../../../services/user.service';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { RouterLink } from '@angular/router';
 import { ImagenPipe } from '../../../pipes/imagen.pipe';
+import { BackButtnComponent } from '../../../shared/backButtn/backButtn.component';
 
 @Component({
   selector: 'app-transferencias',
@@ -19,11 +20,13 @@ import { ImagenPipe } from '../../../pipes/imagen.pipe';
     // PieChart2Component, BarChartComponent,
     LoadingComponent,
     NgxPaginationModule,
+    BackButtnComponent
   ],
   templateUrl: './transferencias.component.html',
   styleUrl: './transferencias.component.css'
 })
 export class TransferenciasComponent {
+  @Input() displaycomponent: string = 'block';
   title = 'Transferencias';
 
   transferecias!: Transferencia[];
