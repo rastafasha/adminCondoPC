@@ -6,22 +6,28 @@
         <div class="clear"></div>
         <section class="section dashboard">
 
-            <!-- Bordered Tabs -->
-            <ul class="nav nav-tabs nav-tabs-bordered">
+           
 
-                <li class="nav-item">
-                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#news">Clientes</button>
-                </li>
+            <div class="tab-content-set">
+                <ul class="nav">
+                    <li>
+                        <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 1}"
+                            (click)="optionSelected(1)">
+                            <h3 class="btn btn-outline-info"> {{'Clientes'}}</h3>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 2}"
+                            (click)="optionSelected(2)">
+                            <h3 class="btn btn-outline-info">{{'Usuarios Admin'}}</h3>
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#admin">Usuarios Admin</button>
-                </li>
-            </ul>
-            <div class="tab-content pt-2">
 
-                <div class="tab-pane fade show active news" id="news">
-                    <br />
-                    <!-- usuarios -->
+                </ul>
+            </div>
+            <div *ngIf="option_selectedd == 1">
+                 <!-- usuarios -->
                     <div class="container">
                         <div class="row">
                             <div class="col-xs-12">
@@ -67,7 +73,7 @@
                                                 <!-- {{user.role }}  -->
                                                 <span class="badge bg-dark" *ngIf="user.role === 'SUPERADMIN_ROLE'">SuperAdmin</span>
                                                 <span class="badge bg-primary" *ngIf="user.role === 'ADMIN_ROLE'">Admin</span>
-                                                <span class="badge bg-danger" *ngIf="user.role === 'USER_ROLE'">Invitado</span>
+                                                <span class="badge bg-success" *ngIf="user.role === 'USER_ROLE'">Propietario</span>
                                             </td>
                                             <td>
                                                 <span *ngIf="user.google" class="label label-danger">Google</span>
@@ -97,10 +103,9 @@
 
                     </div>
                     <!-- End usuarios -->
-                </div>
-                <div class="tab-pane fade show active news" id="admin">
-                    <br />
-                    <!-- usuarios -->
+            </div>
+            <div *ngIf="option_selectedd == 2">
+                <!-- usuarios -->
                     <div class="container">
                         <div class="row">
                             <div class="col-xs-12">
@@ -176,9 +181,6 @@
 
                     </div>
                     <!-- End usuarios -->
-                </div>
-
-
             </div>
             <!-- End Bordered Tabs -->
 

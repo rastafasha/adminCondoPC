@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import Swal from 'sweetalert2';
@@ -7,21 +7,28 @@ import { User } from '../../models/user';
 import { ProfileService } from '../../services/profile.service';
 import { UserService } from '../../services/user.service';
 import { ImagenPipe } from '../../pipes/imagen.pipe';
+import { BackButtnComponent } from '../../shared/backButtn/backButtn.component';
+import { Residencia } from '../../models/residencia';
+import { Local } from '../../models/local';
+import { Oficina } from '../../models/oficina';
 
 @Component({
   selector: 'app-user-profile',
-  imports:[CommonModule, RouterLink, ImagenPipe],
+  imports:[CommonModule, RouterLink, ImagenPipe, BackButtnComponent],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-
+  @Input() displaycomponent: string = 'block';
   title = "Detalles de la cuenta";
-  usuario: User;
   user!: User;
   profile!: Profile;
   error!: string;
   uid:any;
+  local?: Local[];
+  oficina?: Oficina[];
+  residencia?: Residencia[];
+  usuario?: User;
 
   rolesSelected!:number;
 
@@ -54,23 +61,25 @@ export class UserProfileComponent implements OnInit {
       }
   }
 
-
-
-  getUserRemoto(id:any){
+ getUserRemoto(id:any){
     this.userService.getUserById(id).subscribe(
       res =>{
-        this.usuario = res;
+        this.user = res;
         // console.log(this.usuario);
       }
     );
 
   }
-
   getProfile(id:string){
     
     this.profileService.getByUser(id).subscribe(
       res =>{
         this.profile = res;
+        this.local = Array.isArray(res.local) ? res.local : [res.local];
+        this.oficina = Array.isArray(res.oficina) ? res.oficina : [res.oficina];
+        this.residencia = Array.isArray(res.residencia) ? res.residencia : [res.residencia];
+        this.usuario = res.usuario;
+        console.log(this.profile)
       }
     );
 

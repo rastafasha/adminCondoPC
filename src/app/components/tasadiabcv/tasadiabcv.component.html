@@ -1,13 +1,13 @@
 <!-- <app-loading *ngIf="isLoading"></app-loading> -->
 <div class="row shadow animated fadeIn" style="background-color: #f2f2f2;" >
-    
-    <div  *ngIf="!precio_dia ">
+    <app-loading *ngIf="isLoading"></app-loading>
+    <div  *ngIf="!precio_dia && !isLoading">
        Favor Actualizar Tasa del día 
        <button type="button" class="btn btn-outline-warning" routerLink="../dashboard/tasaBCV">
         Actualizar tasa
        </button>
     </div>
-    <div class="preciodia"  *ngIf="precio_dia ">
+    <div class="preciodia"  *ngIf="precio_dia && !isLoading">
         <div class="fa fa-bar-chart fa-2x" style="color: var(--azulclaro);"></div>
         <div class="inf">
             <h4>Feliz día, {{user.name}}!</h4>

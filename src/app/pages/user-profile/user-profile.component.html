@@ -2,24 +2,7 @@
 <div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
 
     <div class="col-xs-12">
-        <div class="leftside">
-            <!-- Page Title -->
-            <div class="pagetitle">
-                <h1><i class="bx bxs-user-account"></i> {{title}}</h1>
-                <nav>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/"><i class="fa fa-home"></i> Inicio</a></li>
-                        <li class="breadcrumb-item active">{{title}}</li>
-                    </ol>
-                </nav>
-            </div>
-            <!-- End Page Title -->
-            <div class="buton">
-                <button class="btn btn-outline-danger pull-right" href="javascript:void(0)"
-                    (click)="goBack()">Volver</button>
-            </div>
-        </div>
-
+        <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
         <div class="clear"></div>
 
         <section class="section profile">
@@ -28,17 +11,17 @@
 
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                           
+
                             <div *ngIf="profile">
                                 <img [src]="(profile.img ?? '') | imagenPipe: 'profiles'" class="rounded-circle">
                             </div>
 
-                            <h3>{{usuario.username}}</h3>
-                            <p>{{usuario.email}}</p>
+                            <h3>{{user.username}}</h3>
+                            <p>{{user.email}}</p>
                             <h3>
-                                <span class="badge bg-dark" *ngIf="usuario.role === 'SUPERADMIN_ROLE'">SuperAdmin</span>
-                                <span class="badge bg-primary" *ngIf="usuario.role === 'ADMIN_ROLE'">Admin</span>
-                                <span class="badge bg-secondary" *ngIf="usuario.role === 'USER_ROLE'">Invitado</span>
+                                <span class="badge bg-dark" *ngIf="user.role === 'SUPERADMIN_ROLE'">SuperAdmin</span>
+                                <span class="badge bg-primary" *ngIf="user.role === 'ADMIN_ROLE'">Admin</span>
+                                <span class="badge bg-secondary" *ngIf="user.role === 'USER_ROLE'">Cliente</span>
                             </h3>
 
                             <a routerLink="/dashboard/rolesconf">
@@ -78,6 +61,7 @@
                                     </div>
                                     <div class="col-xs-12">
                                         <div *ngIf="profile">
+                                            <!-- informacion del perfil -->
                                             <div class="row">
                                                 <div class="col-xs-6 col-sm-6 col-md-4 b-r">
                                                     <div class="col-12  label"><i class="bi bi-person-circle"></i>
@@ -89,14 +73,9 @@
                                                         Apellido</div>
                                                     <div class="col-12  info">{{profile.last_name}}</div>
                                                 </div>
-
-                                            </div>
-                                            <hr>
-
-                                            <div class="row">
-
                                                 <div class="col-xs-6 col-sm-6 col-md-3 b-r">
-                                                    <div class="col-12  label"><i class="bi bi-telephone"></i> Móvil
+                                                    <div class="col-12  label">
+                                                        <i class="bi bi-telephone"></i> Móvil
                                                     </div>
 
                                                     <div class="col-12  info">
@@ -105,30 +84,160 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-6 col-sm-6 col-md-3 b-r">
-                                                    <div class="col-12  label"><i class="bi bi-telephone"></i> Oficina |
-                                                        Home</div>
+                                                <div class="col-xs-6 col-sm-6 col-md-3 b-r" *ngIf="profile.telhome">
+                                                    <div class="col-12  label">
+                                                        <i class="bi bi-telephone"></i> Oficina | Casa
+                                                    </div>
                                                     <div class="col-12  info">
                                                         <a href="tel:{{profile.telhome}}" target="_blank">
                                                             {{profile.telhome}}
                                                         </a>
                                                     </div>
                                                 </div>
+
                                             </div>
                                             <hr>
+                                            <!-- Estatus Financiero -->
                                             <div class="row">
-                                                
-                                                <div class="col-xs-12 col-sm-6 col-md-3 b-r">
-                                                    <div class="col-12  label"><i class="bi bi-file-text"></i> Dirección
+
+                                                <div class="col-xs-6 col-sm-6 col-md-3 b-r">
+                                                    <div class="col-12  label">
+                                                        <i class="bi bi-telephone"></i> Estatus Financiero
                                                     </div>
                                                     <div class="col-12  info">
-                                                        <p>{{profile.direccion}}</p>
-
+                                                        <span class="badge bg-success"
+                                                            *ngIf="profile.statusFinanciero === 'AL_DIA'">Al día</span>
+                                                        <span class="badge bg-danger"
+                                                            *ngIf="profile.statusFinanciero === 'MOROSO'">Moroso</span>
+                                                        <span class="badge bg-warning"
+                                                            *ngIf="profile.statusFinanciero === 'EN_REVISION'">En
+                                                            Revisión</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-3 b-r"
+                                                    *ngIf="profile.deudaTotalAcumulada > 0">
+                                                    <div class="col-12  label">
+                                                        <i class="bi bi-telephone"></i> Deuda Total Acumulada
+                                                    </div>
+                                                    <div class="col-12  info">
+                                                        {{profile.deudaTotalAcumulada |
+                                                        currency:'Bs.':'symbol':'1.2-2'}}
                                                     </div>
                                                 </div>
                                             </div>
                                             <hr>
+                                            <!-- informacion de propiedades -->
+                                            <!-- Residencia -->
+                                            <div class="row" *ngIf="profile.haveResidencia === true ">
+                                                <div class="col-xs-12 ">
+                                                    <div class="col-12  label"><i class="bi bi-file-text"></i>
+                                                        Residencia(s)
+                                                    </div>
+                                                    <div class="col-12 ">
+                                                        <table class="table table-borderless datatable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Edificio</th>
+                                                                    <th scope="col">Letra</th>
+                                                                    <th scope="col">Piso</th>
+                                                                    <th scope="col">Monto M</th>
+                                                                    <th scope="col">Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let res of residencia">
+                                                                    <th scope="row">{{res.edificio}}</th>
+                                                                    <td>{{res.letra}}</td>
+                                                                    <td>{{res.piso}}</td>
+                                                                    <td>{{res.montoMensual |
+                                                                        currency:'Bs.':'symbol':'1.2-2'}}</td>
+                                                                    <td>
+                                                                        <a [routerLink]="['/dashboard/residencia-detail', res._id]"
+                                                                            class="btn btn-outline-primary btn-sm">Ver
+                                                                            Detalles</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr *ngIf="profile.haveResidencia === true ">
+                                             <!-- Oficina -->
+                                            <div class="row" *ngIf="profile.haveOficina === true ">
+                                                <div class="col-xs-12">
+                                                    <div class="col-12  label"><i class="bi bi-file-text"></i>
+                                                        Oficina(s)
+                                                    </div>
+                                                    <div class="col-12 ">
+                                                        <table class="table table-borderless datatable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Edificio</th>
+                                                                    <th scope="col">Letra</th>
+                                                                    <th scope="col">Piso</th>
+                                                                    <th scope="col">Monto M</th>
+                                                                    <th scope="col">Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let res of oficina">
+                                                                    <th scope="row">{{res.edificio}}</th>
+                                                                    <td>{{res.letra}}</td>
+                                                                    <td>{{res.piso}}</td>
+                                                                    <td>{{res.montoMensual |
+                                                                        currency:'Bs.':'symbol':'1.2-2'}}</td>
+                                                                    <td>
+                                                                        <a [routerLink]="['/dashboard/residencia-detail', res._id]"
+                                                                            class="btn btn-outline-primary btn-sm">Ver
+                                                                            Detalles</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                           <hr *ngIf="profile.haveOficina === true ">
+                                             <!-- Local -->
+                                            <div class="row" *ngIf="profile.haveLocal === true ">
+                                                <div class="col-xs-12  ">
+                                                    <div class="col-12  label"><i class="bi bi-file-text"></i>
+                                                        Oficina(s)
+                                                    </div>
+                                                    <div class="col-12 ">
+                                                        <table class="table table-borderless datatable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Edificio</th>
+                                                                    <th scope="col">Letra</th>
+                                                                    <th scope="col">Piso</th>
+                                                                    <th scope="col">Monto M</th>
+                                                                    <th scope="col">Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let res of local">
+                                                                    <th scope="row">{{res.edificio}}</th>
+                                                                    <td>{{res.letra}}</td>
+                                                                    <td>{{res.piso}}</td>
+                                                                    <td>{{res.montoMensual |
+                                                                        currency:'Bs.':'symbol':'1.2-2'}}</td>
+                                                                    <td>
+                                                                        <a [routerLink]="['/dashboard/residencia-detail', res._id]"
+                                                                            class="btn btn-outline-primary btn-sm">Ver
+                                                                            Detalles</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr *ngIf="profile.haveLocal === true ">
                                         </div>
                                     </div>
                                     <div class="clear"></div>

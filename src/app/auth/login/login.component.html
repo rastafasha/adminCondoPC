@@ -1,7 +1,8 @@
 <div class="loginregister animated fadeIn">
     <div class="main">
         <input type="checkbox" id="chk" aria-hidden="true">
-        <img src="./assets/svg/logo-zlipmenu_logotipo.svg" alt="">
+        <!-- <img src="./assets/svg/logo-zlipmenu_logotipo.svg" alt=""> -->
+        <img src="./assets/images/logoCorpo.jpeg" alt="">
         <div class="signup">
             <app-loading *ngIf="isLoading"></app-loading>
             <form *ngIf="!isLoading" [formGroup]="loginForm" id="loginform" (ngSubmit)="login()" autocapitalize="off">

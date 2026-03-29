@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-menuiconos',
   standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterLink],
   templateUrl: './menuiconos.component.html',
   styleUrls: ['./menuiconos.component.css']
 })

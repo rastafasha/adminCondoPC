@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { TasabcvService } from '../../services/tasabcv.service';
 import { CommonModule, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { LoadingComponent } from "../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-tasadiabcv',
-  imports:[CommonModule, RouterLink, NgIf],
+  imports: [CommonModule, RouterLink, NgIf, LoadingComponent],
   templateUrl: './tasadiabcv.component.html',
   styleUrls: ['./tasadiabcv.component.css']
 })
