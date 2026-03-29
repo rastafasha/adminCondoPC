@@ -30,9 +30,9 @@ export class TasadiabcvComponent {
   }
   getTasaDBcvdelDia() {
     this.isLoading = true;
-    this.tasaBcvService.getTasas().subscribe((resp:any)=>{
-      this.precio_dia = resp[0].precio_dia
-      this.precio_fecha = resp[0].createdAt
+    this.tasaBcvService.getUltimaTasa().subscribe((resp:any)=>{
+      this.precio_dia = resp.precio_dia;
+      this.precio_fecha = resp.createdAt;
       this.isLoading = false;
       // console.log(resp);
     })

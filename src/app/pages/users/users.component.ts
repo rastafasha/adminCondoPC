@@ -16,11 +16,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { UserRolePipe } from '../../pipes/user-role.pipe';
 import { AdminRolesPipe } from '../../pipes/admin-roles.pipe';
+import { ModalFacturaMasivaComponent } from '../../components/modal-factura-masiva/modal-factura-masiva.component';
 
 @Component({
   selector: 'app-users',
   imports:[CommonModule, RouterLink, BackButtnComponent, NgxPaginationModule,
-    ReactiveFormsModule, FormsModule, UserRolePipe, AdminRolesPipe
+    ReactiveFormsModule, FormsModule, UserRolePipe, AdminRolesPipe,ModalFacturaMasivaComponent
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
@@ -144,6 +145,7 @@ export class UsersComponent implements OnInit {
      }
    }
 
+   abrirModalMasivo(){}
 
 
 

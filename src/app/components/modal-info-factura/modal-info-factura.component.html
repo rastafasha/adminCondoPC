@@ -5,7 +5,7 @@
                 <h5 class="modal-title">{{ title }} - Parque Central</h5>
                 <button type="button" class="btn-close" (click)="onClose()" data-bs-dismiss="modal"></button>
             </div>
-
+            <app-loading *ngIf="isLoading"></app-loading>
             <form [formGroup]="facturaForm" (ngSubmit)="handleSubmit()">
                 <input type="hidden" formControlName="usuarioId">
                 <input type="hidden" formControlName="propiedadId">

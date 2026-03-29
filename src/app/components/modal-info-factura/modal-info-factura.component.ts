@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-modal-info-factura',
   imports: [CommonModule,
-    //  LoadingComponent, 
+     LoadingComponent, 
     ReactiveFormsModule],
   templateUrl: './modal-info-factura.component.html',
   styleUrl: './modal-info-factura.component.css'

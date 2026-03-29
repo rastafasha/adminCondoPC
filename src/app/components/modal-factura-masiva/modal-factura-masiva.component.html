@@ -1,0 +1,51 @@
+<div class="modal fade" id="modalMasivo" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title"><i class="bi bi-layers"></i> Facturación Mensual Masiva</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">Se generarán las facturas de <b>todos los propietarios</b> que tengan unidades
+          registradas.</p>
+          <app-loading *ngIf="isLoading"></app-loading>
+        <form [formGroup]="formMasivo" *ngIf="!isLoading">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Mes a Facturar</label>
+              <select class="form-select" formControlName="mes">
+                <option *ngFor="let m of meses" [value]="m.val">{{m.nombre}}</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Año</label>
+              <input type="number" class="form-control" formControlName="anio">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">IVA (%)</label>
+              <input type="number" class="form-control" formControlName="porcentajeIva">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Tasa BCV del Día Bs.{{tasaBCV}}</label>
+              
+            </div>
+            <div class="col-12 mb-3">
+              
+              <small class="text-muted mt-3">
+                * Valor sugerido según la última actualización en base de datos.<br>
+                Este valor se mostrará en la factura.
+              </small>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="ejecutarFacturacionMasiva()"
+          [disabled]="formMasivo.invalid">
+          <i class="bi bi-check-circle"></i> Iniciar Proceso
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
