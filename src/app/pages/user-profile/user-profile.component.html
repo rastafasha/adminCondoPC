@@ -34,7 +34,7 @@
 
                 </div>
 
-                <div class="col-xl-9"  *ngIf="!isLoading">
+                <div class="col-xl-9" *ngIf="!isLoading">
 
                     <div class="card">
                         <div class="card-body pt-3">
@@ -154,9 +154,13 @@
                                                                     <td>{{res.montoMensual |
                                                                         currency:'Bs.':'symbol':'1.2-2'}}</td>
                                                                     <td>
-                                                                        <a [routerLink]="['/dashboard/residencia-detail', res._id]"
-                                                                            class="btn btn-outline-primary btn-sm">Ver
-                                                                            Detalles</a>
+                                                                        <div class="btn btn-outline-primary btn-sm"
+                                                                            (click)="openEditModal(res, 'residencia')"
+                                                                            href="javascript:void(0)"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#editFactura">
+                                                                           Facturar
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -166,7 +170,7 @@
                                                 </div>
                                             </div>
                                             <hr *ngIf="profile.haveResidencia === true ">
-                                             <!-- Oficina -->
+                                            <!-- Oficina -->
                                             <div class="row" *ngIf="profile.haveOficina === true ">
                                                 <div class="col-xs-12">
                                                     <div class="col-12  label"><i class="bi bi-file-text"></i>
@@ -191,9 +195,13 @@
                                                                     <td>{{res.montoMensual |
                                                                         currency:'Bs.':'symbol':'1.2-2'}}</td>
                                                                     <td>
-                                                                        <a [routerLink]="['/dashboard/residencia-detail', res._id]"
-                                                                            class="btn btn-outline-primary btn-sm">Ver
-                                                                            Detalles</a>
+                                                                        <div class="btn btn-outline-primary btn-sm"
+                                                                            (click)="openEditModal(res, 'oficina')"
+                                                                            href="javascript:void(0)"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#editFactura">
+                                                                           Facturar
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -202,12 +210,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                           <hr *ngIf="profile.haveOficina === true ">
-                                             <!-- Local -->
+                                            <hr *ngIf="profile.haveOficina === true ">
+                                            <!-- Local -->
                                             <div class="row" *ngIf="profile.haveLocal === true ">
                                                 <div class="col-xs-12  ">
                                                     <div class="col-12  label"><i class="bi bi-file-text"></i>
-                                                        Oficina(s)
+                                                        Local(s)
                                                     </div>
                                                     <div class="col-12 ">
                                                         <table class="table table-borderless datatable">
@@ -228,9 +236,13 @@
                                                                     <td>{{res.montoMensual |
                                                                         currency:'Bs.':'symbol':'1.2-2'}}</td>
                                                                     <td>
-                                                                        <a [routerLink]="['/dashboard/residencia-detail', res._id]"
-                                                                            class="btn btn-outline-primary btn-sm">Ver
-                                                                            Detalles</a>
+                                                                        <div class="btn btn-outline-primary btn-sm"
+                                                                            (click)="openEditModal(res, 'local')"
+                                                                            href="javascript:void(0)"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#editFactura">
+                                                                           Facturar
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -244,12 +256,6 @@
                                     </div>
                                     <div class="clear"></div>
                                 </div>
-
-
-
-
-
-
                             </div>
                             <!-- End Bordered Tabs -->
 
@@ -263,3 +269,4 @@
 
 </div>
 <!--/main-->
+<app-modal-info-factura [paymentSeleccionado]="paymentSeleccionado" (closeModal)="onCloseModal()"></app-modal-info-factura>

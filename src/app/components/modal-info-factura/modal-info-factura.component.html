@@ -1,1 +1,99 @@
-<p>modal-info-factura works!</p>
+<div class="modal fade" id="editFactura" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title">{{ title }} - Parque Central</h5>
+                <button type="button" class="btn-close" (click)="onClose()" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form [formGroup]="facturaForm" (ngSubmit)="handleSubmit()">
+                <input type="hidden" formControlName="usuarioId">
+                <input type="hidden" formControlName="propiedadId">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <!-- Información del Periodo -->
+                        <div class="col-md-6">
+                            <label class="form-label">Mes a Facturar</label>
+                            <select class="form-select" formControlName="mes">
+                                <option value="1">Enero</option>
+                                <option value="2">Febrero</option>
+                                <option value="3">Marzo</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Mayo</option>
+                                <option value="6">Junio</option>
+                                <option value="7">Julio</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Año</label>
+                            <input type="number" class="form-control" formControlName="anio">
+                        </div>
+
+                        <hr class="my-3">
+
+                        <!-- Detalle de la Propiedad -->
+                        <div class="col-12">
+                            <label class="form-label text-muted small">Descripción del Concepto</label>
+                            <input type="text" class="form-control" formControlName="descripcion">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Monto Base (Bs.)</label>
+                            <input type="number" class="form-control fw-bold" formControlName="montoBase">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">IVA (%)</label>
+                            <input type="number" class="form-control" formControlName="porcentajeIva">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Otros Cargos</label>
+                            <input type="number" class="form-control" formControlName="otrosCargos">
+                        </div>
+
+                        <!-- Sección de Retenciones (Opcional) -->
+                        <div class="col-12 mt-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" formControlName="aplicaRetencion"
+                                    id="retSwitch">
+                                <label class="form-check-label" for="retSwitch">¿Aplicar Retención de ISLR/IVA?</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" *ngIf="facturaForm.get('aplicaRetencion')?.value">
+                            <label class="form-label text-danger">Monto de Retención (Resta)</label>
+                            <input type="number" class="form-control border-danger" formControlName="montoRetencion">
+                        </div>
+
+                        <!-- Resumen de Totales -->
+                        <div class="col-12 mt-4">
+                            <!-- Quitamos bg-primary y usamos un borde sutil con texto en color -->
+                            <div class="p-3 border rounded shadow-sm text-end" style="background-color: #f8f9fa;">
+                                <span class="h6 text-muted me-2">TOTAL A FACTURAR:</span>
+                                <span class="h4 fw-bold" style="color: #6f42c1;">
+                                    {{ totalCalculado | currency:'Bs. ':'symbol':'1.2-2' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" (click)="onClose()"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <!-- [disabled]="facturaForm.invalid || isLoading" -->
+                    <button type="submit" class="btn btn-primary">
+                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
+                        Generar Factura
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

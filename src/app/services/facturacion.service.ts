@@ -12,48 +12,86 @@ const baseUrl = environment.apiUrl;
 export class FacturacionService {
 
   public facturacion!: Facturacion;
-  
-  
-    constructor(private http: HttpClient) { }
-  
-    get token(): string {
-      return localStorage.getItem('token') || '';
-    }
-  
-  
-    get headers() {
-      return {
-        headers: {
-          'x-token': this.token
-        }
-      }
-    }
 
-    getFacturaciones() {
-        const url = `${baseUrl}/facturacion`;
-        return this.http.get<any>(url, this.headers)
-          .pipe(
-            map((resp: { ok: boolean, facturas: Facturacion }) => resp.facturas)
-          )
-      }
-    
-      getFactura(_id: Facturacion) {
-        const url = `${baseUrl}/facturacion/${_id}`;
-        return this.http.get<any>(url, this.headers)
-          .pipe(
-            map((resp: { ok: boolean, factura: Facturacion }) => resp.factura)
-          );
-      }
 
-    facturacionIndividual(facturacion: Facturacion) {
-      const url = `${baseUrl}/facturacion/individual`;
-      return this.http.post(url, facturacion, this.headers);
+  constructor(private http: HttpClient) { }
+
+  get token(): string {
+    return localStorage.getItem('token') || '';
+  }
+
+
+  get headers() {
+    return {
+    'x-token': this.token
+  };
+  }
+
+
+ 
+  generarYDescargarFactura(datos: any) {
+  // 1. Llamamos al endpoint que acabas de configurar
+  this.http.post(`${baseUrl}/facturacion/individual`, datos, { 
+    responseType: 'blob', // <--- CRÍTICO: Indica que recibes un archivo
+    headers: this.headers 
+  }).subscribe({
+    next: (res: Blob) => {
+      // 2. Creamos una URL temporal para el archivo recibido
+      const url = window.URL.createObjectURL(res);
+      
+      // 3. Opción A: Abrir en pestaña nueva
+      window.open(url);
+
+      // 4. Opción B: Descarga automática con nombre (opcional)
+      /*
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Factura_${datos.mes}_${datos.anio}.pdf`;
+      link.click();
+      */
+      
+      // Limpiamos la memoria
+      window.URL.revokeObjectURL(url);
+    },
+    error: (err) => {
+      console.error('Error al descargar el PDF', err);
     }
-  
-    facturacionMasiva(facturacion: Facturacion) {
-      const url = `${baseUrl}/facturacion/masiva`;
-      return this.http.post(url, facturacion, this.headers);
-    }
+  });
+}
+facturacionIndividual(facturacion: Facturacion) {
+    const url = `${baseUrl}/facturacion/individual`;
+    // Creamos el objeto de opciones completo
+    const httpOptions: any = {
+      headers: this.headers, // Aquí pasas tu objeto {'x-token': '...'}
+      responseType: 'blob' as 'json' 
+    };
+
+    return this.http.post(url, facturacion, httpOptions);
+  }
+
+ getFacturaciones() {
+    const url = `${baseUrl}/facturacion`;
     
+    return this.http.get<any>(url, { headers: this.headers })
+      .pipe(
+        map((resp: { ok: boolean, facturas: Facturacion }) => resp.facturas)
+      )
+  }
+
+  getFactura(_id: Facturacion) {
+    const url = `${baseUrl}/facturacion/${_id}`;
+    return this.http.get<any>(url, { headers: this.headers })
+      .pipe(
+        map((resp: { ok: boolean, factura: Facturacion }) => resp.factura)
+      );
+  }
+
   
+
+  facturacionMasiva(facturacion: Facturacion) {
+    const url = `${baseUrl}/facturacion/masiva`;
+    return this.http.post(url, facturacion, { headers: this.headers });
+  }
+
+
 }

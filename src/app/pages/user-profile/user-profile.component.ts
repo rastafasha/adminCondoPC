@@ -12,10 +12,13 @@ import { Residencia } from '../../models/residencia';
 import { Local } from '../../models/local';
 import { Oficina } from '../../models/oficina';
 import { LoadingComponent } from '../../shared/loading/loading.component';
+import { Facturacion } from '../../models/facturacion';
+import { ModalInfoFacturaComponent } from '../../components/modal-info-factura/modal-info-factura.component';
 
 @Component({
   selector: 'app-user-profile',
-  imports:[CommonModule, RouterLink, ImagenPipe, BackButtnComponent, LoadingComponent],
+  imports:[CommonModule, RouterLink, ImagenPipe, BackButtnComponent, 
+    LoadingComponent, ModalInfoFacturaComponent],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
@@ -33,6 +36,10 @@ export class UserProfileComponent implements OnInit {
   isLoading: boolean = false;
 
   rolesSelected!:number;
+  selectedPayment!:Facturacion|null;
+  paymentSeleccionado!:any|null;
+  tipoSeleccionado: string = '';
+unidadSeleccionada: any = null;
 
   p: number = 1;
   count: number = 8;
@@ -41,7 +48,6 @@ export class UserProfileComponent implements OnInit {
     private userService: UserService,
     private profileService: ProfileService,
     private activatedRoute: ActivatedRoute,
-    private location: Location,
 
   ) {
     this.usuario = userService.usuario;
@@ -88,12 +94,6 @@ export class UserProfileComponent implements OnInit {
     
   }
 
-
-
-  goBack() {
-    this.location.back(); // <-- go back to previous location on cancel
-  }
-
   updateUser(userprofile: Profile){
     this.profileService.updateProfile(userprofile ).subscribe(
       resp =>{ console.log(resp);
@@ -101,6 +101,20 @@ export class UserProfileComponent implements OnInit {
 
       }
     )
+  }
+
+  openEditModal(unidad: any, tipo: string): void {
+    this.paymentSeleccionado = {
+    ...unidad,
+    tipo: this.tipoSeleccionado = tipo,
+    usuarioId: this.usuario?.uid // "69c864171a472a6c0ff761b8"
+  };
+  console.log(this.paymentSeleccionado)
+
+  }
+
+  onCloseModal(): void {
+    this.paymentSeleccionado = null;
   }
 
   
