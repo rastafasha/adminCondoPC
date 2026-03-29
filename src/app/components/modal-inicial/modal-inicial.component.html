@@ -1,0 +1,84 @@
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+
+        <!-- Step Indicators -->
+        <div class="step-indicators text-center mb-4">
+          <span class="step-circle {{currentStep >= 1 ? 'active' : ''}}">1</span>
+          <span class="step-line"></span>
+          <span class="step-circle {{currentStep >= 2 ? 'active' : ''}}">2</span>
+        </div>
+        <div style="display: flex;
+    flex-direction: column;
+    align-items: anchor-center;" *ngIf="currentStep === 1">
+          <h2>¡Bienvenido al Admin Condominio Parque Central! </h2>
+          <h4>Gracias por acceder a la versión Demo!</h4>
+          <p>En esta sección podrás ver:</p>
+
+          <ul>
+            <li>El comportamiento diario, mensual y anual de tu Negocio.</li>
+            <li>Administrar Clientes</li>
+            <li>Administrar Pagos</li>
+            <li>Generar Facturas Individuales y Masivas</li>
+            <li>Con Calulo de Iva, Retenciones y tasa diaria del BCV</li>
+          </ul>
+
+          <p>Además tienes mas opciones en el menu lateral Izquierdo</p>
+          <small>Eventualmente estaremos mejorando y agregando más opciones, con actualiaciones periodicas</small>
+        </div>
+        <div *ngIf="currentStep === 2">
+          <h2>Instalalo en tu Dispositivo! </h2>
+
+          <p>Si puedes ver el icono de Instalación al final de la barra de dirección:</p>
+          
+          <div class="row">
+            <div class="col-xs-12">
+              <ol>
+                <li>Pulsa sobre el icono y podras instalarlo en tu dispositivo (Computador y / o Tabla):</li>
+                <li>Pulsa el Boton Install</li>
+                <li>Automaticamente estará disponible en tu barra de inicio / programas:</li>
+              </ol>
+              
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-6">
+              <img src="./assets/images/install.jpg" style="width: 100%; display: block; margin:auto" alt="">
+
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <img src="./assets/images/instalado.png" style="width: 100%; display: block; margin:auto" alt="">
+
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group text-center m-t-20">
+          <div class="col-xs-12">
+            <div *ngIf="currentStep === 1" class="text-center">
+              <button class="btn btn-info btn-md text-uppercase waves-effect waves-light m-r-10" type="button"
+                (click)="nextStep()">
+                Siguiente
+              </button>
+            </div>
+            <div *ngIf="currentStep === 2" class="text-center">
+              <button class="btn btn-secondary btn-md m-r-10" type="button" (click)="prevStep()">
+                Volver
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="modal-footer botonesmodal">
+        <button type="button" class="btn btn-outline-success" (click)="onClose()"
+                        data-bs-dismiss="modal">Continuar</button>
+        <button type="button" class="btn btn-outline-danger" (click)="onNoShowMore()">No quiero ver más este
+          mensaje</button>
+      </div>
+    </div>
+  </div>
+</div>

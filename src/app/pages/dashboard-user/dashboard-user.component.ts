@@ -5,9 +5,10 @@ import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { MenuiconosComponent } from '../../shared/menuiconos/menuiconos.component';
+import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 @Component({
   selector: 'app-dashboard-user',
-  imports:[CommonModule, RouterLink, MenuiconosComponent],
+  imports: [CommonModule, RouterLink, MenuiconosComponent, ModalinfoTiposPagoComponent],
   templateUrl: './dashboard-user.component.html',
   styleUrls: ['./dashboard-user.component.css']
 })
@@ -20,7 +21,12 @@ export class DashboardUserComponent implements OnInit {
 
   error!: string;
 
-  uid:any;
+  uid: any;
+  info = `
+  <h2>¡Bienvenido al Admin Condominio Parque Central! </h2>
+  <p>Gracias por acceder a la versión Demo!</p>
+  <p>Ante de todo, Agradeceriamos que completes tu perfil, mientras esperas la Activación de tu Rol Administrativo.</p>
+          `;
 
   constructor(
     private userService: UserService,
@@ -33,26 +39,26 @@ export class DashboardUserComponent implements OnInit {
   ngOnInit(): void {
     this.closeMenu();
     this.getUser();
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     // this.getUserProfile();
   }
 
-  closeMenu(){
+  closeMenu() {
     var menuLateral = document.getElementsByClassName("sidebar");
-      for (var i = 0; i<menuLateral.length; i++) {
-         menuLateral[i].classList.remove("active");
-      }
+    for (var i = 0; i < menuLateral.length; i++) {
+      menuLateral[i].classList.remove("active");
+    }
   }
 
   getUser(): void {
-   let USER = localStorage.getItem("user");
+    let USER = localStorage.getItem("user");
     this.user = USER ? JSON.parse(USER) : null;
     this.uid = this.user.uid;
   }
 
-  getUserProfile(){
+  getUserProfile() {
     this.userService.getUserById(this.user.uid).subscribe(
-      res =>{
+      res => {
         this.userprofile = res;
         console.log(this.userprofile)
       }

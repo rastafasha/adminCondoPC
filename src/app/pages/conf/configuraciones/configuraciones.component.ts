@@ -4,11 +4,12 @@ import { User } from '../../../models/user';
 import { UserService } from '../../../services/user.service';
 import { RouterLink } from '@angular/router';
 import { BackButtnComponent } from '../../../shared/backButtn/backButtn.component';
+import { ModalinfoTiposPagoComponent } from '../../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 
 
 @Component({
   selector: 'app-configuraciones',
-  imports:[CommonModule, RouterLink, BackButtnComponent],
+  imports:[CommonModule, RouterLink, BackButtnComponent, ModalinfoTiposPagoComponent],
   templateUrl: './configuraciones.component.html',
   styleUrls: ['./configuraciones.component.css']
 })
@@ -18,6 +19,13 @@ export class ConfiguracionesComponent implements OnInit, DoCheck {
   error!: string;
 
   user!: User;
+   info = `
+  <p>En esta sección podrás:</p>
+          <ul>
+            <li>Adinistrar El ROL de los usuarios Administrativos</li>
+            <li>Adinistrar Los Metodos de pago Usados</li>
+            <li>Actualizar La tasa del Dólar del Banco Central de Venezuela</li>
+          </ul>`;
 
   constructor(
     private location: Location,

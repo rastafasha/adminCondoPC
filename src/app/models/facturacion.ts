@@ -2,19 +2,22 @@ import { User } from "./user"
 
 export interface DetalleFactura {
     origen: 'RESIDENCIA' | 'LOCAL' | 'OFICINA' | 'EXTRA';
-    propiedadId: string; 
+    propiedadId: string;
     montoBase: number;
     descripcion: string;
+    ivaPorcentaje: number;
+    montoIva: number;
 }
 
 export class Facturacion {
-    _id?: string; 
+    _id?: string;
     usuario?: User;
     nroFactura?: string;
-    mes!: number; 
+    mes!: number;
     anio!: number;
-    
-    detalles: DetalleFactura[]; 
+    tasaBCV!: number; // <--- VITAL guardar la tasa del día del lote
+
+    detalles: DetalleFactura[];
 
     // --- Campos de Impuestos ---
     porcentajeIva: number;

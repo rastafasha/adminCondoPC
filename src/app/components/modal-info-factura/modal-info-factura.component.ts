@@ -6,6 +6,7 @@ import { LoadingComponent } from '../../shared/loading/loading.component';
 import { Residencia } from '../../models/residencia';
 import { FacturacionService } from '../../services/facturacion.service';
 import Swal from 'sweetalert2';
+import { TasabcvService } from '../../services/tasabcv.service';
 
 @Component({
   selector: 'app-modal-info-factura',
@@ -28,15 +29,24 @@ export class ModalInfoFacturaComponent implements OnChanges {
   residencia: Residencia | null = null;
   tipoInmueble!:string;
   tipoSeleccionado!:string;
-
+  tasaBCV!:number;
   
   constructor(private fb: FormBuilder,
-    private facturaService: FacturacionService
+    private facturaService: FacturacionService,
+    private tasaService: TasabcvService
   ) { }
 
   ngOnInit() {
     this.validarFormulario(); // Inicializar el formulario al cargar
     this.cargarDatosEnFormulario();
+    this.getTasadia();
+  }
+
+  getTasadia(){
+     this.tasaService.getUltimaTasa().subscribe((rate:any) => {
+      this.tasaBCV = rate.precio_dia; // Carga automática para ahorrar tiempo
+      this.facturaForm.patchValue({ tasaBCV: this.tasaBCV });
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -90,7 +100,8 @@ export class ModalInfoFacturaComponent implements OnChanges {
       propiedadId: ['', Validators.required],
       montoBase: [0, [Validators.required, Validators.min(0)]],
       descripcion: ['', Validators.required],
-      origen: [''] // Lo dejamos vacío inicialmente
+      origen: [''], // Lo dejamos vacío inicialmente
+      tasaBCV: [0,[Validators.required, Validators.min(0)]] // Lo dejamos vacío inicialmente
       
     });
   }
@@ -140,16 +151,18 @@ export class ModalInfoFacturaComponent implements OnChanges {
       montoRetencion: val.montoRetencion,
       otrosCargos: val.otrosCargos,
       estado: val.estado,
+      tasaBCV: val.tasaBCV,
       detalles: [{
         origen: val.origen,
         propiedadId: val.propiedadId,
         montoBase: val.montoBase,
-        descripcion: val.descripcion
+        descripcion: val.descripcion,
+        ivaPorcentaje: val.porcentajeIva,
+        montoIva: val.porcentajeIva,
       }]
     };
 
     // console.log('Enviando factura a Parque Central:', payload);
-    // Aquí llamarías a tu servicio: this.facturaService.create(payload)...
 
     // 2. Llamamos al servicio (asumiendo que se llama facturaService)
     this.facturaService.facturacionIndividual(payload).subscribe({

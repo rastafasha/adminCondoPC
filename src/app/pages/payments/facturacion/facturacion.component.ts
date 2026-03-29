@@ -9,16 +9,16 @@ import { RouterLink } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { BackButtnComponent } from '../../../shared/backButtn/backButtn.component';
+import { ModalFacturaDetalleComponent } from "../../../components/modal-factura-detalle/modal-factura-detalle.component";
+import { ModalinfoTiposPagoComponent } from '../../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 
 @Component({
   selector: 'app-facturacion',
-  imports: [CommonModule, FormsModule,
-    RouterLink,
+  imports: [CommonModule, FormsModule, ModalinfoTiposPagoComponent,
     // PieChart2Component, BarChartComponent,
     LoadingComponent,
     NgxPaginationModule,
-    BackButtnComponent
-  ],
+    BackButtnComponent, ModalFacturaDetalleComponent],
   templateUrl: './facturacion.component.html',
   styleUrl: './facturacion.component.css'
 })
@@ -33,6 +33,15 @@ export class FacturacionComponent {
 
   public user: any;
   query: string = '';
+  facturaSeleccionado!:any|null;
+
+  info = `
+  <p>En esta sección podrás:</p>
+          <ul>
+            <li>Ver las Facturas recientes </li>
+            <li>Ver a detalle cada factura</li>
+            <li>Encontrar facturas por varias opciones</li>
+          </ul>`;
 
   constructor(
     private facturacionService: FacturacionService,
@@ -72,5 +81,16 @@ export class FacturacionComponent {
     this.getFacturas();
     this.query = '';
   }
+
+  
+  openViewModal(factura: any): void {
+    this.facturaSeleccionado = factura;
+
+  }
+
+  onCloseModal(): void {
+    this.facturaSeleccionado = null;
+  }
+
 
 }

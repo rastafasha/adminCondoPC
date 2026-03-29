@@ -8,6 +8,7 @@ export class Transferencia{
         public bankName: string,
         public metodo_pago: string,
         public amount: number,
+        public tasaBCV: number,
         public referencia: string,
         public factura: string,
         public paymentday: Date,
@@ -15,7 +16,7 @@ export class Transferencia{
         public createdAt: Date,
         public updatedAt: Date,
         public _id?: string,
-        public comprobante_img?: string
+        public img?: string
       
   ){
     this.status = 'PENDING'; // Valor por defecto

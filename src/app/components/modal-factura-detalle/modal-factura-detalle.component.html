@@ -1,0 +1,74 @@
+<div class="modal fade" id="viewFactura" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title">{{ title }} - {{facturaSeleccionado?.nroFactura}}</h5>
+                <button type="button" class="btn-close" (click)="onClose()" data-bs-dismiss="modal"></button>
+            </div>
+            <app-loading *ngIf="isLoading"></app-loading>
+            <div class="modal-body" *ngIf="!isLoading">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Cliente:</strong> {{ facturaSeleccionado?.usuario?.username }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>aplica Retención:</strong> &nbsp;
+                        <span class="badge bg-success" *ngIf="facturaSeleccionado?.aplicaRetencion === true">Si</span>
+                        <span class="badge bg-danger" *ngIf="facturaSeleccionado?.aplicaRetencion === false">No</span>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Retención:</strong> {{ facturaSeleccionado?.montoRetencion |currency:'Bs.' }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>otros Cargos:</strong> {{ facturaSeleccionado?.otrosCargos |currency:'Bs.'}}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>tasa BCV:</strong> {{ facturaSeleccionado?.tasaBCV |currency:'Bs.' }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>estado:</strong> &nbsp;
+                        <span class="badge bg-success" *ngIf="facturaSeleccionado?.estado === 'PAGADO'">Pagado</span>
+                        <span class="badge bg-primary"
+                            *ngIf="facturaSeleccionado?.estado === 'PENDIENTE'">Pendiente</span>
+                        <span class="badge bg-danger" *ngIf="facturaSeleccionado?.estado === 'ANULADO'">Anulado</span>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>mes:</strong> {{ facturaSeleccionado?.mes }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>anio:</strong> {{ facturaSeleccionado?.anio }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Fecha:</strong> {{ facturaSeleccionado?.createdAt | date:'dd/MM/yyyy' }}
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Origen</th>
+                            <th>Monto Base</th>
+                            <th>% IVA</th>
+                            <th>Monto IVA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let detalle of facturaSeleccionado?.detalles">
+                            <td>{{ detalle.descripcion}}</td>
+                            <td>{{ detalle.origen }}</td>
+                            <td>{{ detalle.montoBase |currency:'Bs.' }}</td>
+                            <td>{{ detalle.ivaPorcentaje }}</td>
+                            <td>{{ detalle.montoIva |currency:'Bs.' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-end mt-3">
+                    <h5>Total: {{ facturaSeleccionado?.totalPagar |currency:'Bs.' }}</h5>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" (click)="onClose()"
+                        data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>

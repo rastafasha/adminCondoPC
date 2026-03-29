@@ -11,6 +11,7 @@ import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { RouterLink } from '@angular/router';
 import { ImagenPipe } from '../../../pipes/imagen.pipe';
 import { BackButtnComponent } from '../../../shared/backButtn/backButtn.component';
+import { ModalinfoTiposPagoComponent } from '../../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 
 @Component({
   selector: 'app-transferencias',
@@ -20,7 +21,8 @@ import { BackButtnComponent } from '../../../shared/backButtn/backButtn.componen
     // PieChart2Component, BarChartComponent,
     LoadingComponent,
     NgxPaginationModule,
-    BackButtnComponent
+    BackButtnComponent,
+    ModalinfoTiposPagoComponent
   ],
   templateUrl: './transferencias.component.html',
   styleUrl: './transferencias.component.css'
@@ -38,10 +40,17 @@ export class TransferenciasComponent {
   public user: any;
   query: string = '';
 
+  info = `
+  <p>En esta sección podrás:</p>
+          <ul>
+            <li>Ver Todos las Trasnfericias recientes </li>
+            <li>Ver a detalle cada Trasnfericia</li>
+            <li>Cambiar el estado de las Trasnfericias (Verifica con tu Banco Emisor)</li>
+            <li>Encontrar facturas por varias opciones</li>
+          </ul>`;
+
   constructor(
     private trasnsferenciaService: TransferenciaService,
-    private userService: UserService,
-    private http: HttpClient
   ) {
   }
 

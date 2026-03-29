@@ -9,6 +9,7 @@ import { TiposdepagoService } from '../../../services/tiposdepago.service';
 import { UserService } from '../../../services/user.service';
 import { ModalinfoTiposPagoComponent } from '../../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 import { BackButtnComponent } from '../../../shared/backButtn/backButtn.component';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
 
 
 interface HtmlInputEvent extends Event {
@@ -21,7 +22,7 @@ declare var $: any;
 @Component({
   selector: 'app-tiposdepago',
   imports: [CommonModule, ReactiveFormsModule, FormsModule,
-    ModalinfoTiposPagoComponent, BackButtnComponent
+    ModalinfoTiposPagoComponent, BackButtnComponent, LoadingComponent
   ],
   templateUrl: './tiposdepago.component.html',
   styleUrls: ['./tiposdepago.component.css']
@@ -33,6 +34,7 @@ export class TiposdepagoComponent implements OnInit {
   public msm_error = false;
   public msm_success = false;
   title: string = 'Gestión Tipos de Pago';
+  isLoading:boolean = false;
 
   public slider: any = {};
   clientIdPaypal: string = '';
@@ -58,6 +60,17 @@ export class TiposdepagoComponent implements OnInit {
   // Edit mode properties
   isEditMode: boolean = false;
   editingPayment: PaymentMethod | null = null;
+
+  info = `
+  <p>En esta sección podrás:</p>
+          <ul>
+            <li>Crear Tipos de Pago que use tu negocio</li>
+            <li>Usa los datos bancarios para que transfieran a tu cuenta en dólares o euros</li>
+            <li>Si esta disponible el sistema de pago móvil, agrega los datos </li>
+            <li>Para agregar los datos de paypal, es necesario nuestra asistencia técnica</li>
+            <li>La cuenta de paypal actual esta en modo prueba, y es de nuestra empresa</li>
+          </ul>`;
+
 
   constructor(
     private fb: FormBuilder,
@@ -126,19 +139,18 @@ export class TiposdepagoComponent implements OnInit {
   }
 
   getTiposdePago() {
+    this.isLoading = true
     this.paymentMethodService.getPaymentMethods().subscribe(paymentMethods => {
       this.tiposdepagos = paymentMethods;
+      this.isLoading = false
     });
   }
 
-  getTiposdePagoByLocal() {
-    this.paymentMethodService.getPaymentMethodByTiendaId(this.user.local).subscribe(paymentMethods => {
-      this.tiposdepagos = paymentMethods;
-    });
-  }
 
   cambiarStatus(tipodepago: PaymentMethod) {
+    this.isLoading = true
     this.paymentMethodService.updateStatus(tipodepago).subscribe(resp => {
+      this.isLoading = false
       this.reloadList();
     });
   }
@@ -202,11 +214,8 @@ export class TiposdepagoComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.paymentMethodService.borrarPaymentMethod(tiposdepago._id!).subscribe((resp: any) => {
-          if (this.user.role === 'SUPERADMIN') {
-            this.getTiposdePago();
-          } else {
-            this.getTiposdePagoByLocal();
-          }
+          this.getTiposdePago();
+          
         });
         Swal.fire('Borrado!', 'El Archivo fue borrado.', 'success');
       }

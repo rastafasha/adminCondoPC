@@ -1,9 +1,10 @@
 <div class="container">
      <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
     <div class="clear"></div>
+    <app-loading *ngIf="isLoading"></app-loading>
     <div class="row">
 
-    <div class="card">
+    <div class="card" *ngIf="!isLoading">
         <div class="card-body">
             <div class="tab-pane" id="address" role="tabpanel" aria-labelledby="address-tab">
 
@@ -331,5 +332,5 @@
 </div>
 
 
-<app-modalinfo-tipos-pago></app-modalinfo-tipos-pago>
+<app-modalinfo-tipos-pago [info]="info"></app-modalinfo-tipos-pago>
 

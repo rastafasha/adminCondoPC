@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnChanges, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { FacturacionService } from '../../services/facturacion.service';
@@ -10,12 +10,12 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-modal-factura-masiva',
   imports: [CommonModule,
-    //  LoadingComponent, 
     ReactiveFormsModule, LoadingComponent],
   templateUrl: './modal-factura-masiva.component.html',
   styleUrl: './modal-factura-masiva.component.css'
 })
 export class ModalFacturaMasivaComponent implements OnInit {
+  @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 
   // Define los meses para el select
 meses = [
@@ -42,8 +42,10 @@ constructor(
 }
 
 ngOnInit() {
+  this.isLoading =true
   this.tasaService.getUltimaTasa().subscribe((rate:any) => {
     this.tasaBCV = rate.precio_dia; // Carga automática para ahorrar tiempo
+    this.isLoading =false
     this.formMasivo.patchValue({ tasaBCV: this.tasaBCV });
   });
 }
@@ -69,5 +71,10 @@ ejecutarFacturacionMasiva() {
     }
   });
 }
+
+onClose() {
+    this.formMasivo.reset();
+    this.closeModal.emit();
+  }
 
 }

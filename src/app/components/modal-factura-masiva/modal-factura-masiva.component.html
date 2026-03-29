@@ -3,12 +3,14 @@
     <div class="modal-content">
       <div class="modal-header bg-success text-white">
         <h5 class="modal-title"><i class="bi bi-layers"></i> Facturación Mensual Masiva</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" (click)="onClose()" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <p class="text-muted">Se generarán las facturas de <b>todos los propietarios</b> que tengan unidades
           registradas.</p>
-          <app-loading *ngIf="isLoading"></app-loading>
+
+        <app-loading *ngIf="isLoading"></app-loading>
+
         <form [formGroup]="formMasivo" *ngIf="!isLoading">
           <div class="row">
             <div class="col-md-6 mb-3">
@@ -22,15 +24,18 @@
               <input type="number" class="form-control" formControlName="anio">
             </div>
             <div class="col-md-6">
-              <label class="form-label">IVA (%)</label>
+              <label class="form-label">IVA General (%)</label>
               <input type="number" class="form-control" formControlName="porcentajeIva">
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Tasa BCV del Día Bs.{{tasaBCV}}</label>
-              
+              <input type="number" class="form-control" formControlName="tasaBCV">
             </div>
-            <div class="col-12 mb-3">
-              
+            <div class="col-12 mb-3 alert-warning">
+              <small class="text-muted mt-3 ">
+                El IVA Se aplicará solo a locales comerciales. Los residenciales quedan exentos.
+              </small>
+              <br>
               <small class="text-muted mt-3">
                 * Valor sugerido según la última actualización en base de datos.<br>
                 Este valor se mostrará en la factura.
@@ -40,10 +45,13 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success" (click)="ejecutarFacturacionMasiva()"
-          [disabled]="formMasivo.invalid">
-          <i class="bi bi-check-circle"></i> Iniciar Proceso
+        <button type="button" class="btn btn-secondary" (click)="onClose()"
+                        data-bs-dismiss="modal">Cancelar</button>
+
+        <button class="btn btn-success" (click)="ejecutarFacturacionMasiva()"
+          [disabled]="formMasivo.invalid || isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1"></span>
+          {{ isLoading ? 'Procesando...' : 'Iniciar Proceso' }}
         </button>
       </div>
     </div>

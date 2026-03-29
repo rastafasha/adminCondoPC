@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PaymentDetailsComponent } from './payment-details.component';
+import { ModalInicialComponent } from './modal-inicial.component';
 
-describe('PaymentDetailsComponent', () => {
-  let component: PaymentDetailsComponent;
-  let fixture: ComponentFixture<PaymentDetailsComponent>;
+describe('ModalInicialComponent', () => {
+  let component: ModalInicialComponent;
+  let fixture: ComponentFixture<ModalInicialComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PaymentDetailsComponent ]
+      imports: [ModalInicialComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PaymentDetailsComponent);
+    fixture = TestBed.createComponent(ModalInicialComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

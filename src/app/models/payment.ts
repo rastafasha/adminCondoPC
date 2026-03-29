@@ -7,6 +7,7 @@ export class Payment {
     _id?: string;
     cliente?: User;
     amount!: number;
+    tasaBCV!: number;
     factura!: string;
     referencia!: string;
     bank_destino!: string;

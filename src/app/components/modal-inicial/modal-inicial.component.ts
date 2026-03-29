@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, AfterViewInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output } from '@angular/core';
+
 declare var $: any;
 declare var bootstrap: any;
+
 @Component({
-  selector: 'app-modalinfo-tipos-pago',
+  selector: 'app-modal-inicial',
   imports: [CommonModule],
-  templateUrl: './modalinfo-tipos-pago.component.html',
-  styleUrls: ['./modalinfo-tipos-pago.component.css']
+  templateUrl: './modal-inicial.component.html',
+  styleUrls: ['./modal-inicial.component.css']
 })
-export class ModalinfoTiposPagoComponent implements AfterViewInit {
-  @Input() info!:string;
+export class ModalInicialComponent implements AfterViewInit {
   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
   isLogued: boolean = false;
 
@@ -34,7 +35,17 @@ export class ModalinfoTiposPagoComponent implements AfterViewInit {
     $('#exampleModal').modal('hide');
   }
 
-  onClose() {
+  nextStep() {
+    this.currentStep = 2;
+
+  }
+
+  prevStep() {
+    this.currentStep = 1;
+  }
+
+   onClose() {
     this.closeModal.emit();
   }
+ 
 }

@@ -47,40 +47,44 @@
                         <thead>
                             <tr>
                                 <th scope="col">nroFactura</th>
-                                <th scope="col">usuario</th>
                                 <th scope="col">mes</th>
                                 <th scope="col">anio</th>
-                                <th scope="col">aplicaRetencion </th>
-                                <th scope="col">porcentajeIva </th>
-                                <th scope="col">montoRetencion </th>
-                                <th scope="col">otrosCargos </th>
+                                <th scope="col">Aplica Retención </th>
+                                <th scope="col">monto Retencion </th>
+                                <th scope="col">tasaBCV </th>
+                                <th scope="col">otros Cargos </th>
+                                <th scope="col">total Pagado </th>
                                 <th scope="col">estado</th>
                                 <th scope="col">Creado</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let factura of facturas |  paginate: { itemsPerPage: count, currentPage: p }">
-                                
+
                                 <th scope="row">
-                                    <a [routerLink]="['/dashboard/payment-detail', factura._id]">{{factura.nroFactura}}</a>
+                                    <a (click)="openViewModal(factura)" href="javascript:void(0)" data-bs-toggle="modal"
+                                        data-bs-target="#viewFactura">{{factura.nroFactura}}</a>
                                 </th>
-                                <th><a [routerLink]="['/dashboard/user/detail/', factura.usuario]">{{factura.usuario}}</a>
-                                </th>
-                                
+
                                 <td>{{factura.mes}}</td>
                                 <td>{{factura.anio}}</td>
-                                <td>{{factura.aplicaRetencion}}</td>
-                                <td>% {{factura.porcentajeIva}}</td>
-                                <td>% {{factura.montoRetencion}}</td>
+                                <td>
+                                    <span class="badge bg-success" *ngIf="factura.aplicaRetencion === true">Si</span>
+                                    <span class="badge bg-danger" *ngIf="factura.aplicaRetencion === false">No</span>
+                                </td>
+                                <td>{{factura.montoRetencion|currency:'Bs.'}}</td>
+                                <td>{{factura.tasaBCV|currency:'Bs.'}}</td>
                                 <td>{{factura.otrosCargos|currency:'Bs.'}}</td>
+                                <td>{{factura.totalPagar|currency:'Bs.'}}</td>
                                 <td>
                                     <span class="badge bg-success" *ngIf="factura.estado === 'PAGADO'">Pagado</span>
-                                    <span class="badge bg-primary" *ngIf="factura.estado === 'PENDIENTE'">Pendiente</span>
+                                    <span class="badge bg-primary"
+                                        *ngIf="factura.estado === 'PENDIENTE'">Pendiente</span>
                                     <span class="badge bg-danger" *ngIf="factura.estado === 'ANULADO'">Anulado</span>
                                 </td>
                                 <td>{{factura.createdAt | date:'MMM d, y, h:mm:ss a'}}</td>
 
-                                
+
                             </tr>
 
 
@@ -94,3 +98,8 @@
     </div>
 </div>
 <!-- End #main-->
+
+<app-modal-factura-detalle [facturaSeleccionado]="facturaSeleccionado"
+    (closeModal)="onCloseModal()"></app-modal-factura-detalle>
+
+    <app-modalinfo-tipos-pago [info]="info"></app-modalinfo-tipos-pago>

@@ -1,0 +1,110 @@
+<div class="modal fade" id="viewPago" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title">{{ title }} - {{pagoSeleccionado?.referencia}}</h5>
+                <button type="button" class="btn-close" (click)="onClose()" data-bs-dismiss="modal"></button>
+            </div>
+            <app-loading *ngIf="isLoading"></app-loading>
+            <div class="modal-body" *ngIf="!isLoading">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Cliente:</strong> {{ pagoSeleccionado?.cliente?.username }}
+                    </div>
+
+                    <div class="col-md-4">
+                        <strong>metodo_pago:</strong> {{ pagoSeleccionado?.metodo_pago }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>bank_destino:</strong> {{ pagoSeleccionado?.bank_destino }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>fecha_pago:</strong> {{ pagoSeleccionado?.fecha_pago| date:'MMM d, y, h:mm:ss a'}}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>tasa BCV:</strong> {{ pagoSeleccionado?.tasaBCV |currency:'Bs.' }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>estado:</strong> &nbsp;
+                        <span class="badge bg-success" *ngIf="pagoSeleccionado?.status === 'APROBADO'">Aprobado</span>
+                        <span class="badge bg-primary" *ngIf="pagoSeleccionado?.status === 'PENDIENTE'">Pendiente</span>
+                        <span class="badge bg-danger" *ngIf="pagoSeleccionado?.status === 'RECHAZADO'">Rechazado</span>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>mes:</strong> {{ pagoSeleccionado?.mes }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>anio:</strong> {{ pagoSeleccionado?.anio }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Fecha:</strong> {{ pagoSeleccionado?.createdAt | date:'dd/MM/yyyy' }}
+                    </div>
+                </div>
+                <hr>
+                <!-- detalle factura -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>nro Factura:</strong> {{ pagoSeleccionado?.factura?.nroFactura }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>aplica Retención:</strong> &nbsp;
+                        <span class="badge bg-success" *ngIf="pagoSeleccionado?.factura?.aplicaRetencion === true">Si</span>
+                        <span class="badge bg-danger" *ngIf="pagoSeleccionado?.factura?.aplicaRetencion === false">No</span>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Retención:</strong> {{ pagoSeleccionado?.factura?.montoRetencion |currency:'Bs.' }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>otros Cargos:</strong> {{ pagoSeleccionado?.factura?.otrosCargos |currency:'Bs.'}}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>tasa BCV:</strong> {{ pagoSeleccionado?.factura?.tasaBCV |currency:'Bs.' }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>estado:</strong> &nbsp;
+                        <span class="badge bg-success" *ngIf="pagoSeleccionado?.factura?.estado === 'PAGADO'">Pagado</span>
+                        <span class="badge bg-primary"
+                            *ngIf="pagoSeleccionado?.factura?.estado === 'PENDIENTE'">Pendiente</span>
+                        <span class="badge bg-danger" *ngIf="pagoSeleccionado?.factura?.estado === 'ANULADO'">Anulado</span>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>mes:</strong> {{ pagoSeleccionado?.factura?.mes }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>anio:</strong> {{ pagoSeleccionado?.factura?.anio }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Fecha:</strong> {{ pagoSeleccionado?.factura?.createdAt | date:'dd/MM/yyyy' }}
+                    </div>
+                </div>
+                <!-- detalles pago-->
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Origen</th>
+                            <th>Monto Base</th>
+                            <th>% IVA</th>
+                            <th>Monto IVA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let detalle of pagoSeleccionado?.factura.detalles">
+                            <td>{{ detalle.descripcion}}</td>
+                            <td>{{ detalle.origen }}</td>
+                            <td>{{ detalle.montoBase |currency:'Bs.' }}</td>
+                            <td>{{ detalle.ivaPorcentaje }}</td>
+                            <td>{{ detalle.montoIva |currency:'Bs.' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-end mt-3">
+                    <h5>Total: {{ pagoSeleccionado?.amount |currency:'Bs.' }}</h5>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" (click)="onClose()"
+                        data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>

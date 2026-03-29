@@ -62,7 +62,7 @@
                         <tbody>
                             <tr *ngFor="let transferecia of transferecias |  paginate: { itemsPerPage: count, currentPage: p }">
                                 <td>
-                                    <img [src]="(transferecia?.comprobante_img || '')| imagenPipe: 'transferencias' " class="imagecircle shadow"
+                                    <img [src]="(transferecia?.img || '')| imagenPipe: 'transferencias' " class="imagecircle shadow"
                                         alt="">
                                 </td>
                                 <th><a [routerLink]="['/dashboard/user/detail/', transferecia.user]">{{transferecia.user | slice:0:15}}...</a>
@@ -109,3 +109,5 @@
     </div>
 </div>
 <!-- End #main-->
+
+ <app-modalinfo-tipos-pago [info]="info"></app-modalinfo-tipos-pago>

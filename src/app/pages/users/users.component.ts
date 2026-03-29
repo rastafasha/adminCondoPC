@@ -17,11 +17,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserRolePipe } from '../../pipes/user-role.pipe';
 import { AdminRolesPipe } from '../../pipes/admin-roles.pipe';
 import { ModalFacturaMasivaComponent } from '../../components/modal-factura-masiva/modal-factura-masiva.component';
+import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 
 @Component({
   selector: 'app-users',
   imports:[CommonModule, RouterLink, BackButtnComponent, NgxPaginationModule,
-    ReactiveFormsModule, FormsModule, UserRolePipe, AdminRolesPipe,ModalFacturaMasivaComponent
+    ReactiveFormsModule, FormsModule, UserRolePipe, AdminRolesPipe,ModalFacturaMasivaComponent,
+    ModalinfoTiposPagoComponent
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
@@ -45,6 +47,16 @@ export class UsersComponent implements OnInit {
     solicitud_selectedd: any = 1;
   ServerUrl = environment.apiUrl;
   query:string ='';
+
+  info = `
+  <p>En esta sección podrás:</p>
+          <ul>
+            <li>Ver Todos los usuarios </li>
+            <li>Ver a detalle cada Cliente</li>
+            <li>Encontrar Cliente por varias opciones</li>
+            <li>Generar La Facturación por cada cliente individual</li>
+            <li>Generar La Facturación Masiva a todos los Clientes</li>
+          </ul>`;
 
   constructor(
     private userService: UserService,

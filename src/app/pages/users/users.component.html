@@ -21,11 +21,10 @@
                     </li>
                     <li>
                         <!-- NUEVO BOTÓN MASIVO -->
-                        <button class="btn btn-success ms-2" 
+                        <button class="btn btn-outline-success" 
                                 data-bs-toggle="modal" 
                                 data-bs-target="#modalMasivo"
-                                (click)="abrirModalMasivo()">
-                        <i class="bi bi-plus-square-fill"></i> Generar Mes
+                                (click)="abrirModalMasivo()"> Generar Mes
                         </button>
                     </li>
 
@@ -196,3 +195,4 @@
 </div>
 <!--/main-->
 <app-modal-factura-masiva></app-modal-factura-masiva>
+<app-modalinfo-tipos-pago [info]="info"></app-modalinfo-tipos-pago>

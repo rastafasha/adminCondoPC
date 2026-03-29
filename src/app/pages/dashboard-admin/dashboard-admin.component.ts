@@ -6,10 +6,13 @@ import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { MenuiconosComponent } from '../../shared/menuiconos/menuiconos.component';
 import { TasadiabcvComponent } from '../../components/tasadiabcv/tasadiabcv.component';
+import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
+import { ModalInicialComponent } from "../../components/modal-inicial/modal-inicial.component";
 
 @Component({
   selector: 'app-dashboard-admin',
-  imports:[CommonModule, MenuiconosComponent, TasadiabcvComponent],
+  imports: [CommonModule, MenuiconosComponent, 
+    TasadiabcvComponent, ModalInicialComponent],
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css']
 })
@@ -30,6 +33,8 @@ export class DashboardAdminComponent implements OnInit {
   query:string ='';
   selectedPayment!:Payment|null;
   paymentSeleccionado!:Payment|null;
+
+  
 
   constructor(
     private userService: UserService,

@@ -12,17 +12,17 @@ import { PieChart2Component } from '../../components/charts/pie-chart2/pie-chart
 import { BarChartComponent } from '../../components/charts/bar-chart/bar-chart.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { BackButtnComponent } from '../../shared/backButtn/backButtn.component';
+import { ModalPagoDetalleComponent } from "../../components/modal-pago-detalle/modal-pago-detalle.component";
+import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 
 @Component({
   selector: 'app-payments',
-  imports:[CommonModule, FormsModule, 
-    RouterLink,
+  imports: [CommonModule, FormsModule,
     // ImagenPipe, 
     // PieChart2Component, BarChartComponent,
     LoadingComponent,
-    NgxPaginationModule, 
-    BackButtnComponent
-   ],
+    NgxPaginationModule,
+    BackButtnComponent, ModalPagoDetalleComponent, ModalinfoTiposPagoComponent],
   templateUrl: './payments.component.html',
   styleUrls: ['./payments.component.css'],
 })
@@ -34,10 +34,21 @@ export class PaymentsComponent implements OnInit {
   error!: string;
   p: number = 1;
   count: number = 8;
-  isLoading!:boolean
+  isLoading!: boolean
 
-  public user:any;
+  public user: any;
   query: string = '';
+  pagoSeleccionado!: any | null;
+
+  info = `
+  <p>En esta sección podrás:</p>
+          <ul>
+            <li>Ver Todos los Pagos recientes </li>
+            <li>Ver a detalle cada Pago</li>
+            <li>Encontrar facturas por varias opciones</li>
+            <li>Cambiar el estado del Pago (Verifica con tu Banco Emisor)</li>
+            <li>Si Eres Cajero / Administrador puedes Cargar Pagos</li>
+          </ul>`;
 
   constructor(
     private location: Location,
@@ -55,7 +66,7 @@ export class PaymentsComponent implements OnInit {
     // this.getPagos_list();
   }
 
-  
+
 
   getPagos(): void {
     this.isLoading = true;
@@ -82,23 +93,33 @@ export class PaymentsComponent implements OnInit {
     this.query = '';
   }
 
-  cambiarStatus(data:any){
+  cambiarStatus(data: any) {
     const VALUE = data.status;
     console.log(VALUE);
-    
+
     this.paymentService.updatePaymentStatus(data).subscribe(
-      resp =>{
+      resp => {
 
         console.log(resp);
         Swal.fire({
-                      position: 'top-end',
-                      icon: 'success',
-                      title: 'Actualizado',
-                      showConfirmButton: false,
-                      timer: 1500,
-                    });
+          position: 'top-end',
+          icon: 'success',
+          title: 'Actualizado',
+          showConfirmButton: false,
+          timer: 1500,
+        });
         this.getPagos();
       }
     )
+  }
+
+
+  openViewModal(pago: any): void {
+    this.pagoSeleccionado = pago;
+
+  }
+
+  onCloseModal(): void {
+    this.pagoSeleccionado = null;
   }
 }

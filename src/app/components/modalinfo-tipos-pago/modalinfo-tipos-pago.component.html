@@ -3,19 +3,10 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-
-          <p>En esta sección podrás:</p>
-          <ul>
-            <li>Crear Tipos de Pago que use tu negocio</li>
-            <li>Usa los datos bancarios para que transfieran a tu cuenta en dólares o euros</li>
-            <li>Si esta disponible el sistema de pago móvil, agrega los datos </li>
-            <li>Para agregar los datos de paypal, es necesario nuestra asistencia técnica</li>
-            <li>La cuenta de paypal actual esta en modo prueba, y es de nuestra empresa</li>
-          </ul>
-
+        <div [innerHTML]="info"></div>
       </div>
       <div class="modal-footer botonesmodal">
-        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Continuar</button>
+        <button type="button" class="btn btn-success" (click)="onClose()" data-bs-dismiss="modal">Continuar</button>
         <button type="button" class="btn btn-outline-danger" (click)="onNoShowMore()">No quiero ver más este
           mensaje</button>
       </div>
