@@ -1,9 +1,10 @@
 import { Component, Inject, Input } from '@angular/core';
 import {  CommonModule, Location } from '@angular/common';
+import { RouterLink } from '@angular/router';
 @Component({
     selector: 'app-backButtn',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterLink],
     templateUrl: './backButtn.component.html',
     styleUrls: ['./backButtn.component.css']
 })

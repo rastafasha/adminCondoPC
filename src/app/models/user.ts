@@ -9,6 +9,7 @@ export class User {
     public username: string,
     public email: string,
     public terminos: boolean,
+    public numdoc: string,
     public password?: string,
     public google?: boolean,
     public role?: 'SUPERADMIN_ROLE' | 'ADMIN_ROLE'  | 'USER_ROLE' ,

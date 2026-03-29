@@ -62,7 +62,6 @@ export class PaymentsComponent implements OnInit {
     this.paymentService.getPayments().subscribe((res: any) => {
       this.payments = res;
       this.isLoading = false;
-      console.log(this.payments);
     });
   }
   goBack() {

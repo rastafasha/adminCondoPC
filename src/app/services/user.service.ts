@@ -180,6 +180,7 @@ export class UserService {
               user.email,
               user.terminos,
               '',
+              user.numdoc,
               user.google,
               user.role,
               user.uid

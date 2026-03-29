@@ -60,7 +60,6 @@ export class TransferenciasComponent {
     this.trasnsferenciaService.getTransferencias().subscribe((res: any) => {
       this.transferecias = res;
       this.isLoading = false;
-      console.log(this.transferecias);
     });
   }
 

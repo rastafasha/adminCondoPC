@@ -11,10 +11,11 @@ import { BackButtnComponent } from '../../shared/backButtn/backButtn.component';
 import { Residencia } from '../../models/residencia';
 import { Local } from '../../models/local';
 import { Oficina } from '../../models/oficina';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-user-profile',
-  imports:[CommonModule, RouterLink, ImagenPipe, BackButtnComponent],
+  imports:[CommonModule, RouterLink, ImagenPipe, BackButtnComponent, LoadingComponent],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
@@ -29,6 +30,7 @@ export class UserProfileComponent implements OnInit {
   oficina?: Oficina[];
   residencia?: Residencia[];
   usuario?: User;
+  isLoading: boolean = false;
 
   rolesSelected!:number;
 
@@ -71,7 +73,7 @@ export class UserProfileComponent implements OnInit {
 
   }
   getProfile(id:string){
-    
+    this.isLoading = true;
     this.profileService.getByUser(id).subscribe(
       res =>{
         this.profile = res;
@@ -79,7 +81,7 @@ export class UserProfileComponent implements OnInit {
         this.oficina = Array.isArray(res.oficina) ? res.oficina : [res.oficina];
         this.residencia = Array.isArray(res.residencia) ? res.residencia : [res.residencia];
         this.usuario = res.usuario;
-        console.log(this.profile)
+        this.isLoading = false;
       }
     );
 

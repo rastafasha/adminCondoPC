@@ -1,17 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { User } from '../../../../models/user';
 import { UserService } from '../../../../services/user.service';
 import { RouterLink } from '@angular/router';
-import { NgxPaginationModule, PaginatePipe } from 'ngx-pagination';
+import { NgxPaginationModule} from 'ngx-pagination';
 import { BackButtnComponent } from '../../../../shared/backButtn/backButtn.component';
+import { UserRolePipe } from '../../../../pipes/user-role.pipe';
+import { AdminRolesPipe } from '../../../../pipes/admin-roles.pipe';
+import { LoadingComponent } from '../../../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-roles-view',
   imports:[CommonModule, RouterLink, ReactiveFormsModule, 
-    FormsModule, NgxPaginationModule, BackButtnComponent ],
+    FormsModule, NgxPaginationModule, BackButtnComponent,
+    UserRolePipe, AdminRolesPipe, LoadingComponent ],
   templateUrl: './roles-view.component.html',
   styleUrls: ['./roles-view.component.css']
 })
@@ -21,6 +25,7 @@ export class RolesViewComponent implements OnInit {
   users: any;
   user!: User;
   role?: User;
+  isLoading: boolean = false;
 
   p: number = 1;
   count: number = 8;
@@ -32,10 +37,12 @@ export class RolesViewComponent implements OnInit {
 
   rolesForm!: FormGroup;
 
+  option_selectedd: number = 1;
+    solicitud_selectedd: any = 1;
+
   constructor(
     private fb:FormBuilder,
     private userService: UserService,
-    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -44,9 +51,11 @@ export class RolesViewComponent implements OnInit {
   }
 
   getUsers(): void {
+    this.isLoading = true;
     this.userService.getUsuarios().subscribe(
       res =>{
         this.users = res;
+        this.isLoading = false;
       }
     );
   }
@@ -61,8 +70,16 @@ export class RolesViewComponent implements OnInit {
   }
 
 
-  goBack() {
-    this.location.back(); // <-- go back to previous location on cancel
-  }
+
+  optionSelected(value: number) {
+     this.option_selectedd = value;
+     if (this.option_selectedd === 1) {
+ 
+       // this.ngOnInit();
+     }
+     if (this.option_selectedd === 2) {
+       this.solicitud_selectedd = null;
+     }
+   }
 
 }

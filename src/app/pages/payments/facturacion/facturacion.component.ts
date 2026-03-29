@@ -55,7 +55,6 @@ export class FacturacionComponent {
     this.facturacionService.getFacturaciones().subscribe((res: any) => {
       this.facturas = res;
       this.isLoading = false;
-      console.log(this.facturas);
     });
   }
 
