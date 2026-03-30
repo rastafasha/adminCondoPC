@@ -98,6 +98,13 @@
       "type": "image/png",
       "purpose": "maskable any",
       "form_factor": "wide"
+    },
+    {
+      "src": "assets/icons-ios/apple-launch-800x1280.png",
+      "sizes": "800x1280",
+      "type": "image/png",
+      "purpose": "maskable any",
+      "form_factor": "wide"
     }
   ]
 }
