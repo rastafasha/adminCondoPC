@@ -1,9 +1,10 @@
 {
-  "name": "adminCondoPC",
-  "short_name": "adminCondoPC",
-  "display": "standalone",
-  "scope": "./",
+ "name": "Corpo Capital",
+  "short_name": "Corpo",
   "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0056b3",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",
