@@ -10,11 +10,10 @@ import Chart from 'chart.js/auto';
 })
 export class PieChart2Component implements OnChanges {
   public chart!: Chart;
-  isLoading:boolean = false;
-  @Input() payments!: any[];
+  @Input() stats!: any; // Cambiamos 'payments' por 'stats' que trae {labels, data}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['payments'] && this.payments) {
+    if (changes['stats'] && this.stats) {
       this.updateChart();
     }
   }
@@ -22,54 +21,36 @@ export class PieChart2Component implements OnChanges {
   
 
   updateChart() {
-    const paidCount = this.payments.filter(p => p.notificado === true).length;
-    const debtCount = this.payments.filter(p => p.notificado === false).length;
-    const data = {
-      labels: ['Con Presentación', 'Sin Presentación'],
-      datasets: [
-        {
-          label: 'Comportamiento',
-          data: [paidCount, debtCount],
-          backgroundColor: [
-            'rgba(75, 192, 192, 0.6)', // greenish for paid
-            'rgba(255, 99, 132, 0.6)'  // reddish for debt
-          ],
-          borderColor: [
-            'rgba(75, 192, 192, 1)',
-            'rgba(255, 99, 132, 1)'
-          ],
-          borderWidth: 1
-        }
-      ]
+    const chartData = {
+      labels: this.stats.labels, // ['Pagado', 'Pendiente', 'Anulado']
+      datasets: [{
+        label: 'Cantidad de Facturas',
+        data: this.stats.data,     // [5, 4, 0]
+        backgroundColor: [
+          'rgba(75, 192, 192, 0.6)', // Pagado
+          'rgba(255, 159, 64, 0.6)',  // Pendiente (Naranja)
+          'rgba(255, 99, 132, 0.6)'   // Anulado
+        ],
+        borderWidth: 1
+      }]
     };
-    
 
     if (this.chart) {
-      this.chart.data = data;
+      this.chart.data = chartData;
       this.chart.update();
     } else {
       this.chart = new Chart('pieChart', {
-        type: 'doughnut',
-        data: data,
+        type: 'doughnut', // Mantengo el doughnut que se ve genial
+        data: chartData,
         options: {
           responsive: true,
           plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Comportamiento'
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
+            legend: { position: 'top' },
+            title: { display: true, text: 'Estado de Facturación' }
+          }
+        }
       });
     }
-    
   }
+
 }

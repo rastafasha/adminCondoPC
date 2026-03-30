@@ -9,7 +9,7 @@
             <ul id="sidebar-nav">
                 <li class="nav-item">
                     <a class="nav-link collapsed cursor" routerLink="/">
-                        <i class="fa fa-home"></i>
+                        <i class="fas fa-home"></i>
                         <span>Inicio</span>
                     </a>
                 </li>
@@ -18,37 +18,27 @@
                 <!-- menu superadmin y admin -->
 
                 <div *ngIf="user.role === 'SUPERADMIN_ROLE' || user.role === 'ADMIN_ROLE'  ">
-
-                    <!-- <li class="nav-item">
-                        <a class="nav-link collapsed cursor" routerLink="/dashboard/buscar" routerLinkActive="active">
-                            <i class="fa fa-search"></i>
-                            <span>Buscar</span>
-                        </a>
-                    </li> -->
-                   
-                    
-                   
                     <li class="nav-item">
                         <a class="nav-link collapsed cursor" routerLink="/dashboard/payments" routerLinkActive="active">
-                            <i class="fa fa-users"></i>
+                            <i class="fas fa-chart-pie"></i>
                             <span>Pagos</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed cursor" routerLink="/dashboard/facturacion" routerLinkActive="active">
-                            <i class="fa fa-users"></i>
+                            <i class="fas fa-chart-line"></i>
                             <span>Facturación</span>
                         </a>
                     </li>
                      <li class="nav-item">
                         <a class="nav-link collapsed cursor" routerLink="/dashboard/trasnferencias" routerLinkActive="active">
-                            <i class="fa fa-users"></i>
+                            <i class="fas fa-money"></i>
                             <span>Transferencias</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed cursor" routerLink="/dashboard/users" routerLinkActive="active">
-                            <i class="fa fa-users"></i>
+                            <i class="fas fa-users"></i>
                             <span>Usuarios</span>
                         </a>
                     </li>
@@ -57,13 +47,13 @@
                     
                     <li class="nav-item">
                         <a class="nav-link collapsed cursor" [routerLink]="['/dashboard/profile/', user.uid]" routerLinkActive="active">
-                            <i class="fa fa-user"></i>
+                            <i class="fas fa-user"></i>
                             <span>Mi Cuenta</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed cursor" routerLink="/dashboard/configuraciones" routerLinkActive="active">
-                            <i class="fa fa-cogs"> </i>
+                            <i class="fas fa-cogs"> </i>
                             <span>Configuraciones</span>
                         </a>
                     </li>
@@ -76,7 +66,7 @@
                 <div *ngIf="user.role === 'USER_ROLE' ">
                     <li class="nav-item">
                         <a class="nav-link collapsed cursor" [routerLink]="['/dashboard/profile/', user.uid]" routerLinkActive="active">
-                            <i class="fa fa-user-md"></i>
+                            <i class="fas fa-user-md"></i>
                             <span>Mi Cuenta</span>
                         </a>
                     </li>
@@ -103,7 +93,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link collapsed cursor" (click)="logout()">
-                        <i class="fa fa-power-off"></i>
+                        <i class="fas fa-power-off"></i>
                         <span>Salir</span>
                     </a>
                 </li>

@@ -12,12 +12,13 @@ import { PaymentsComponent } from "../payments/payments.component";
 import { PieChartComponent } from '../../components/charts/pie-chart/pie-chart.component';
 import { LineChartComponent } from '../../components/charts/line-chart/line-chart.component';
 import { PieChart2Component } from '../../components/charts/pie-chart2/pie-chart2.component';
+import { FacturacionService } from '../../services/facturacion.service';
 
 @Component({
   selector: 'app-dashboard-admin',
   imports: [CommonModule, MenuiconosComponent,
     TasadiabcvComponent, ModalInicialComponent,
-     PaymentsComponent, LineChartComponent, PieChart2Component
+     PaymentsComponent, 
     ],
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css']
@@ -39,12 +40,13 @@ export class DashboardAdminComponent implements OnInit {
   query:string ='';
   selectedPayment!:Payment|null;
   paymentSeleccionado!:Payment|null;
-
+  
   
 
   constructor(
     private userService: UserService,
     private payentService: PaymentService,
+    
     
 
   ) {
@@ -65,6 +67,8 @@ export class DashboardAdminComponent implements OnInit {
       this.payments = resp;
     })
   }
+
+  
 
   onEditProject(payment: Payment) {
     this.selectedPayment = payment;

@@ -1,12 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { PaymentService } from '../../../services/payment.service';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-bar-chart',
-  imports:[CommonModule, FormsModule ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.css']
 })
@@ -43,25 +43,26 @@ export class BarChartComponent implements OnInit {
   }
 
   loadData(): void {
-    this.isLoading = true;
-    this.paymentService.getMontlyReport(this.selectedMonth, this.selectedYear).subscribe({
-      next: (resp: any) => {
-        // Si el backend responde que no hay pagos, reportData debe ser null
-        if (resp.ok && resp.report && resp.report.cantidadPagos > 0) {
-          this.reportData = resp.report;
-        } else {
-          this.reportData = null;
-        }
-
-        this.createChart(); // Se llama siempre para destruir el viejo o pintar el nuevo
-        this.isLoading = false;
-      },
-      error: (error) => {
+  this.isLoading = true;
+  this.paymentService.getMontlyReport(this.selectedMonth, this.selectedYear).subscribe({
+    next: (resp: any) => {
+      // Validamos que existan datos en alguna de las dos partes del reporte
+      if (resp.ok && (resp.recaudado || resp.pendiente)) {
+        this.reportData = resp; 
+      } else {
         this.reportData = null;
-        this.isLoading = false;
       }
-    });
-  }
+      
+      this.createChart(); // Esto dibujará las barras con 610 y 1198
+      this.isLoading = false;
+    },
+    error: (error) => {
+      console.error("Error en reporte:", error);
+      this.reportData = null;
+      this.isLoading = false;
+    }
+  });
+}
 
   onYearChange(year: number): void {
     this.selectedYear = year;
@@ -74,54 +75,65 @@ export class BarChartComponent implements OnInit {
   }
 
   private createChart(): void {
-    // 1. Limpiar gráfico previo si existe
+
+
+
     if (this.chart) {
       this.chart.destroy();
     }
 
-    // 2. Si no hay datos, no hacemos nada
-    if (!this.reportData || this.reportData.cantidadPagos === 0) {
+    // Verificamos si existe data de recaudación o morosidad
+    if (!this.reportData || (!this.reportData.recaudado && !this.reportData.pendiente)) {
       return;
     }
 
-    // 3. Esperar a que Angular termine de renderizar el HTML
+
+
     setTimeout(() => {
       const el = document.getElementById('barChart') as HTMLCanvasElement;
+      if (!el) return;
 
-      if (!el) {
-        console.error("No se encontró el canvas 'barChart'");
-        return;
-      }
+      const rec = this.reportData.recaudado;
+      const pen = this.reportData.pendiente;
 
       this.chart = new Chart(el, {
         type: 'bar',
         data: {
-          labels: ['Vendedores', 'Admins', 'CEOs', 'Total General'],
+          labels: ['Residencias', 'IVA', 'Otros', 'TOTAL RECAUDADO', 'POR COBRAR'],
           datasets: [{
-            label: 'Montos Acumulados (€)',
+            label: 'Montos en Bs.',
             data: [
-              Number(this.reportData.totalVendedores) || 0,
-              Number(this.reportData.totalAdmins) || 0,
-              Number(this.reportData.totalCEOs) || 0,
-              Number(this.reportData.granTotal) || 0
+              this.reportData.recaudado?.totalResidencias || 0, // 500
+              this.reportData.recaudado?.totalIVA || 0,         // 80
+              this.reportData.recaudado?.totalOtros || 0,       // 30
+              this.reportData.recaudado?.recaudacionNeta || 0,  // 610 (Total Pagado)
+              this.reportData.pendiente?.montoPendiente || 0    // 1198 (Por Cobrar)
             ],
             backgroundColor: [
-              'rgba(75, 192, 192, 0.7)',
-              'rgba(54, 162, 235, 0.7)',
-              'rgba(255, 206, 86, 0.7)',
-              'rgba(153, 102, 255, 0.7)'
+              'rgba(75, 192, 192, 0.6)', // Residencias
+              'rgba(153, 102, 255, 0.6)', // IVA
+              'rgba(255, 206, 86, 0.6)',  // Otros
+              'rgba(54, 162, 235, 0.8)',  // Total Recaudado (Azul)
+              'rgba(255, 99, 132, 0.8)'   // Por Cobrar (Rojo)
             ],
             borderWidth: 1
           }]
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false, // Importante para que llene el contenedor
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false } // Ocultamos leyenda para que se vea más limpio
+          },
           scales: {
-            y: { beginAtZero: true }
+            y: {
+              beginAtZero: true,
+              ticks: { callback: (value) => 'Bs ' + value } // Formato moneda
+            }
           }
         }
       });
-    }, 100); // 100ms es suficiente para que el DOM esté listo
+    }, 50);
   }
+
 }

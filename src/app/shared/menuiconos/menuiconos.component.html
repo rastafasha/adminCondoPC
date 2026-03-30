@@ -6,17 +6,11 @@
 
 <div *ngIf="user.role === 'SUPERADMIN_ROLE'|| user.role === 'ADMIN_ROLE' ">
     <div class="acces-icons animated fadeIn container">
-        <!-- <a class="nav-link collapsed cursor" routerLink="/dashboard/buscar">
-
-            <div class="icontext shadow">
-                <i class="fa fa-search"></i>
-                <h3>Buscar</h3>
-            </div>
-        </a> -->
+        
         
         <a class="nav-link collapsed cursor" routerLink="/dashboard/payments">
             <div class="icontext shadow">
-                <i class="fa fa-folder"> </i>
+               <i class="fas fa-chart-pie"></i>
                 <h3>Pagos</h3>
             </div>
         </a>
@@ -24,21 +18,21 @@
         <a class="nav-link collapsed cursor" routerLink="/dashboard/facturacion">
 
             <div class="icontext shadow">
-                <i class="fa fa-users"></i>
+                <i class="fas fa-chart-line"></i>
                 <h3>Facturación</h3>
             </div>
         </a>
-        <!-- <a class="nav-link collapsed cursor" routerLink="/dashboard/trasnferencias">
+        <a class="nav-link collapsed cursor" routerLink="/dashboard/trasnferencias">
 
             <div class="icontext shadow">
-                <i class="fa fa-users"></i>
+                <i class="fas fa-money"></i>
                 <h3>Transferencia</h3>
             </div>
-        </a> -->
+        </a>
         <a class="nav-link collapsed cursor" routerLink="/dashboard/users">
 
             <div class="icontext shadow">
-                <i class="fa fa-users"></i>
+                <i class="fas fa-users"></i>
                 <h3>Usuarios</h3>
             </div>
         </a>
@@ -46,7 +40,7 @@
         <a class="nav-link collapsed cursor" routerLink="/dashboard/configuraciones">
 
             <div class="icontext shadow">
-                <i class="fa fa-cogs"> </i>
+                <i class="fas fa-cogs"> </i>
                 <h3>Configuraciones</h3>
             </div>
         </a>

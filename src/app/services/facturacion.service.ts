@@ -95,6 +95,11 @@ facturacionIndividual(facturacion: Facturacion) {
         )
     }
   
+  getByStatusFaturas() {
+      const url = `${baseUrl}/facturacion/status/pagos`;
+      return this.http.get<any>(url, { headers: this.headers });
+    }
+  
 
   
 

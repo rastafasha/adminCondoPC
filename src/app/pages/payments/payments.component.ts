@@ -16,13 +16,14 @@ import { ModalPagoDetalleComponent } from "../../components/modal-pago-detalle/m
 import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 import { BusquedasService } from '../../services/busqueda.service';
 import { ReportarPagoComponent } from "./reportar-pago/reportar-pago.component";
+import { FacturacionService } from '../../services/facturacion.service';
 
 @Component({
   selector: 'app-payments',
   imports: [CommonModule, FormsModule,
     // ImagenPipe, 
-    // PieChart2Component,
-    //  BarChartComponent,
+     PieChart2Component,
+     BarChartComponent,
     LoadingComponent,
     NgxPaginationModule,
     BackButtnComponent, ModalPagoDetalleComponent, ModalinfoTiposPagoComponent, NgFor, ReportarPagoComponent],
@@ -43,6 +44,9 @@ export class PaymentsComponent implements OnInit {
   public user: any;
   query: string = '';
   pagoSeleccionado!: any | null;
+  option_selectedd: number = 1;
+    solicitud_selectedd: any = 1;
+    stats:any;
 
   info = `
   <p>En esta sección podrás:</p>
@@ -60,6 +64,7 @@ export class PaymentsComponent implements OnInit {
     private userService: UserService,
     private http: HttpClient,
     private busquedasService: BusquedasService,
+    private facturacionService: FacturacionService,
 
   ) {
   }
@@ -70,9 +75,17 @@ export class PaymentsComponent implements OnInit {
     this.getPagos();
     window.scrollTo(0, 0);
     // this.getPagos_list();
+    this.getStatusFacturas();
   }
 
-
+  getStatusFacturas(){
+      this.facturacionService.getByStatusFaturas().subscribe((resp:any)=>{
+        this.stats = resp;
+        console.log(resp)
+      })
+  
+      
+    }
 
   getPagos(): void {
     this.isLoading = true;
@@ -166,4 +179,16 @@ export class PaymentsComponent implements OnInit {
     // Por ejemplo, podrías usar un servicio de modal o simplemente mostrar un componente específico
     console.log('Abrir modal de pago masivo');
   }
+
+   optionSelected(value: number) {
+      this.option_selectedd = value;
+      if (this.option_selectedd === 1) {
+  
+        // this.ngOnInit();
+      }
+      if (this.option_selectedd === 2) {
+        this.solicitud_selectedd = null;
+      }
+    }
+
 }
