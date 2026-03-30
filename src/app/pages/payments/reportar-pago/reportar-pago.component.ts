@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { TransferenciaService } from '../../../services/transferencia.service';
 import { PagoEfectivoService } from '../../../services/pago-efectivo.service';
 import { TiposdepagoService } from '../../../services/tiposdepago.service';
+import { TasabcvService } from '../../../services/tasabcv.service';
 
 interface HtmlInputEvent extends Event{
   target : HTMLInputElement & EventTarget;
@@ -60,6 +61,7 @@ export class ReportarPagoComponent implements OnInit {
   public storage = environment.apiUrl;
   public identity!: User;
   public userId!: any;
+  public tasaBCV!: number;
 
   selectedMethod: string = 'Selecciona un método de pago';
   habilitacionFormTransferencia: boolean = false;
@@ -76,13 +78,15 @@ export class ReportarPagoComponent implements OnInit {
     referencia: new FormControl('', Validators.required),
     paymentday: new FormControl('', Validators.required),
     amount: new FormControl('', Validators.required),
-    phone: new FormControl('', Validators.required)
+    phone: new FormControl('', Validators.required),
+    tasaBCV: new FormControl(0, Validators.required),
   });
 
 
   formEfectivo = new FormGroup({
     paymentday: new FormControl('', Validators.required),
-    amount: new FormControl('', Validators.required)
+    amount: new FormControl('', Validators.required),
+    tasaBCV: new FormControl(0, Validators.required),
   });
 
   constructor(
@@ -91,6 +95,7 @@ export class ReportarPagoComponent implements OnInit {
     private efectivoService: PagoEfectivoService,
     private usuarioService: UserService,
     private paymentMethodService: TiposdepagoService,
+    private tasaService: TasabcvService,
   ) {
     this.user = this.usuarioService.usuario;
   }
@@ -105,7 +110,17 @@ export class ReportarPagoComponent implements OnInit {
     this.userId = this.identity.uid;
     this.visible= false;
     this.getTiposdePago();
+    this.getTasadeldia();
     this.total = this.getTotal();
+  }
+
+  getTasadeldia(){
+    this.tasaService.getUltimaTasa().subscribe((rate:any) => {
+    this.tasaBCV = rate.precio_dia; // Carga automática para ahorrar tiempo
+    this.isLoading =false
+    this.formTransferencia.patchValue({ tasaBCV: this.tasaBCV });
+    this.formEfectivo.patchValue({ tasaBCV: this.tasaBCV });
+  });
   }
 
 getTiposdePago(){

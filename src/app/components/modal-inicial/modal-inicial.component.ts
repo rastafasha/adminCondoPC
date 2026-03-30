@@ -14,7 +14,7 @@ export class ModalInicialComponent implements AfterViewInit {
   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
   isLogued: boolean = false;
 
-   currentStep = 1;
+  currentStep = 1;
 
   ngAfterViewInit() {
     const USER = localStorage.getItem("user");
@@ -23,7 +23,7 @@ export class ModalInicialComponent implements AfterViewInit {
       return;
     }
     setTimeout(() => {
-      const modalElement = $('#exampleModal');
+      const modalElement = $('#inicialModal');
       if (modalElement.length) {
         modalElement.modal('show');
       }
@@ -32,20 +32,24 @@ export class ModalInicialComponent implements AfterViewInit {
 
   onNoShowMore() {
     localStorage.setItem('modalInicialDismissed', 'true');
-    $('#exampleModal').modal('hide');
+    $('#inicialModal').modal('hide');
+    $('.modal-backdrop').remove();
+    $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
   }
 
   nextStep() {
     this.currentStep = 2;
-
   }
 
   prevStep() {
     this.currentStep = 1;
   }
 
-   onClose() {
+  onClose() {
+    $('#inicialModal').modal('hide');
+    $('.modal-backdrop').remove();
+    $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
     this.closeModal.emit();
   }
- 
 }
+

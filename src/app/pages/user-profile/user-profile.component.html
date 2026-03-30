@@ -102,11 +102,11 @@
                                             <!-- Estatus Financiero -->
                                             <div class="row">
 
-                                                <div class="col-xs-6 col-sm-6 col-md-3 b-r">
+                                                <div class="col-xs-6 col-sm-6 col-md-3 b-r" *ngIf="user.role === 'USER_ROLE'">
                                                     <div class="col-12  label">
                                                         <i class="bi bi-telephone"></i> Estatus Financiero
                                                     </div>
-                                                    <div class="col-12  info">
+                                                    <div class="col-12  info" >
                                                         <span class="badge bg-success"
                                                             *ngIf="profile.statusFinanciero === 'AL_DIA'">Al día</span>
                                                         <span class="badge bg-danger"
@@ -127,7 +127,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <hr>
+                                            <hr *ngIf="user.role === 'USER_ROLE'">
                                             <!-- informacion de propiedades -->
                                             <!-- Residencia -->
                                             <div class="row" *ngIf="profile.haveResidencia === true ">

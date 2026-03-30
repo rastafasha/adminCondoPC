@@ -54,6 +54,7 @@ export class PaymentsComponent implements OnInit {
             <li>Ver Todos los Pagos recientes </li>
             <li>Ver a detalle cada Pago</li>
             <li>Encontrar facturas por varias opciones</li>
+            <li>Ver el comportamiento general mediante los gráficos</li>
             <li>Cambiar el estado del Pago (Verifica con tu Banco Emisor)</li>
             <li>Si Eres Cajero / Administrador puedes Cargar Pagos</li>
           </ul>`;

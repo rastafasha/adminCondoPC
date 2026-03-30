@@ -1,16 +1,10 @@
-# TODO: Improve Search Function in Users Component
+# Task: Fix dashboard modal display (modal-inicial vs modalinfo-tipos-pago conflict)
 
-## Status: Completed ✓
+## Steps:
+- [x] 1. Edit modalinfo-tipos-pago.component.ts: Change localStorage key to 'modalInfoTiposPagoDismissed'
+- [x] 2. Confirm modal-inicial.component.ts key (uses 'modalInicialDismissed' correctly)
+- [x] 3. Fix modal backdrop stuck: Added manual cleanup in onClose() for both modals
+- [ ] 4. Test reload + clear localStorage if needed
 
-**Additional Fix:** Updated BusquedasService.trasnformarUsuarios to match backend fields (added terminos/numdoc defaults, dates).
+## Completed:
 
-- [x] Step 1: Fix search() method in src/app/pages/users/users.component.ts ✓
-  - Handle empty query with getUsers()
-  - Fix response handling (direct assign, no .usuarios)
-  - Add loading state and error handling
-
-- [x] Step 2: Remove redundant searchUsers() from src/app/services/user.service.ts ✓
-
-- [x] Step 3: Test changes (manual via app run) ✓
-
-- [x] Step 4: Complete task ✓

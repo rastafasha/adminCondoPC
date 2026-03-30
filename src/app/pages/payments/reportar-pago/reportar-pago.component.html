@@ -9,6 +9,9 @@
             <!-- Metodos de Pago -->
             <div class="col-12">
                 <div class="card p-3" id="card-pay">
+                    <div class="alert alert-info">
+                        Tasa del dia: {{tasaBCV|currency:'Bs.'}}
+                    </div>
                     <label class="form-label">Seleccione el método de pago</label>
                     <!-- select metodo de pago -->
                     <select id="paymentMethod" class="form-control" (change)="onPaymentMethodChange($event)"
@@ -100,6 +103,12 @@
                                     <label for="phone" class="form-label">Teléfono</label>
                                     <input type="number" formControlName="phone" class="form-control" name="phone"
                                         id="phone">
+                                </div>
+                                <!-- numero de referencia -->
+                                <div class="mb-3 col-xs-12 col-sm-6">
+                                    <label for="referencia" class="form-label">Num. referencia</label>
+                                    <input type="text" formControlName="referencia" class="form-control"
+                                        name="referencia" id="referencia">
                                 </div>
                                 <!-- monto -->
                                 <div class="mb-3 col-xs-12 col-sm-6">

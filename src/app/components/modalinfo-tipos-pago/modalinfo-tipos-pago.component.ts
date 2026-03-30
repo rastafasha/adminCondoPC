@@ -9,20 +9,21 @@ declare var bootstrap: any;
   styleUrls: ['./modalinfo-tipos-pago.component.css']
 })
 export class ModalinfoTiposPagoComponent implements AfterViewInit {
+  @Input() displaycomponent: string = 'block';
   @Input() info!:string;
   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
   isLogued: boolean = false;
 
-   currentStep = 1;
+  currentStep = 1;
 
   ngAfterViewInit() {
     const USER = localStorage.getItem("user");
     this.isLogued = !!USER;
-    if (localStorage.getItem('modalInicialDismissed')) {
+    if (localStorage.getItem('modalInfoTiposPagoDismissed')) {
       return;
     }
     setTimeout(() => {
-      const modalElement = $('#exampleModal');
+      const modalElement = $('#infoModal');
       if (modalElement.length) {
         modalElement.modal('show');
       }
@@ -30,11 +31,17 @@ export class ModalinfoTiposPagoComponent implements AfterViewInit {
   }
 
   onNoShowMore() {
-    localStorage.setItem('modalInicialDismissed', 'true');
-    $('#exampleModal').modal('hide');
+    localStorage.setItem('modalInfoTiposPagoDismissed', 'true');
+    $('#infoModal').modal('hide');
+    $('.modal-backdrop').remove();
+    $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
   }
 
   onClose() {
+    $('#infoModal').modal('hide');
+    $('.modal-backdrop').remove();
+    $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
     this.closeModal.emit();
   }
 }
+

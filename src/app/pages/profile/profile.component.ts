@@ -12,12 +12,13 @@ import { UserService } from '../../services/user.service';
 import { ImagenPipe } from '../../pipes/imagen.pipe';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { BackButtnComponent } from '../../shared/backButtn/backButtn.component';
+import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 
 
 @Component({
   selector: 'app-profile',
   imports:[CommonModule, ImagenPipe, ReactiveFormsModule, 
-    BackButtnComponent, LoadingComponent  ],
+    BackButtnComponent, LoadingComponent, ModalinfoTiposPagoComponent  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -70,6 +71,15 @@ export class ProfileComponent implements OnInit {
   //DATA
   public new_password = '';
   public comfirm_password = '';
+
+  info = `
+  <p>Hola!:</p>
+  <p>Esta Aplicación agradeceria que completes todos los campos requeridos, para continuar con el proceso de acceso:</p>
+          <ul>
+            <li>Nombre y Apellido</li>
+            <li>Teléfonos de Contacto</li>
+            <li>Si deseas puedes subir tu foto</li>
+          </ul>`;
 
 
   constructor(

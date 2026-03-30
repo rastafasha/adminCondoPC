@@ -225,3 +225,8 @@ body .dark {
 .dark .modal-title, .dark .btn-close {
     color: var(--white) !important;
 }
+
+.dark .preciodia{
+    background-color: var(--black) !important;
+    color: var(--white) !important;
+}
