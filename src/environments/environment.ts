@@ -11,7 +11,7 @@ export const environment = {
   mediaUrlRemoto: 'https://res.cloudinary.com/dmv6aukai/image/upload/v1741275492/condoParqueCentral/uploads',
   
   //remoto
-  // apiUrl: "https://backend-crmmenu-mean.onrender.com/api",
+  // apiUrl: "https://backend-condoparquecentral-mean.onrender.com/api",
   apiUrlMedia: "https://res.cloudinary.com/dmv6aukai/image/upload/v1741275492/condoParqueCentral/uploads",
 
   clientId: '',

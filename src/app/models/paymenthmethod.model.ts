@@ -7,7 +7,7 @@ export class PaymentMethod{
           public bankName: string,
           public bankAccount: number,
           public ciorif: string,
-          public telefono: string,
+          public phone: string,
           public tipo: string,
           public status: string,
           public email: string,

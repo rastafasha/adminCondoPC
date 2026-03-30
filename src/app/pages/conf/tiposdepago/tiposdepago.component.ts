@@ -110,7 +110,7 @@ export class TiposdepagoComponent implements OnInit {
     this.bankName = this.editingPayment!.bankName || '';
     this.bankAccount = this.editingPayment!.bankAccount?.toString() || '';
     this.ciorif = this.editingPayment!.ciorif || '';
-    this.phone = this.editingPayment!.telefono || '';
+    this.phone = this.editingPayment!.phone || '';
     this.username = this.editingPayment!.username || '';
     this.email = this.editingPayment!.email || '';
 
@@ -161,7 +161,7 @@ export class TiposdepagoComponent implements OnInit {
       this.editingPayment!.bankName = this.bankName;
       this.editingPayment!.bankAccount = parseFloat(this.bankAccount || '0') || 0;
       this.editingPayment!.ciorif = this.ciorif;
-      this.editingPayment!.telefono = this.phone;
+      this.editingPayment!.phone = this.phone;
       this.editingPayment!.username = this.username;
       this.editingPayment!.email = this.email;
 
