@@ -1,1 +1,16 @@
-# Task: Implement User Role Filtering Pipes\n\n- [x] Create TODO.md\n- [ ] Create src/app/pipes/user-role.pipe.ts\n- [ ] Create src/app/pipes/admin-roles.pipe.ts\n- [ ] Edit src/app/pages/users/users.component.ts (add imports)\n- [ ] Edit src/app/pages/users/users.component.html (*ngFor #news tab)\n- [ ] Edit src/app/pages/users/users.component.html (*ngFor #admin tab)\n- [ ] Test with ng serve & attempt_completion
+# TODO: Improve Search Function in Users Component
+
+## Status: Completed ✓
+
+**Additional Fix:** Updated BusquedasService.trasnformarUsuarios to match backend fields (added terminos/numdoc defaults, dates).
+
+- [x] Step 1: Fix search() method in src/app/pages/users/users.component.ts ✓
+  - Handle empty query with getUsers()
+  - Fix response handling (direct assign, no .usuarios)
+  - Add loading state and error handling
+
+- [x] Step 2: Remove redundant searchUsers() from src/app/services/user.service.ts ✓
+
+- [x] Step 3: Test changes (manual via app run) ✓
+
+- [x] Step 4: Complete task ✓

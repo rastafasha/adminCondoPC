@@ -12,6 +12,8 @@ import { RouterLink } from '@angular/router';
 import { ImagenPipe } from '../../../pipes/imagen.pipe';
 import { BackButtnComponent } from '../../../shared/backButtn/backButtn.component';
 import { ModalinfoTiposPagoComponent } from '../../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
+import { Payment } from '../../../models/payment';
+import { BusquedasService } from '../../../services/busqueda.service';
 
 @Component({
   selector: 'app-transferencias',
@@ -39,7 +41,7 @@ export class TransferenciasComponent {
 
   public user: any;
   query: string = '';
-
+  status!:string;
   info = `
   <p>En esta sección podrás:</p>
           <ul>
@@ -51,6 +53,7 @@ export class TransferenciasComponent {
 
   constructor(
     private trasnsferenciaService: TransferenciaService,
+     private busquedasService: BusquedasService,
   ) {
   }
 
@@ -73,19 +76,46 @@ export class TransferenciasComponent {
   }
 
 
-  search() {
-    // return this.paymentService.search(this.query).subscribe((res: any) => {
-    //   this.payments = res;
-    //   if (!this.query) {
-    //     this.ngOnInit();
-    //   }
-    // });
-  }
 
-  public PageSize(): void {
-    this.getPagos();
-    this.query = '';
-  }
+  search(): void {
+        // Case 1: Only selectedType (category) is provided - use category filter
+        if (!this.query || this.query === null || this.query === '') {
+          if (this.status) {
+            this.trasnsferenciaService.getByStatus(this.status).subscribe(
+              (resp: any) => {
+                this.transferecias = resp;
+              }
+            );
+            return;
+          } else {
+            // No query and no category - reload all projects
+            this.ngOnInit();
+            return;
+          }
+        } 
+        // Case 2: Query is provided (with or without category)
+        else {
+          this.busquedasService.searchGlobal(this.query).subscribe(
+            (resp: any) => {
+              let filteredProjects = resp.transferecias;
+              if (this.status) {
+                filteredProjects = filteredProjects.filter(
+                  (payment: Payment) => payment.referencia === this.status
+                );
+              }
+              this.transferecias = filteredProjects;
+            }
+          );
+          return;
+        }
+      }
+  
+    public PageSize(): void {
+      this.getPagos();
+      this.query = '';
+      this.status = '';
+    }
+  
 
   cambiarStatus(data: any) {
     const VALUE = data.status;

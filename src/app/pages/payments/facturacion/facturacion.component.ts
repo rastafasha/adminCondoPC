@@ -11,6 +11,7 @@ import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { BackButtnComponent } from '../../../shared/backButtn/backButtn.component';
 import { ModalFacturaDetalleComponent } from "../../../components/modal-factura-detalle/modal-factura-detalle.component";
 import { ModalinfoTiposPagoComponent } from '../../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
+import { BusquedasService } from '../../../services/busqueda.service';
 
 @Component({
   selector: 'app-facturacion',
@@ -33,8 +34,9 @@ export class FacturacionComponent {
 
   public user: any;
   query: string = '';
-  facturaSeleccionado!:any|null;
+  facturaSeleccionado!: any | null;
 
+  estado!: string
   info = `
   <p>En esta sección podrás:</p>
           <ul>
@@ -46,6 +48,7 @@ export class FacturacionComponent {
   constructor(
     private facturacionService: FacturacionService,
     private userService: UserService,
+    private busquedasService: BusquedasService,
     private http: HttpClient
   ) {
   }
@@ -57,8 +60,6 @@ export class FacturacionComponent {
     window.scrollTo(0, 0);
   }
 
-
-
   getFacturas(): void {
     this.isLoading = true;
     this.facturacionService.getFacturaciones().subscribe((res: any) => {
@@ -67,14 +68,36 @@ export class FacturacionComponent {
     });
   }
 
-
-  search() {
-    // return this.paymentService.search(this.query).subscribe((res: any) => {
-    //   this.payments = res;
-    //   if (!this.query) {
-    //     this.ngOnInit();
-    //   }
-    // });
+  search(): void {
+    // Case 1: No query - use estado filter or all
+    if (!this.query || this.query === null || this.query === '') {
+      if (this.estado) {
+        this.facturacionService.getByStatus(this.estado).subscribe(
+            (resp: any) => {
+              this.facturas = resp;
+              // this.facturacionService.emitFilteredProjects(resp);
+            }
+          );
+          return;
+      } else {
+        // No query and no estado - reload all
+        this.ngOnInit();
+        return;
+      }
+    }
+    // Case 2: Query provided - global search + optional estado filter
+    this.busquedasService.searchGlobal(this.query).subscribe(
+      (resp: any) => {
+        let filteredProjects = resp.facturas;
+        if (this.estado) {
+          filteredProjects = filteredProjects.filter(
+            (factura: Facturacion) => factura.estado === this.estado
+          );
+        }
+        this.facturas = filteredProjects;
+        // this.facturacionService.emitFilteredProjects(filteredProjects);
+      }
+    );
   }
 
   public PageSize(): void {
@@ -82,15 +105,12 @@ export class FacturacionComponent {
     this.query = '';
   }
 
-  
   openViewModal(factura: any): void {
     this.facturaSeleccionado = factura;
-
   }
 
   onCloseModal(): void {
     this.facturaSeleccionado = null;
   }
-
-
 }
+

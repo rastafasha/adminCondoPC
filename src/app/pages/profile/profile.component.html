@@ -2,33 +2,17 @@
 <div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
 
     <div class="col-xs-12">
-        <div class="leftside">
-            <!-- Page Title -->
-            <div class="pagetitle">
-                <h1><i class="bx bxs-user-account"></i> Mi Perfil </h1>
-                <nav>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/"><i class="fa fa-home"></i> Inicio</a></li>
-                        <li class="breadcrumb-item active">Mi Perfil</li>
-                    </ol>
-                </nav>
-            </div>
-            <!-- End Page Title -->
-            <div class="buton">
-                <button class="btn btn-outline-danger pull-right" href="javascript:void(0)"
-                    (click)="goBack()">Volver</button>
-            </div>
-        </div>
-
+        <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
         <div class="clear"></div>
+        <app-loading *ngIf="isLoading"></app-loading>
 
         <section class="section profile">
             <div class="row">
-                <div class="col-xs-12 cols-sm-12 col-md-4 col-xl-4">
+                <div class="col-xs-12 cols-sm-12 col-md-4 col-xl-4" *ngIf="!isLoading">
 
                     <div class="card">
                         <div class="card-body profile-card pt-4  fichasmall">
-                            
+
                             <div *ngIf="profileSeleccionado ">
                                 <img [src]="(profile.img ?? '') | imagenPipe: 'profiles'" [alt]="user.username"
                                     class="rounded-circle">
@@ -36,8 +20,10 @@
                             <div class="inffichasmall">
                                 <h2>{{user.username}}</h2>
                                 <p>{{user.email}}</p>
+                                <p>{{user.numdoc}}</p>
 
-                                <span class="badge bg-dark-light" *ngIf="user.role === 'SUPERADMIN_ROLE'">SuperAdmin</span>
+                                <span class="badge bg-dark-light"
+                                    *ngIf="user.role === 'SUPERADMIN_ROLE'">SuperAdmin</span>
                                 <span class="badge bg-primary" *ngIf="user.role === 'ADMIN_ROLE'">Admin</span>
                                 <span class="badge bg-secondary" *ngIf="user.role === 'USER_ROLE'">Invitado</span>
                             </div>
@@ -48,7 +34,7 @@
 
                 </div>
 
-                <div class="col-xs-12 col-sm-12 col-md-8 col-xl-8">
+                <div class="col-xs-12 col-sm-12 col-md-8 col-xl-8" *ngIf="!isLoading">
 
                     <div class="card">
                         <div class="card-body pt-3">
@@ -88,11 +74,33 @@
                                                     <input type="text" formControlName="first_name" class="form-control"
                                                         required>
 
+                                                    <div *ngIf="perfilForm.get('first_name')?.touched"
+                                                        class="text-danger">
+                                                        <div *ngIf="perfilForm.get('first_name')?.errors?.['required']">
+                                                            Campo Requerido
+                                                        </div>
+                                                        <div
+                                                            *ngIf="perfilForm.get('first_name')?.errors?.['minlength']">
+                                                            Mínimo 4 Caracteres
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <div class="col-xs-12 col-md-6">
                                                     <label>Apellidos <span class="required">*</span></label>
                                                     <input type="text" formControlName="last_name" class="form-control"
                                                         required>
+
+                                                        <div *ngIf="perfilForm.get('last_name')?.touched"
+                                                        class="text-danger">
+                                                        <div *ngIf="perfilForm.get('last_name')?.errors?.['required']">
+                                                            Campo Requerido
+                                                        </div>
+                                                        <div
+                                                            *ngIf="perfilForm.get('last_name')?.errors?.['minlength']">
+                                                            Mínimo 4 Caracteres
+                                                        </div>
+                                                    </div>
 
                                                 </div>
 
@@ -102,17 +110,38 @@
                                                             class="required">*</span></label>
                                                     <input type="text" formControlName="telhome" class="form-control"
                                                         required>
+                                                        <div *ngIf="perfilForm.get('telhome')?.touched"
+                                                        class="text-danger">
+                                                        <div *ngIf="perfilForm.get('telhome')?.errors?.['required']">
+                                                            Campo Requerido
+                                                        </div>
+                                                        <div
+                                                            *ngIf="perfilForm.get('telhome')?.errors?.['minlength']">
+                                                            Mínimo 4 Caracteres
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                                 <div class="col-xs-12 col-md-6">
-                                                    <label for="exampleInputEmail1">Teléfonos Móvil </label>
-                                                    <input type="text" formControlName="telmovil" class="form-control">
-
+                                                    <label for="exampleInputEmail1">Teléfonos Móvil <span
+                                                            class="required">*</span></label>
+                                                    <input type="text" formControlName="telmovil" class="form-control"
+                                                        required>
+                                                        <div *ngIf="perfilForm.get('telmovil')?.touched"
+                                                        class="text-danger">
+                                                        <div *ngIf="perfilForm.get('telmovil')?.errors?.['required']">
+                                                            Campo Requerido
+                                                        </div>
+                                                        <div
+                                                            *ngIf="perfilForm.get('telmovil')?.errors?.['minlength']">
+                                                            Mínimo 4 Caracteres
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="clear"></div>
                                                 <!----//-->
                                             </div>
-                                           
+
 
                                         </div>
 

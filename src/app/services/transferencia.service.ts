@@ -56,15 +56,13 @@ export class TransferenciaService {
         );
 
   }
-  getTransferenciaByTiendaId(_id: string){
-    const url = `${base_url}/transferencias/tienda/${_id}`;
-    return this.http.get<any>(url, this.headers)
-      .pipe(
-        map((resp:{ok: boolean, transferencias: Transferencia[]}) => resp.transferencias)
-        );
-
-  }
-
+ getByStatus(status: string) {
+     const url = `${base_url}/transferencias/status/${status}`;
+     return this.http.get<any>(url, this.headers)
+       .pipe(
+         map((resp: { ok: boolean, trasnferencias: Transferencia[] }) => resp.trasnferencias)
+       )
+   }
 
   actualizarTransferencia(trasnferencia: Transferencia){
     const url = `${base_url}/transferencias/update/${trasnferencia._id}`;

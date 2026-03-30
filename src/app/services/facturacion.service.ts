@@ -3,6 +3,7 @@ import { Facturacion } from '../models/facturacion';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs';
+import { Payment } from '../models/payment';
 
 const baseUrl = environment.apiUrl;
 
@@ -85,6 +86,15 @@ facturacionIndividual(facturacion: Facturacion) {
         map((resp: { ok: boolean, factura: Facturacion }) => resp.factura)
       );
   }
+
+  getByStatus(status: string) {
+      const url = `${baseUrl}/facturacion/status/${status}`;
+      return this.http.get<any>(url, { headers: this.headers })
+        .pipe(
+          map((resp: { ok: boolean, facturas: Facturacion }) => resp.facturas)
+        )
+    }
+  
 
   
 

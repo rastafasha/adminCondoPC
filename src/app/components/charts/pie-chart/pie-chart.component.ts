@@ -24,16 +24,16 @@ export class PieChartComponent {
   constructor(
     // private graficoService: GraficoService
   ) {
-    // Object.assign(this, { single });
+    Object.assign(this, { single });
   }
 
   // get single(){
-  //   return this.graficoService.getgraficoData();
+  //   // return this.graficoService.getgraficoData();
   // }
 
-  // onRandomData(){
-  //   this.graficoService.randomData();
-  // }
+  onRandomData(){
+    // this.graficoService.randomData();
+  }
 
   onSelect(data:any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));

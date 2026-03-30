@@ -11,10 +11,10 @@ import Chart from 'chart.js/auto';
 export class PieChart2Component implements OnChanges {
   public chart!: Chart;
   isLoading:boolean = false;
-  @Input() projects!: any[];
+  @Input() payments!: any[];
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['projects'] && this.projects) {
+    if (changes['payments'] && this.payments) {
       this.updateChart();
     }
   }
@@ -22,8 +22,8 @@ export class PieChart2Component implements OnChanges {
   
 
   updateChart() {
-    const paidCount = this.projects.filter(p => p.notificado === true).length;
-    const debtCount = this.projects.filter(p => p.notificado === false).length;
+    const paidCount = this.payments.filter(p => p.notificado === true).length;
+    const debtCount = this.payments.filter(p => p.notificado === false).length;
     const data = {
       labels: ['Con Presentación', 'Sin Presentación'],
       datasets: [

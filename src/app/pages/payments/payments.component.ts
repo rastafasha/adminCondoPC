@@ -14,20 +14,24 @@ import { LoadingComponent } from '../../shared/loading/loading.component';
 import { BackButtnComponent } from '../../shared/backButtn/backButtn.component';
 import { ModalPagoDetalleComponent } from "../../components/modal-pago-detalle/modal-pago-detalle.component";
 import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
+import { BusquedasService } from '../../services/busqueda.service';
+import { ReportarPagoComponent } from "./reportar-pago/reportar-pago.component";
 
 @Component({
   selector: 'app-payments',
   imports: [CommonModule, FormsModule,
     // ImagenPipe, 
-    // PieChart2Component, BarChartComponent,
+    // PieChart2Component,
+    //  BarChartComponent,
     LoadingComponent,
     NgxPaginationModule,
-    BackButtnComponent, ModalPagoDetalleComponent, ModalinfoTiposPagoComponent],
+    BackButtnComponent, ModalPagoDetalleComponent, ModalinfoTiposPagoComponent, NgFor, ReportarPagoComponent],
   templateUrl: './payments.component.html',
   styleUrls: ['./payments.component.css'],
 })
 export class PaymentsComponent implements OnInit {
   @Input() displaycomponent: string = 'block';
+  @Input() limit!: number;
   title = 'Pagos';
 
   payments!: Payment[];
@@ -49,12 +53,14 @@ export class PaymentsComponent implements OnInit {
             <li>Cambiar el estado del Pago (Verifica con tu Banco Emisor)</li>
             <li>Si Eres Cajero / Administrador puedes Cargar Pagos</li>
           </ul>`;
-
+  status!:string;
   constructor(
     private location: Location,
     private paymentService: PaymentService,
     private userService: UserService,
-    private http: HttpClient
+    private http: HttpClient,
+    private busquedasService: BusquedasService,
+
   ) {
   }
 
@@ -79,25 +85,57 @@ export class PaymentsComponent implements OnInit {
     this.location.back(); // <-- go back to previous location on cancel
   }
 
-  search() {
-    // return this.paymentService.search(this.query).subscribe((res: any) => {
-    //   this.payments = res;
-    //   if (!this.query) {
-    //     this.ngOnInit();
-    //   }
-    // });
-  }
+  search(): void {
+      // Case 1: Only selectedType (category) is provided - use category filter
+      if (!this.query || this.query === null || this.query === '') {
+        if (this.status) {
+          this.paymentService.getByStatus(this.status).subscribe(
+            (resp: any) => {
+              this.payments = resp;
+              this.paymentService.emitFilteredProjects(resp);
+            }
+          );
+          return;
+        } else {
+          // No query and no category - reload all projects
+          this.ngOnInit();
+          return;
+        }
+      } 
+      // Case 2: Query is provided (with or without category)
+      else {
+        this.busquedasService.searchGlobal(this.query).subscribe(
+          (resp: any) => {
+            let filteredProjects = resp.payments;
+            if (this.status) {
+              filteredProjects = filteredProjects.filter(
+                (payment: Payment) => payment.referencia === this.status
+              );
+            }
+            this.payments = filteredProjects;
+            this.paymentService.emitFilteredProjects(filteredProjects);
+          }
+        );
+        return;
+      }
+    }
 
   public PageSize(): void {
     this.getPagos();
     this.query = '';
+    this.status = '';
   }
 
   cambiarStatus(data: any) {
     const VALUE = data.status;
     console.log(VALUE);
 
-    this.paymentService.updatePaymentStatus(data).subscribe(
+    const payload ={
+      data: data.status,
+      usuario_validador: this.userService.usuario.uid
+    }
+
+    this.paymentService.validarPagoAdmin(payload).subscribe(
       resp => {
 
         console.log(resp);
@@ -121,5 +159,11 @@ export class PaymentsComponent implements OnInit {
 
   onCloseModal(): void {
     this.pagoSeleccionado = null;
+  }
+
+  abrirModalPago(): void {
+    // Aquí puedes agregar lógica para abrir el modal de pago masivo
+    // Por ejemplo, podrías usar un servicio de modal o simplemente mostrar un componente específico
+    console.log('Abrir modal de pago masivo');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, ChangeDetectorRef, Input } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,20 +10,24 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { ProfileService } from '../../services/profile.service';
 import { UserService } from '../../services/user.service';
 import { ImagenPipe } from '../../pipes/imagen.pipe';
+import { LoadingComponent } from '../../shared/loading/loading.component';
+import { BackButtnComponent } from '../../shared/backButtn/backButtn.component';
 
 
 @Component({
   selector: 'app-profile',
-  imports:[CommonModule, ImagenPipe, ReactiveFormsModule  ],
+  imports:[CommonModule, ImagenPipe, ReactiveFormsModule, 
+    BackButtnComponent, LoadingComponent  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
-
+  @Input() displaycomponent: string = 'block';
+  title = 'Perfil de Usuario';
   imagePath!: string;
   error!: string;
   uploadError!: boolean;
+  isLoading: boolean = false;
 
   profileSeleccionado!: Profile;
   pageTitle!: string;
@@ -84,8 +88,10 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     window.scrollTo(0,0);
+    let USER = localStorage.getItem("user");
+    this.user = USER ? JSON.parse(USER) : null;
+    console.log('usuario',this.user);
     this.closeMenu();
-    this.getUser();
     this.validarFormularioPerfil();
     this.activatedRoute.params.subscribe( ({id}) => this.getUserProfile(id));
    
@@ -100,23 +106,13 @@ export class ProfileComponent implements OnInit {
       }
   }
 
-  goBack() {
-    this.location.back(); // <-- go back to previous location on cancel
-  }
-
-  getUser(): void {
-let USER = localStorage.getItem("user");
-    this.user = USER ? JSON.parse(USER) : null;
-    console.log('usuario',this.user);
-
-  }
-
 
   getUserProfile(id:string){
+    this.isLoading = true;
     this.userService.getUserById(id).subscribe(
       res =>{
         this.usuario = res;
-        console.log('usuarioServer',this.usuario)
+        this.isLoading = false;
       }
     );
     
@@ -129,8 +125,7 @@ let USER = localStorage.getItem("user");
     if(!id == null || !id == undefined || id){
       this.profileService.listarUsuario(id).subscribe(
         response =>{
-          this.profile = response[0];
-          console.log('profileServer',this.profile);
+          this.profile = response;
         }
       );
     }else{
@@ -143,6 +138,7 @@ let USER = localStorage.getItem("user");
 
 
   iniciarFormularioPerfil(id:string){
+    this.isLoading = true;
     if (!id == null || !id == undefined || id) {
       this.profileService.getByUser(id).subscribe(
         res => {
@@ -157,10 +153,9 @@ let USER = localStorage.getItem("user");
             img: this.profile.img
           });
           this.profileSeleccionado = res;
-          console.log('profileSeleccionado',this.profileSeleccionado);
 
+          this.isLoading = false;
         }
-
       );
     } else {
       this.pageTitle = 'Crear Perfil';
@@ -174,18 +169,8 @@ let USER = localStorage.getItem("user");
     this.perfilForm = this.fb.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      pais: [''],
-      estado: [''],
-      ciudad: [''],
       telhome: ['', Validators.required],
       telmovil: ['', Validators.required],
-      shortdescription: ['', Validators.required],
-      emailPaypal: [''],
-      nombrePaypal: [''],
-      facebook: [''],
-      instagram: [''],
-      twitter: [''],
-      linkedin: [''],
       // usuario: [this.usuario.uid],
       id: [''],
     });
@@ -199,42 +184,13 @@ let USER = localStorage.getItem("user");
     return this.perfilForm.get('last_name');
   }
 
-  get pais() {
-    return this.perfilForm.get('pais');
-  }
-  get estado() {
-    return this.perfilForm.get('estado');
-  }
-  get ciudad() {
-    return this.perfilForm.get('ciudad');
-  }
-  get shortdescription() {
-    return this.perfilForm.get('shortdescription');
-  }
   get telmovil() {
     return this.perfilForm.get('telmovil');
   }
   get emailPaypal() {
     return this.perfilForm.get('emailPaypal');
   }
-  get facebook() {
-    return this.perfilForm.get('facebook');
-  }
-  get instagram() {
-    return this.perfilForm.get('instagram');
-  }
-  get twitter() {
-    return this.perfilForm.get('twitter');
-  }
-  get nombrePaypal() {
-    return this.perfilForm.get('nombrePaypal');
-  }
-  get linkedin() {
-    return this.perfilForm.get('linkedin');
-  }
-  get image() {
-    return this.perfilForm.get('adicional');
-  }
+  
 
 
   // cambiarImagen(file: File){
@@ -266,17 +222,14 @@ let USER = localStorage.getItem("user");
 
   guardarPerfil() {
 
-    const {first_name, last_name,pais, estado,
-      ciudad,telhome, telmovil, shortdescription, 
-      nombrePaypal,emailPaypal,
-      facebook, instagram, twitter, linkedin } = this.perfilForm.value;
+    const {first_name, last_name,telhome, telmovil } = this.perfilForm.value;
 
 
     if (this.profile ) {
       const data = {
         ...this.perfilForm.value,
         _id: this.profile._id,
-        usuario: this.usuario.uid,
+        usuario: this.user.uid,
       }
       this.profileService.updateProfile(data).subscribe(
         res => {
@@ -288,7 +241,7 @@ let USER = localStorage.getItem("user");
     } else {
       const data = {
         ...this.perfilForm.value,
-        usuario: this.usuario.uid
+        usuario: this.user.uid
       }
       this.profileService.createProfile(data).subscribe(
         res => {

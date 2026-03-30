@@ -8,11 +8,17 @@ import { MenuiconosComponent } from '../../shared/menuiconos/menuiconos.componen
 import { TasadiabcvComponent } from '../../components/tasadiabcv/tasadiabcv.component';
 import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 import { ModalInicialComponent } from "../../components/modal-inicial/modal-inicial.component";
+import { PaymentsComponent } from "../payments/payments.component";
+import { PieChartComponent } from '../../components/charts/pie-chart/pie-chart.component';
+import { LineChartComponent } from '../../components/charts/line-chart/line-chart.component';
+import { PieChart2Component } from '../../components/charts/pie-chart2/pie-chart2.component';
 
 @Component({
   selector: 'app-dashboard-admin',
-  imports: [CommonModule, MenuiconosComponent, 
-    TasadiabcvComponent, ModalInicialComponent],
+  imports: [CommonModule, MenuiconosComponent,
+    TasadiabcvComponent, ModalInicialComponent,
+     PaymentsComponent, LineChartComponent, PieChart2Component
+    ],
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css']
 })
@@ -38,7 +44,7 @@ export class DashboardAdminComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private projectService: PaymentService,
+    private payentService: PaymentService,
     
 
   ) {
@@ -49,13 +55,13 @@ export class DashboardAdminComponent implements OnInit {
 
     this.closeMenu();
     this.getUser();
-    this.getProjectsData();
-    // this.subscribeToFilteredProjects();
+    this.getPPaymentsData();
+    this.subscribeToFilteredPPayments();
     window.scrollTo(0,0);
   }
 
-  getProjectsData(){
-    this.projectService.getPayments().subscribe((resp:any)=>{
+  getPPaymentsData(){
+    this.payentService.getPayments().subscribe((resp:any)=>{
       this.payments = resp;
     })
   }
@@ -67,14 +73,14 @@ export class DashboardAdminComponent implements OnInit {
     this.selectedPayment = payment;
   }
 
-  subscribeToFilteredProjects() {
-    // this.projectService.filteredProjects$.subscribe((filteredProjects: Project[]) => {
-    //   if (filteredProjects && filteredProjects.length > 0) {
-    //     this.projects = filteredProjects;
-    //   } else {
-    //     this.getProjectsData();
-    //   }
-    // });
+  subscribeToFilteredPPayments() {
+    this.payentService.filteredProjects$.subscribe((filteredProjects: Payment[]) => {
+      if (filteredProjects && filteredProjects.length > 0) {
+        this.payments = filteredProjects;
+      } else {
+        this.getPPaymentsData();
+      }
+    });
   }
 
   closeMenu(){
@@ -109,7 +115,7 @@ export class DashboardAdminComponent implements OnInit {
   }
 
   PageSize() {
-    this.getProjectsData();
+    this.getPPaymentsData();
 
   }
   

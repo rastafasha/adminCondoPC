@@ -34,21 +34,14 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUser();
+     let USER = localStorage.getItem("user");
+    this.user = USER ? JSON.parse(USER) : null;
+    this.id = this.user.uid;
   }
 
 
   toggleNav() {
     this.sidenav.toggle();
-  }
-
-  getUser(): void {
-
-    let USER = localStorage.getItem("user");
-    this.user = USER ? JSON.parse(USER) : null;
-    this.id = this.user.uid;
-    // console.log(this.user);
-    // this.activatedRoute.params.subscribe( ({id}) => this.getUserProfile(id));
   }
 
 

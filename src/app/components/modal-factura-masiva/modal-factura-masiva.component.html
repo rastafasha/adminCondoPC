@@ -14,18 +14,42 @@
         <form [formGroup]="formMasivo" *ngIf="!isLoading">
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">Mes a Facturar</label>
+              <label class="form-label">Mes a Facturar <span class="required">*</span></label>
               <select class="form-select" formControlName="mes">
                 <option *ngFor="let m of meses" [value]="m.val">{{m.nombre}}</option>
               </select>
+              <div *ngIf="formMasivo.get('mes')?.touched" class="text-danger">
+                                <div *ngIf="formMasivo.get('mes')?.errors?.['required']">
+                                    Campo Requerido
+                                </div>
+                                <div *ngIf="formMasivo.get('mes')?.errors?.['minlength']">
+                                    Debe seleccionar un mes
+                                </div>
+                            </div>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label">Año</label>
+              <label class="form-label">Año <span class="required">*</span></label>
               <input type="number" class="form-control" formControlName="anio">
+              <div *ngIf="formMasivo.get('anio')?.touched" class="text-danger">
+                <div *ngIf="formMasivo.get('anio')?.errors?.['required']">
+                  Campo Requerido
+                </div>
+                <div *ngIf="formMasivo.get('anio')?.errors?.['minlength']">
+                  Mínimo 4 Caracteres
+                </div>
+              </div>
             </div>
             <div class="col-md-6">
-              <label class="form-label">IVA General (%)</label>
+              <label class="form-label">IVA General (%) <span class="required">*</span></label>
               <input type="number" class="form-control" formControlName="porcentajeIva">
+              <div *ngIf="formMasivo.get('porcentajeIva')?.touched" class="text-danger">
+                <div *ngIf="formMasivo.get('porcentajeIva')?.errors?.['required']">
+                  Campo Requerido
+                </div>
+                <div *ngIf="formMasivo.get('porcentajeIva')?.errors?.['minlength']">
+                  Colocar un valor válido (Ej: 16)
+                </div>
+              </div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Tasa BCV del Día Bs.{{tasaBCV}}</label>
@@ -45,8 +69,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="onClose()"
-                        data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" (click)="onClose()" data-bs-dismiss="modal">Cancelar</button>
 
         <button class="btn btn-success" (click)="ejecutarFacturacionMasiva()"
           [disabled]="formMasivo.invalid || isLoading">

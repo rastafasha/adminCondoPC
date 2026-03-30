@@ -245,11 +245,7 @@ export class UserService {
       }
   }
 
-  searchUsers(usuario:any):Observable<any>{
 
-    const url = `${base_url}/todo/coleccion/usuarios/${usuario}`;
-    return this.http.get<any>(url, this.headers)
-  }
   set_recovery_token(email:string):Observable<any>{
 
     const url = `${base_url}/usuarios/user_token/set/${email}`;

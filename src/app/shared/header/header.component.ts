@@ -7,19 +7,15 @@ import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
 import { ImagenPipe } from '../../pipes/imagen.pipe';
 
-
-
 @Component({
   selector: 'app-header',
-  standalone: true,
-    imports: [CommonModule, ImagenPipe],
+  imports: [CommonModule, ImagenPipe],
   templateUrl: './header.component.html',
   styles: []
 })
 export class HeaderComponent implements OnInit {
 
   private linktTheme = document.querySelector('.dark');// se comunica el id pulsado
-
 
   userprofile!: any;
   user: User;
@@ -30,13 +26,10 @@ export class HeaderComponent implements OnInit {
   constructor(
     private usuarioService: UserService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private profileService: ProfileService,
     ) {
       this.user = usuarioService.usuario;
     }
-
-
 
   ngOnInit() {
 
@@ -52,37 +45,23 @@ export class HeaderComponent implements OnInit {
       this.router.navigateByUrl('/login');
     }
 
-    this.listar()
-
+    this.listar();
   }
 
-
-  getUserServer(){
-    this.usuarioService.getUserById(this.user.uid).subscribe(
-      res =>{
-        this.user = res;
-        // console.log(this.user);
-      }
-    );
-
-  }
 
   listar(){
     this.profileService.listarUsuario(this.user.uid).subscribe(
       response =>{
-        this.profile = response[0];
-        // console.log('profileServer',this.profile);
+        this.profile = response;
       }
     );
     
   }
 
   openModal(){
-
     var modalcart = document.getElementsByClassName("dropdown-menu");
       for (var i = 0; i<modalcart.length; i++) {
          modalcart[i].classList.toggle("show");
-
       }
   }
 
@@ -92,7 +71,6 @@ export class HeaderComponent implements OnInit {
     var menuLateral = document.getElementsByClassName("mini-sidebar");
       for (var i = 0; i<menuLateral.length; i++) {
          menuLateral[i].classList.toggle("show-sidebar");
-
       }
   }
 

@@ -31,7 +31,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.closeMenu();
-    this.getUser();
+    let USER = localStorage.getItem("user");
+    this.user = USER ? JSON.parse(USER) : null;
   }
 
   closeMenu(){
@@ -42,19 +43,6 @@ export class DashboardComponent implements OnInit {
       }
   }
 
-  getUser(): void {
-
-   let USER = localStorage.getItem("user");
-    this.user = USER ? JSON.parse(USER) : null;
-    this.activatedRoute.params.subscribe( ({id}) => this.getUserProfile(id));
-  }
-
-  getUserProfile(id:any){
-    this.userService.getUserById(id).subscribe((data: any) => {
-      this.user = data;
-      console.log(this.user)
-    });
-  }
 
 
 }

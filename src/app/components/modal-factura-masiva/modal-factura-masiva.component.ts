@@ -53,6 +53,11 @@ ngOnInit() {
 
 
 ejecutarFacturacionMasiva() {
+  if (!this.formMasivo.valid) {
+        //mostramos las alertas de los campos requeridos
+        this.formMasivo.markAllAsTouched(); // Esto activa las validaciones visuales
+        return
+      }
   Swal.fire({
     title: '¿Confirmar Facturación Masiva?',
     text: `Se procesará el mes ${this.formMasivo.value.mes}/${this.formMasivo.value.anio} a tasa BCV: ${this.formMasivo.value.tasaBCV}`,

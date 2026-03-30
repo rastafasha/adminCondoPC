@@ -35,11 +35,14 @@ export class BusquedasService {
         new User(
           user.username,
           user.email,
-          user.img,
-          user.google,
+          false, // terminos
+          user.numdoc || '',
+          undefined, // password
+          user.google || false,
           user.role,
           user.uid,
-          user.profile,
+          user.createdAt ? new Date(user.createdAt) : undefined,
+          user.updatedAt ? new Date(user.updatedAt) : undefined
         )
     );
   }
@@ -90,9 +93,6 @@ export class BusquedasService {
     return this.http.get<any[]>(url, this.headers);
   }
 
-  getMorosos() {
-      const url = `${base_url}/reporte-morosos`;
-    return this.http.get<any[]>(url, this.headers);
-    }
+ 
     
 }

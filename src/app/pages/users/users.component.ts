@@ -21,8 +21,8 @@ import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pa
 
 @Component({
   selector: 'app-users',
-  imports:[CommonModule, RouterLink, BackButtnComponent, NgxPaginationModule,
-    ReactiveFormsModule, FormsModule, UserRolePipe, AdminRolesPipe,ModalFacturaMasivaComponent,
+  imports: [CommonModule, RouterLink, BackButtnComponent, NgxPaginationModule,
+    ReactiveFormsModule, FormsModule, UserRolePipe, AdminRolesPipe, ModalFacturaMasivaComponent,
     ModalinfoTiposPagoComponent
   ],
   templateUrl: './users.component.html',
@@ -35,7 +35,7 @@ export class UsersComponent implements OnInit {
   usersCount = 0;
   usuarios: any;
   user!: User;
-  roles:any;
+  roles: any;
 
   p: number = 1;
   count: number = 8;
@@ -44,9 +44,9 @@ export class UsersComponent implements OnInit {
   msm_error!: string;
 
   option_selectedd: number = 1;
-    solicitud_selectedd: any = 1;
+  solicitud_selectedd: any = 1;
   ServerUrl = environment.apiUrl;
-  query:string ='';
+  query: string = '';
 
   info = `
   <p>En esta sección podrás:</p>
@@ -64,13 +64,13 @@ export class UsersComponent implements OnInit {
     private location: Location,
     private http: HttpClient,
     handler: HttpBackend,
-    
-    ) {
-      this.http = new HttpClient(handler);
-    }
+
+  ) {
+    this.http = new HttpClient(handler);
+  }
 
   ngOnInit(): void {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     this.closeMenu();
     this.getUsers();
     this.getUser();
@@ -82,19 +82,27 @@ export class UsersComponent implements OnInit {
   }
 
   getUsers(): void {
+    this.loading = true;
     this.userService.getUsuarios().subscribe(
-      res =>{
+      res => {
         this.usuarios = res;
+        this.loading = false;
+      },
+      error => {
+        console.error('Error loading users:', error);
+        this.loading = false;
+        this.msm_error = 'Error al cargar usuarios';
       }
     );
   }
   PageSize() {
+    this.query ='';
     this.getUsers();
 
   }
 
 
-  eliminarUser(user:User){
+  eliminarUser(user: User) {
     Swal.fire({
       title: 'Estas Seguro?',
       text: "No podras recuperarlo!",
@@ -106,10 +114,10 @@ export class UsersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.userService.deleteById(user).subscribe(
-          response =>{
+          response => {
             this.getUsers();
           }
-          );
+        );
         Swal.fire(
           'Borrado!',
           'El Archivo fue borrado.',
@@ -120,44 +128,51 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  goBack() {
-    this.location.back(); // <-- go back to previous location on cancel
-  }
-
-  closeMenu(){
+  closeMenu() {
     var menuLateral = document.getElementsByClassName("sidebar");
-      for (var i = 0; i<menuLateral.length; i++) {
-         menuLateral[i].classList.remove("active");
+    for (var i = 0; i < menuLateral.length; i++) {
+      menuLateral[i].classList.remove("active");
 
-      }
+    }
   }
 
-  search() {
+  search(): void {
+    this.query = this.query.trim();
+    this.loading = true;
+    this.msm_error = '';
 
-    if(!this.query){
-      this.ngOnInit();
-    }else{
-      this.busquedasService.searchGlobal(this.query).subscribe(
-        (resp:any) => {
-          this.usuarios = resp.usuarios;
-        }
-      );
+    if (!this.query) {
+      this.getUsers();
+      return;
     }
 
+    this.busquedasService.buscar('usuarios', this.query).subscribe(
+      (resp: any) => {
+        this.usuarios = resp;
+        this.loading = false;
+      },
+      (error) => {
+        console.error('Error searching users:', error);
+        this.loading = false;
+        this.msm_error = 'Error en la búsqueda';
+        // Fallback to full list
+        this.getUsers();
+      }
+    );
   }
 
   optionSelected(value: number) {
-     this.option_selectedd = value;
-     if (this.option_selectedd === 1) {
- 
-       // this.ngOnInit();
-     }
-     if (this.option_selectedd === 2) {
-       this.solicitud_selectedd = null;
-     }
-   }
+    this.option_selectedd = value;
+    if (this.option_selectedd === 1) {
 
-   abrirModalMasivo(){}
+      // this.ngOnInit();
+    }
+    if (this.option_selectedd === 2) {
+      this.solicitud_selectedd = null;
+    }
+  }
+
+  abrirModalMasivo() { }
 
 
 

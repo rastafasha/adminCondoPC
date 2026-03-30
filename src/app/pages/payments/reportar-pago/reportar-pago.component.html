@@ -1,220 +1,213 @@
-<!-- =======| Main |======= -->
-<div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
-
-    <div class="row">
-        <div class="leftside">
-            <!-- Page Title -->
-            <div class="pagetitle">
-                <h1><i class="bx bxs-user-account"></i> {{title}}</h1>
-                <nav>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/"><i class="bi bi-house"></i> Inicio</a></li>
-                        <li class="breadcrumb-item active">{{title}}</li>
-                    </ol>
-                </nav>
+<div class="modal fade" id="crearPago" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title">{{ title }} - Parque Central</h5>
+                <button type="button" class="btn-close" (click)="onClose()" data-bs-dismiss="modal"></button>
             </div>
-            <!-- End Page Title -->
-        </div>
-        <div class="buton">
-            <button class="btn btn-outline-danger pull-right pull-right" href="javascript:void(0)" (click)="goBack()">Volver</button>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-body pt-3">
-            <!--external Bordered Tabs -->
-            <ul class="nav nav-tabs nav-tabs-bordered">
-
-                <li class="nav-item">
-                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#instrucci">Instrucciones</button>
-                </li>
-
-                <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#formulario">Formulario</button>
-                </li>
+            <app-loading *ngIf="isLoading"></app-loading>
+            <!-- Metodos de Pago -->
+            <div class="col-12">
+                <div class="card p-3" id="card-pay">
+                    <label class="form-label">Seleccione el método de pago</label>
+                    <!-- select metodo de pago -->
+                    <select id="paymentMethod" class="form-control" (change)="onPaymentMethodChange($event)"
+                        [(ngModel)]="selectedMethod">
+                        <option value=" ">Selecciona un método de pago</option>
+                        <option value="transferencia">Transferencia Bancaria</option>
+                        <option value="efectivo">Efectivo</option>
+                    </select>
 
 
-            </ul>
-            <div class="tab-content pt-2">
-
-                <div class="tab-pane fade show active profile-overview" id="instrucci">
-                    <div class="instruccioness pagarinfo shadow ">
-                        <!-- <img src="./assets/img/paypal-pay01.png" alt=""> -->
-                        <div class="info">
-                            <h2>¿Cómo reportar el pago?</h2>
-                            <ol>
-                                <li>Copie los datos suministrados para procesar el pago: <br>
-                                    <span>
-                                    <b>Metodo</b><br>
-                                    <b>Banco</b><br>
-                                   <b>Correo o Número de Cuenta</b><br>
-                                 <b>Monto</b><br>
-                                </span>
-                                </li><br>
-                                <li>Ingrese a la app o web del metodo de su preferencia,
-                                    <ul>
-                                        <li class="badge bg-primary">Paypal</li>
-                                        <li class="badge bg-primary">Zelle</li>
-                                        <li class="badge bg-primary">Pago Móvil</li>
-                                        <li class="badge bg-primary">Transferencia</li>
-                                    </ul>
-                                </li>
-                                <li>Ingrese los datos correctamente, y verifique antes de pagar </li>
-                                <li>Copiar el <b>Número de referencia</b> del pago o transferencia </li>
-                                <li>Dirigirse a nuestro <b>Formulario</b> y llenar los datos requeridos </li>
-                                <li>Pegar el <b>Número de referencia</b> en el campo correspondido </li>
-                                <li>Adjuntar la foto del pago </li>
-                                <li>Le indicaremos el cambio de status. </li>
-                            </ol>
-                        </div>
-
-                    </div>
-                    <div class="clear"></div>
-                    <div class="datosTranf">
-                        <div class="datos">
-                            <h3>Paypal</h3>
-                            <div class="clear"></div>
-                            <p><b>Metodo:</b> Paypal</p>
-                            <p><b>Correo:</b> correopaypal&#64;gmail.com</p>
-                            <p><b>Banco:</b> Paypal</p>
-                            <p><b>Requerido:</b> reference y photo</p>
-                        </div>
-                        <div class="datos">
-                            <h3>Zelle</h3>
-                            <div class="clear"></div>
-                            <p> <b>Metodo:</b> Zelle</p>
-                            <p><b>Correo:</b> correozelle&#64;gmail.com</p>
-                            <p><b>Banco:</b> nombre del banco</p>
-                            <p><b>Requerido:</b> reference y photo</p>
-                        </div>
-                        <div class="datos">
-                            <h3>Transferencia Bancaria</h3>
-                            <div class="clear"></div>
-                            <p> <b>Metodo:</b> Transferencia</p>
-                            <p><b>Banco:</b> nombre del banco</p>
-                            <p><b>Cuenta:</b> 0000-020320320320329</p>
-                            <p><b>CI o Rif:</b> J-123456789</p>
-                            <p><b>Requerido:</b> reference y photo</p>
-                        </div>
-                        <div class="datos">
-                            <h3>Pago Movil</h3>
-                            <div class="clear"></div>
-                            <p> <b>Metodo:</b> Pago Movil</p>
-                            <p><b>Banco:</b> banco</p>
-                            <p><b>Telf:</b> 0424-123345567</p>
-                            <p><b>CI o Rif:</b> J-123456789</p>
-                            <p><b>Requerido:</b> reference y photo</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade pt-3" id="formulario">
-
-
-                    <section class="section dashboard">
-
-                        <form class="form-horizontal form-material formPagar" (submit)="updateForm()" enctype="multipart/form-data" [formGroup]="PaymentRegisterForm">
-                            <div class="container">
-
-                                <div class="col-xs-12 col-md-8 " style="float: left;">
-                                    <div class="formcompr">
-                                        <div class="div1">
-                                            <div class="form-group ">
-                                                <label for="">Tipo De transferencia</label>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" formControlName="metodo" (click)="verpaypal()" type="radio" value="Paypal" id="radiotipo1">
-                                                    <label class="form-check-label" for="radiotipo1">Paypal</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" formControlName="metodo" (click)="hidepaypal()" type="radio" value="Zelle" id="radiotipo2">
-                                                    <label class="form-check-label" for="radiotipo2">Zelle</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" formControlName="metodo" (click)="hidepaypal()" type="radio" value="Transferencia" id="radiotipo3">
-                                                    <label class="form-check-label" for="radiotipo3">Transferencia</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" formControlName="metodo" (click)="hidepaypal()" type="radio" value="Pago Movil" id="radiotipo4">
-                                                    <label class="form-check-label" for="radiotipo4">Pago Movil</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="div2">
-                                            <div class="form-group ">
-                                                <label for="">Nombre Banco </label>
-                                                <input type="text" formControlName="bank_name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="div3">
-                                            <div class="form-group ">
-                                                <label for="">Num. referencia </label>
-                                                <input type="text" formControlName="referencia" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="div4">
-                                            <div class="form-group " *ngIf="!total">
-                                                <label for="">Monto</label>
-                                                <input type="text" formControlName="monto" class="form-control">
-                                            </div>
-                                            <div class="form-group " *ngIf="total">
-                                                <label for="">Monto</label>
-                                                <p>{{currenciesAll[0].name}} {{total}}</p>
-                                                <input type="text" formControlName="monto" class="form-control" placeholder="Ingrese el monto mostrado arriba">
-                                            </div>
-                                        </div>
-                                        <div class="div7">
-                                            <div class="form-group ">
-                                                <label for="">Nombre y Apellido(en cuenta pagadora) </label>
-                                                <input type="text" formControlName="nombre" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="div8">
-                                            <div class="form-group ">
-                                                <label for="">Email (en cuenta pagadora)</label>
-                                                <input type="text" formControlName="email" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-
-
+                    <!-- Contenedor para el botón de transferencia-->
+                    <div *ngIf="habilitacionFormTransferencia" class="mt-1 mb-1 ">
+                        <form [formGroup]="formTransferencia" (ngSubmit)="sendFormTransfer()">
+                            <!-- Tipo de Transferencia -->
+                            <div class="mb-3 mt-2 col-12">
+                                <label class="form-label">Tipo de Transferencia</label>
+                                <select formControlName="metodo_pago" class="form-control"
+                                    (change)="onChangePayment($event)" name="metodo_pago" id="metodo_pago">
+                                    <option value=" ">Seleccione Tipo de Transferencia</option>
+                                    <option [value]="metodo_pago._id" *ngFor="let metodo_pago of paymentMethods">
+                                        {{metodo_pago.tipo}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="card mb-3">
+                                <div class="card-body alert-warning " *ngIf="paymentSelected">
+                                    <p>Entre a su Aplicación Bancaria y realice el pago con la siguiente
+                                        información:</p>
+                                    <p *ngIf="paymentSelected.bankName">Nombre del
+                                        Banco:&nbsp;{{paymentSelected.bankName}}</p>
+                                    <p *ngIf="paymentSelected.username">Cheque a nombre
+                                        de:&nbsp;{{paymentSelected.username}}</p>
+                                    <p *ngIf="paymentSelected.bankAccount">Número de
+                                        Cuenta:&nbsp;{{paymentSelected.bankAccount}}</p>
+                                    <!-- <p *ngIf="paymentSelected.phone">Número de
+                                            Teléfono:&nbsp;{{paymentSelected.phone}}</p> -->
+                                    <p *ngIf="paymentSelected.email">Email:&nbsp;{{paymentSelected.email}}</p>
+                                    <p *ngIf="paymentSelected?.ciorif">CI o rif:&nbsp;{{paymentSelected.ciorif}}</p>
                                 </div>
-                                <div class="col-xs-12 col-md-4 imagenypaypal">
-                                    <div class="form-group form-row">
+                            </div>
+                            <!-- formularios Dólares -->
+                            <div class="row" *ngIf="paymentSelected && paymentSelected.tipo === 'TRANSFERENCIA'">
+                                <!-- nombre del banco -->
+                                <div class="mb-3 col-xs-12 col-sm-6">
+                                    <label for="bankName" class="form-label">Banco</label>
+                                    <input type="text" formControlName="bankName" class="form-control" name="bankName"
+                                        id="bankName">
+                                </div>
+                                <!-- monto -->
+                                <div class="mb-3 col-xs-12 col-sm-6">
+                                    <label for="amount" class="form-label">Monto</label>
+                                    <!-- {{totalAmount |number:'1.2-2'| currency:tienda_moneda}} -->
+                                    <input type="number" formControlName="amount" class="form-control" name="amount"
+                                        id="amount">
+                                </div>
+                                <!-- numero de referencia -->
+                                <div class="mb-3 col-xs-12 col-sm-6">
+                                    <label for="referencia" class="form-label">Num. referencia</label>
+                                    <input type="text" formControlName="referencia" class="form-control"
+                                        name="referencia" id="referencia">
+                                </div>
+                                <!-- fecha de pago -->
+                                <div class="mb-3">
+                                    <label for="paymentday" class="form-label">Fecha de Pago</label>
+                                    <input type="date" formControlName="paymentday" class="form-control"
+                                        name="paymentday" id="paymentday">
+                                </div>
+                                <!-- botones -->
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
+                                        Generar Pago
+                                    </button>
+                                </div>
+                            </div>
 
-                                        <p>Imagen del pago (requerido) <br> (peso max: 500kb )</p>
-                                       
+                            <!-- formularios pagomovil -->
+
+                            <div class="row" *ngIf="paymentSelected && paymentSelected?.tipo === 'PAGO_MOVIL'">
+
+                                <!-- nombre del banco -->
+                                <div class="mb-3 col-xs-12 col-sm-6">
+                                    <label for="bankName" class="form-label">Banco</label>
+                                    <input type="text" formControlName="bankName" class="form-control" name="bankName"
+                                        id="bankName">
+                                </div>
+                                <!-- teléfono de la persona que hace la transferencia -->
+                                <div class="mb-3 col-xs-12 col-sm-6">
+                                    <label for="phone" class="form-label">Teléfono</label>
+                                    <input type="number" formControlName="phone" class="form-control" name="phone"
+                                        id="phone">
+                                </div>
+                                <!-- monto -->
+                                <div class="mb-3 col-xs-12 col-sm-6">
+                                    <label for="amount" class="form-label">Monto</label>
+                                    <!-- {{totalAmount |number:'1.2-2'| currency:tienda_moneda}} -->
+                                    <input type="number" formControlName="amount" class="form-control" name="amount"
+                                        id="amount">
+                                </div>
+                                <!-- botones -->
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
+                                        Generar Pago
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- formularios zelle -->
+                            <div *ngIf="paymentSelected && paymentSelected?.tipo === 'ZELLE'">
+                                <div class="row">
+                                    <!-- numero de referencia -->
+                                    <div class="mb-3 col-xs-12 col-sm-6">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="text" formControlName="email" class="form-control" name="email"
+                                            id="email">
                                     </div>
-                                    <div class="vibiblepayp">
-                                        <!-- <app-cart></app-cart> -->
+                                    <!-- nombre del banco -->
+                                    <div class="mb-3 col-xs-12 col-sm-6">
+                                        <label for="bankName" class="form-label">Banco</label>
+                                        <input type="text" formControlName="bankName" class="form-control"
+                                            name="bankName" id="bankName">
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <!-- numero de referencia -->
+                                    <div class="mb-3 col-xs-12 col-sm-6">
+                                        <label for="referencia" class="form-label">Num. referencia</label>
+                                        <input type="text" formControlName="referencia" class="form-control"
+                                            name="referencia" id="referencia">
+                                    </div>
+
+                                    <!-- monto -->
+                                    <div class="mb-3 col-xs-12 col-sm-6">
+                                        <label for="amount" class="form-label">Monto</label>
+                                        <!-- {{totalAmount |number:'1.2-2'| currency:tienda_moneda}} -->
+                                        <input type="number" formControlName="amount" class="form-control" name="amount"
+                                            id="amount">
+                                    </div>
+                                </div>
+                                <!-- botones -->
+                                <div class="d-flex justify-content-center gap-2">
+
+
+                                    <button class="check-button " type="submit">
+                                        <i class="fa fa-money-check"></i>
+                                        Procesar pago
+                                    </button>
+                                </div>
 
 
                             </div>
-                            <div class="clear"></div><br>
-
-                            <button class="btn btn-outline-success " type="submit">Registrar Pago</button>
-
 
                         </form>
-                    </section>
-                    <!-- Form -->
+                    </div>
+                    <!-- formularios Efectivo -->
+                    <div *ngIf="habilitacionFormEfectivo" class="mt-1 mb-1 ">
+                        <form [formGroup]="formEfectivo" (ngSubmit)="sendFormEfectivo()">
+                            <div class="card mb-3">
+                                <div class="card-body alert-warning ">
+                                    <p>Ingrese el Monto exacto, ya que nuestro delivery no lleva efectivo</p>
+                                </div>
+                            </div>
 
+
+                            <!-- monto -->
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">Monto</label>
+                                <!-- {{totalAmount |number:'1.2-2'| currency:tienda_moneda}} -->
+                                <!-- <input type="number" formControlName="amount" class="form-control" name="amount" id="amount"> -->
+                            </div>
+
+                            <!-- fecha de pago -->
+                            <div class="mb-3">
+                                <label for="paymentday" class="form-label">Fecha de Pago</label>
+                                <input type="date" formControlName="paymentday" class="form-control" name="paymentday"
+                                    id="paymentday">
+                            </div>
+
+                            <!-- botones -->
+                            <div class="d-flex justify-content-center gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
+                                    Generar Pago
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+            </div>
 
-
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" (click)="onClose()"
+                    data-bs-dismiss="modal">Cancelar</button>
+                <!-- [disabled]="facturaForm.invalid || isLoading" -->
 
             </div>
-            <!-- End Bordered Tabs -->
 
         </div>
     </div>
-
-
-
-
-
-
 </div>
-<!-- End #main-->

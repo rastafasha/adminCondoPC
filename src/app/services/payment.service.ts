@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Payment } from '../models/payment';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 const baseUrl = environment.apiUrl;
 
@@ -11,6 +11,8 @@ const baseUrl = environment.apiUrl;
 export class PaymentService {
 
   public payment!: Payment;
+  private filteredProjectsSubject = new BehaviorSubject<Payment[]>([]);
+  public filteredProjects$: Observable<Payment[]> = this.filteredProjectsSubject.asObservable();
 
 
   constructor(private http: HttpClient) { }
@@ -27,7 +29,9 @@ export class PaymentService {
       }
     }
   }
-
+   emitFilteredProjects(projects: Payment[]) {
+    this.filteredProjectsSubject.next(projects);
+  }
 
   getPayments() {
     const url = `${baseUrl}/payments`;
@@ -64,13 +68,21 @@ export class PaymentService {
       )
   }
 
+  getByStatus(status: string) {
+    const url = `${baseUrl}/payments/status/${status}`;
+    return this.http.get<any>(url, this.headers)
+      .pipe(
+        map((resp: { ok: boolean, payments: Payment[] }) => resp.payments)
+      )
+  }
+
 
   createPayment(payment: Payment) {
     const url = `${baseUrl}/payments/store`;
     return this.http.post(url, payment, this.headers);
   }
   
-  validarPagoAdmin(payment: Payment) {
+  validarPagoAdmin(payment: any) {
     const url = `${baseUrl}/payments/validarpago/${payment._id}`;
     return this.http.post(url, payment, this.headers);
   }

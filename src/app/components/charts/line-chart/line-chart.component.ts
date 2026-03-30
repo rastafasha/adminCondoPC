@@ -10,14 +10,14 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./line-chart.component.css'],
 })
 export class LineChartComponent implements OnChanges {
-  @Input() projects: Payment[] = [];
+  @Input() payments: Payment[] = [];
 
   public chart!: Chart;
 
   ngOnChanges(changes: SimpleChanges) {
     setTimeout(()=>{
-      // console.log('LineChartComponent ngOnChanges projects:', this.projects);
-    if (changes['projects'] && this.projects && this.projects.length > 0) {
+      // console.log('LineChartComponent ngOnChanges payments:', this.payments);
+    if (changes['payments'] && this.payments && this.payments.length > 0) {
       this.createChart();
     }
     }, 2000)

@@ -20,21 +20,34 @@
             <div class="row">
                 <div class="col-xs-12">
                     <!-- buscador -->
-                    <form class="form-horizontal">
-                        <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
-                            <div class="input-group">
-                                <input type="search" name="search" type="text" class="form-control col-xs-12"
-                                    placeholder="Buscar.." [(ngModel)]="query" aria-describedby="button-addon1"
-                                    class="form-control border-0 bg-light">
-                                <div class="input-group-append">
-                                    <button id="button-addon1" type="submit" class="btn btn-link text-primary circle"
-                                        (click)="search()" name="submit" data-toggle="tooltip" title="mostrar todos"><i
-                                            class="fa fa-search"></i></button>
+                    <form class="form-horizontal ">
+                        <div
+                            class="p-1 bg-light rounded rounded-pill shadow-sm mb-4 d-flex justify-content-center gap-3">
+                            <div class="input-group busc">
+                                <input type="search" name="search" type="text" class="form-control inputb "
+                                    placeholder="Buscar Factura" aria-describedby="button-addon1" [(ngModel)]="query"
+                                    class="form-control border-0 bg-light" />
+
+                                <select class="form-control form-select-solid fw-bolder" name="status"
+                                    [(ngModel)]="estado" (change)="search()" placeholder="status">
+                                    <option value="">Seleccione</option>
+                                    <option value="PAGADO">Pagado</option>
+                                    <option value="PENDIENTE">Pendiente</option>
+                                    <option value="ANULADO">Anulado</option>
+                                </select>
+
+                                <div class="input-group-append ">
+                                    <button id="button-addon1" type="submit" class="btn btn-link text-primary"
+                                        (click)="search()" name="submit" data-toggle="tooltip" title="mostrar todos">
+                                        <i class="fa fa-search"></i>
+                                    </button>
                                     <a href="javascript:;" (click)="PageSize()"
-                                        class="btn btn-primary doctor-refresh ms-2 circle"><i
-                                            class="fa fa-refresh"></i></a>
+                                        class="btn btn-primary doctor-refresh ms-2 "><i class="fa fa-refresh"></i></a>
                                 </div>
+
+
                             </div>
+
                         </div>
                     </form>
                     <!-- buscador -->
@@ -102,4 +115,4 @@
 <app-modal-factura-detalle [facturaSeleccionado]="facturaSeleccionado"
     (closeModal)="onCloseModal()"></app-modal-factura-detalle>
 
-    <app-modalinfo-tipos-pago [info]="info"></app-modalinfo-tipos-pago>
+<app-modalinfo-tipos-pago [info]="info"></app-modalinfo-tipos-pago>

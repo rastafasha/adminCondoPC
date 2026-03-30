@@ -1,15 +1,18 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CommonModule, Location } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from '@angular/forms';
-
-
-import { environment } from 'src/environments/environment';
-import { AccountService } from 'src/app/services/account.service';
-import { Payment } from 'src/app/models/payment';
-import { User } from 'src/app/models/users';
-import { PaymentService } from 'src/app/services/payment.service';
-import { UserService } from 'src/app/services/users.service';
+import { CommonModule, Location, NgIf } from '@angular/common';
+import { FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from '@angular/forms';
+import { environment } from '../../../../environments/environment';
+import { Payment } from '../../../models/payment';
+import { User } from '../../../models/user';
+import { PaymentService } from '../../../services/payment.service';
+import { UserService } from '../../../services/user.service';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
+import { PaymentMethod } from '../../../models/paymenthmethod.model';
+import Swal from 'sweetalert2';
+import { TransferenciaService } from '../../../services/transferencia.service';
+import { PagoEfectivoService } from '../../../services/pago-efectivo.service';
+import { TiposdepagoService } from '../../../services/tiposdepago.service';
 
 interface HtmlInputEvent extends Event{
   target : HTMLInputElement & EventTarget;
@@ -22,14 +25,15 @@ declare var $:any;
   selector: 'app-reportar-pago',
   standalone: true,
   imports: [
-    CommonModule,FormsModule,ReactiveFormsModule
+    CommonModule,FormsModule,ReactiveFormsModule,
+    LoadingComponent
   ],
   templateUrl: './reportar-pago.component.html',
   styleUrls: ['./reportar-pago.component.css']
 })
 export class ReportarPagoComponent implements OnInit {
-
-  public PaymentRegisterForm: FormGroup;
+@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
+  public PaymentRegisterForm!: FormGroup;
 
   title= 'Realizar un Pago';
 
@@ -38,52 +42,78 @@ export class ReportarPagoComponent implements OnInit {
   Item: any[] = [];
   total= 0;
 
-  public usuario;
+  public usuario:any;
   visible :boolean = false;
+  isLoading :boolean = false;
 
-  metodo:string;
-  error: string;
-  pagoSeleccionado: Payment;
-  pagoS: Payment;
+  metodo!:string;
+  error!: string;
+  pagoSeleccionado!: Payment;
+  pagoS!: Payment;
 
-  uploadError: boolean;
-  imagePath: string;
-  paymentSeleccionado:Payment;
+  uploadError!: boolean;
+  imagePath!: string;
+  paymentSeleccionado!:Payment;
 
   user:User;
 
-  public storage = environment.url_media
+  public storage = environment.apiUrl;
+  public identity!: User;
+  public userId!: any;
 
-  
+  selectedMethod: string = 'Selecciona un método de pago';
+  habilitacionFormTransferencia: boolean = false;
+  habilitacionFormEfectivo: boolean = false;
+
+  paymentMethods: PaymentMethod[] = []; //array metodos de pago para transferencia (dolares, bolivares, movil)
+  paymentSelected!: PaymentMethod; //metodo de pago seleccionado por el usuario para transferencia
+  paymentMethodinfo!: PaymentMethod; //metodo de pago seleccionado por el usuario para transferencia
+
+
+  formTransferencia = new FormGroup({
+    metodo_pago: new FormControl(this.paymentMethodinfo, Validators.required),
+    bankName: new FormControl('', Validators.required),
+    referencia: new FormControl('', Validators.required),
+    paymentday: new FormControl('', Validators.required),
+    amount: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required)
+  });
+
+
+  formEfectivo = new FormGroup({
+    paymentday: new FormControl('', Validators.required),
+    amount: new FormControl('', Validators.required)
+  });
 
   constructor(
     private fb: FormBuilder,
-    private location: Location,
-    private paymentService: PaymentService,
+    private trasnferenciaService: TransferenciaService,
+    private efectivoService: PagoEfectivoService,
     private usuarioService: UserService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private accountService: AccountService,
+    private paymentMethodService: TiposdepagoService,
   ) {
-    this.user = this.usuarioService.user;
+    this.user = this.usuarioService.usuario;
   }
 
 
   ngOnInit(): void {
     window.scrollTo(0,0);
+    let USER = localStorage.getItem('user');
+    if (USER) {
+      this.identity = JSON.parse(USER);
+    }
+    this.userId = this.identity.uid;
     this.visible= false;
-    this.getUser();
-    this.closeCart();
-    this.validarFormulario();
+    this.getTiposdePago();
     this.total = this.getTotal();
-
   }
 
-  getUser(): void {
-    this.usuario = JSON.parse(localStorage.getItem('user'));
-  }
-
-
+getTiposdePago(){
+  this.paymentMethodService.getPaymentsActives().subscribe((res:any)=>{
+    this.paymentMethods = res;
+    // console.log(this.paymentMethods)
+  })
+}
   getTotal():number{
     let total =  0;
     this.cartItems.forEach(item => {
@@ -93,105 +123,162 @@ export class ReportarPagoComponent implements OnInit {
   }
 
 
-  goBack() {
-    this.location.back(); // <-- go back to previous location on cancel
-  }
-
-  validarFormulario(){
-    this.PaymentRegisterForm = this.fb.group({
-      id: [''],
-      metodo: ['',Validators.required],
-      bank_name: [''],
-      monto: ['',Validators.required],
-      currency_id: [''],
-      referencia: [''],
-      email: [''],
-      nombre: [''],
-      plan_id: [''],
-      // status: ['PENDING'],
-      // validacion: ['PENDING'],
-      metodo_id: ['1'],
-      user_id: [''],
-      image: [''],
-    })
-  }
-
 
 
   get image() {
     return this.PaymentRegisterForm.get('image');
   }
 
-  avatarUpload(datos) {
+  avatarUpload(datos:any) {
     const data = JSON.parse(datos.response);
     this.PaymentRegisterForm.controls['image'].setValue(data.image);//almaceno el nombre de la imagen
   }
 
 
-  updateForm(){
+  // Método que se llama cuando cambia el select
+  onPaymentMethodChange(event: any) {
+    this.selectedMethod = event.target.value;
+    console.log(this.selectedMethod)
+    this.renderTipos();
+  }
 
-    const formData = new FormData();
-    formData.append('metodo', this.PaymentRegisterForm.get('metodo').value);
-    formData.append('bank_name', this.PaymentRegisterForm.get('bank_name').value);
-    formData.append('monto', this.PaymentRegisterForm.get('monto').value);
-    formData.append('currency_id', this.PaymentRegisterForm.get('currency_id').value);
-    formData.append('referencia', this.PaymentRegisterForm.get('referencia').value);
-    formData.append('nombre', this.PaymentRegisterForm.get('nombre').value);
-    formData.append('email', this.PaymentRegisterForm.get('email').value);
-    formData.append('plan_id', this.PaymentRegisterForm.get('plan_id').value);
-    formData.append('metodo_id', '1');
-    // formData.append('status', 'PENDING');
-    // formData.append('validacion', 'PENDING');
-    formData.append('image', this.PaymentRegisterForm.get('image').value);
+  // metodo para el cambio del select 'tipo de transferencia'
+  onChangePayment(event: Event) {
+    const target = event.target as HTMLSelectElement; //obtengo el valor
+    // console.log(target.value)
 
+    // guardo el metodo seleccionado en la variable de clase paymentSelected
+    this.paymentSelected = this.paymentMethods.filter(method => method._id === target.value)[0]
+    console.log(this.paymentSelected)
+  }
 
-    //crear
-    const data = {
-      ...this.PaymentRegisterForm.value,
-      user_id: this.usuario.id
+  private renderTipos() {
+    if (this.selectedMethod === 'card' || this.selectedMethod === 'paypal') {
+      this.habilitacionFormTransferencia = false;
+      this.habilitacionFormEfectivo = false;
     }
-    this.paymentService.create(data)
-    .subscribe( (resp: any) =>{
-      this.router.navigateByUrl(`/dashboard/historial-pagos`);
-      this.pagoSeleccionado = resp;
-      console.log(this.pagoSeleccionado);
-      this.emptyCart();
-    })
-
+    else if (this.selectedMethod === 'transferencia') {
+      // transferencia bancaria => abrir formulario (en un futuro un modal con formulario)
+      this.habilitacionFormTransferencia = true;
+      this.habilitacionFormEfectivo = false;
+    }
+    else if (this.selectedMethod === 'efectivo') {
+      // transferencia bancaria => abrir formulario (en un futuro un modal con formulario)
+      this.habilitacionFormEfectivo = true;
+      this.habilitacionFormTransferencia = false;
+    }
+    else {
+      this.habilitacionFormTransferencia = false;
+      this.habilitacionFormEfectivo = false;
+    }
   }
 
 
-  closeCart(){
-    var cartNotification = document.getElementsByClassName("cart-modal");
-      for (var i = 0; i<cartNotification.length; i++) {
-        cartNotification[i].classList.remove("cart-modal--active");
 
+  sendFormTransfer() {
+
+    if (this.formTransferencia.valid) {
+
+      const data = {
+        user: this.user.uid,
+        // name_person: this.identity.first_name + this.identity.last_name,
+        // phone: this.identity.telefono,
+        // amount: this.totalAmount,
+        ...this.formTransferencia.value
       }
+
+
+      // llamo al servicio
+      this.trasnferenciaService.createTransfer(data).subscribe(resultado => {
+        // console.log('resultado: ',resultado);
+        // this.verify_dataComplete(Number(this.formTransferencia.value.amount));
+        // this.verify_dataComplete(Number(this.totalAmount));
+        if (resultado.ok || resultado.status === 200) {
+          // transferencia registrada con exito
+          // console.log(resultado.payment);
+          // alert('Transferencia registrada con exito');
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Transferencia registrada con exito',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // this.onItemRemoved();
+          // this._router.navigate(['/my-account/ordenes']);
+        }
+        else {
+          // error al registar la transferencia
+          // alert('Error al registrar la transferencia');
+          // console.log(resultado.msg);
+          Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: 'Error al registrar la transferencia',
+            text: resultado.msg,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+    }
   }
 
+  sendFormEfectivo() {
 
+    if (this.formEfectivo.valid) {
 
-  verpaypal(){
-    var verPaypalpay = document.getElementsByClassName("vibiblepayp");
-      for (var i = 0; i<verPaypalpay.length; i++) {
-        verPaypalpay[i].classList.toggle("vibiblepaypblok");
-
+      const data = {
+        // localId: this.tiendaSelected._id,
+        // user: this.identity.uid,
+        // name_person: this.identity.first_name + this.identity.last_name,
+        // phone: this.identity.telefono,
+        // amount: this.totalAmount,
+        ...this.formEfectivo.value
       }
+
+      // llamo al servicio
+      this.efectivoService.registro(data).subscribe(resultado => {
+        // console.log('resultado: ',resultado);
+        // this.verify_dataComplete(Number(this.formEfectivo.value.amount));
+        // this.verify_dataComplete(Number(this.totalAmount));
+        if (resultado.ok || resultado.status === 200) {
+          // transferencia registrada con exito
+          // console.log(resultado.payment);
+          // alert('Transferencia registrada con exito');
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Pago registrada con exito',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // this.onItemRemoved();
+          // this._router.navigate(['/my-account/ordenes']);
+        }
+        else {
+          // error al registar la transferencia
+          // alert('Error al registrar la transferencia');
+          // console.log(resultado.msg);
+          Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: 'Error al registrar el Pago',
+            text: resultado.msg,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+    }
   }
-  hidepaypal(){
-    var verPaypalpay = document.getElementsByClassName("vibiblepayp");
-      for (var i = 0; i<verPaypalpay.length; i++) {
-        verPaypalpay[i].classList.remove("vibiblepaypblok");
 
-      }
+
+  onClose() {
+    this.selectedMethod = 'Selecciona un método de pago';
+    this.habilitacionFormTransferencia = false;
+    this.habilitacionFormEfectivo = false;
+    this.closeModal.emit();
   }
-
-
-
-  emptyCart():void{
-    this.cartItems = [];
-    this.total = 0;
-  }
-
 
 }

@@ -76,8 +76,6 @@ export class TiposdepagoComponent implements OnInit {
     private fb: FormBuilder,
     private paymentMethodService: TiposdepagoService,
     private userService: UserService,
-    private location: Location,
-    private ativatedRoute: ActivatedRoute,
   ) {
     this.url = environment.apiUrl;
     this.identity = this.userService.usuario;
