@@ -173,6 +173,7 @@ export class ProfileComponent implements OnInit {
       telmovil: ['', Validators.required],
       // usuario: [this.usuario.uid],
       id: [''],
+      img: [ ''],
     });
   }
 
@@ -187,44 +188,44 @@ export class ProfileComponent implements OnInit {
   get telmovil() {
     return this.perfilForm.get('telmovil');
   }
-  get emailPaypal() {
-    return this.perfilForm.get('emailPaypal');
-  }
   
+  
+cambiarImagen(file: File) {
+    this.imagenSubir = file;
 
+    // if (!file) {
+    //   return this.imgTemp = null;
+    // }
 
-  // cambiarImagen(file: File){
-  //   this.imagenSubir = file;
+    const reader = new FileReader();
+    const url64 = reader.readAsDataURL(file);
 
-  //   if(!file){
-  //     return this.imgTemp = null;
-  //   }
+    reader.onloadend = () => {
+      this.imgTemp = reader.result;
+    }
+  }
 
-  //   const reader = new FileReader();
-  //   const url64 = reader.readAsDataURL(file);
-
-  //   reader.onloadend = () =>{
-  //     this.imgTemp = reader.result;
-  //   }
-  // }
-
-  subirImagen(){
-    this.fileUploadService
-    .actualizarFoto(this.imagenSubir, 'profiles', this.profileId)
-    .then(img => { this.profile.img = img;
-      Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
-    }).catch(err =>{
-      Swal.fire('Error', 'No se pudo subir la imagen', 'error');
-    })
+  subirImagen() {
+    this.isLoading = true;
+        this.fileUploadService
+          .actualizarFoto(this.imagenSubir, 'profiles', this.profileSeleccionado._id || '')
+          .then(img => {
+            this.profile.img = img;
+            Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
+            this.isLoading = false;
+            this.ngOnInit()
+          }).catch(err => {
+            Swal.fire('Error', 'No se pudo subir la imagen', 'error');
+            this.isLoading = false;
+            this.ngOnInit()
+          })
   }
 
 
 
   guardarPerfil() {
 
-    const {first_name, last_name,telhome, telmovil } = this.perfilForm.value;
-
-
+    
     if (this.profile ) {
       const data = {
         ...this.perfilForm.value,

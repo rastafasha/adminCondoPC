@@ -66,6 +66,7 @@
                                 <th scope="col">Banco Destino</th>
                                 <th scope="col">Metodo</th>
                                 <th scope="col">Monto </th>
+                                <th scope="col">tasa BCV </th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Dia del Pago</th>
                                 <th scope="col">Creado</th>
@@ -90,6 +91,9 @@
                                 <td>{{transferecia.metodo_pago}}</td>
                                 <td>
                                     {{transferecia.amount|currency:'Bs.'}}
+                                </td>
+                                <td>
+                                    {{transferecia.tasaBCV|currency:'Bs.'}}
                                 </td>
                                 <td>
                                     <span class="badge bg-success" *ngIf="transferecia.status === 'APPROVED'">Aprobado</span>

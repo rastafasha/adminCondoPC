@@ -139,6 +139,30 @@
                                                     </div>
                                                 </div>
                                                 <div class="clear"></div>
+                                                <div class="col-xs-12 col-md-6">
+                                                   <!-- Foto -->
+                                                    <div style="height: auto; margin-bottom: 20px;">
+                                                        <div class="col-xs-12 col-sm-">
+                                                        <div class="form-group">
+                                                            <div class="cz-file-drop-area">
+                                                            <label for="file" class="upload labelgoogle">
+                                                                <input type="file" accept="image/*" name="image" id="file"
+                                                                (change)="cambiarImagen($any($event.target).files?.[0])"
+                                                                class="hide-input input">
+                                                                <span class="label__name">
+                                                                {{'Select a Photo'}}
+                                                                </span>
+                                                            </label>
+                                                            <button type="button" [disabled]="!imagenSubir" (click)="subirImagen()"
+                                                                class="btn btn-outline-success waves-effect waves-light m-r-10 ">
+                                                                <i class="fa fa-save"></i> Cambiar imagen
+                                                            </button>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
                                                 <!----//-->
                                             </div>
 

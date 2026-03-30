@@ -54,7 +54,7 @@ export class UsersComponent implements OnInit {
             <li>Ver Todos los usuarios </li>
             <li>Ver a detalle cada Cliente</li>
             <li>Encontrar Cliente por varias opciones</li>
-            <li>Generar La Facturación por cada cliente individual</li>
+            <li>Generar La Facturación por cada cliente individual en PDF</li>
             <li>Generar La Facturación Masiva a todos los Clientes</li>
           </ul>`;
 

@@ -1,6 +1,6 @@
-import { Facturacion } from "./facturacion";
-import { User } from "./user";
+import { environment } from "../../environments/environment";
 
+const base_url = environment.mediaUrlRemoto;
 export class Transferencia{
   constructor(
 
@@ -20,6 +20,20 @@ export class Transferencia{
       
   ){
     this.status = 'PENDING'; // Valor por defecto
+  }
+
+
+  get imagenUrl(){
+    if(!this.img){
+      return `${base_url}/trasferencias/no-image.jpg`;
+    } else if(this.img.includes('https')){
+      return this.img;
+    } else if(this.img){
+      return `${base_url}/trasferencias/${this.img}`;
+    }else {
+      return `${base_url}/no-image.jpg`;
+      // return `./assets/img/no-image.jpg`;
+    }
   }
 
    

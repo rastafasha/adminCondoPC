@@ -82,6 +82,7 @@
                                     <th scope="col">Banco Destino</th>
                                     <th scope="col">Metodo</th>
                                     <th scope="col">Monto </th>
+                                    <th scope="col">tasaBCV </th>
                                     <th scope="col">fecha_pago </th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Creado</th>
@@ -100,6 +101,7 @@
                                     <td>{{pago.bank_destino}}</td>
                                     <td>{{pago.metodo_pago}}</td>
                                     <td>{{pago.amount|currency:'Bs.'}} </td>
+                                    <td>{{pago.tasaBCV|currency:'Bs.'}}</td>
                                     <td>{{pago.fecha_pago | date:'MMM d, y'}}</td>
                                     <td>
                                         <span class="badge bg-success"
