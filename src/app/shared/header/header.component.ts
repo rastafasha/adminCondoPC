@@ -32,7 +32,6 @@ export class HeaderComponent implements OnInit {
     }
 
   ngOnInit() {
-
     let USER = localStorage.getItem("user");
     this.user = USER ? JSON.parse(USER) : null;
     // console.log(this.user);
@@ -46,7 +45,14 @@ export class HeaderComponent implements OnInit {
     }
 
     this.listar();
+    localStorage.setItem('dark', 'dark');
+    
+    if (localStorage.getItem('dark')) {
+      this.darkmode('dark');
+    }
   }
+
+  
 
 
   listar(){

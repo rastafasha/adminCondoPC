@@ -43,6 +43,7 @@ export class PaymentsComponent implements OnInit {
 
   public user: any;
   query: string = '';
+  adminId!:string;
   pagoSeleccionado!: any | null;
   option_selectedd: number = 1;
     solicitud_selectedd: any = 1;
@@ -72,7 +73,10 @@ export class PaymentsComponent implements OnInit {
 
   ngOnInit(): void {
     // this.closeMenu();
-
+    let USER = localStorage.getItem("user");
+    this.user = USER ? JSON.parse(USER) : null;
+    this.adminId = this.user.uid;
+    this.userService.closeMenu();
     this.getPagos();
     window.scrollTo(0, 0);
     // this.getPagos_list();
@@ -82,7 +86,6 @@ export class PaymentsComponent implements OnInit {
   getStatusFacturas(){
       this.facturacionService.getByStatusFaturas().subscribe((resp:any)=>{
         this.stats = resp;
-        console.log(resp)
       })
   
       
@@ -143,10 +146,12 @@ export class PaymentsComponent implements OnInit {
   cambiarStatus(data: any) {
     const VALUE = data.status;
     console.log(VALUE);
+    console.log(data);
 
     const payload ={
-      data: data.status,
-      usuario_validador: this.userService.usuario.uid
+      nuevoEstado: data.status,
+      usuario_validador: this.adminId,
+      _id:data._id
     }
 
     this.paymentService.validarPagoAdmin(payload).subscribe(

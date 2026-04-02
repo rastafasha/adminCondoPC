@@ -132,10 +132,10 @@
                             </form>
                         </div>
                         <!-- lista de tipos de pago -->
-                        <div class="col-xs-12 col-sm-7" *ngIf="!tipoSeleccionado">
+                        <div class="col-xs-12 col-sm-7" *ngIf="!tipoSeleccionado && !isEditMode">
                             <div class="card">
                                 <div class="card-body">
-                                    <table class="rbt-table table">
+                                    <table class="rbt-table table table-responsive">
                                         <thead>
                                             <tr>
                                                 <th>Tipo</th>

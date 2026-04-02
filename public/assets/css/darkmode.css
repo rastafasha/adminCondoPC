@@ -230,3 +230,24 @@ body .dark {
     background-color: var(--black) !important;
     color: var(--white) !important;
 }
+.parablanco{
+    display: flex;
+    float: right;
+    transform: translate(-10px, 20px);
+}
+.paranegro{
+    display: none; 
+}
+.dark .dark-logo, .dark .parablanco{
+    display: none;
+}
+.dark .light-logo{
+    display: block !important;
+    transform: translate(0px, 10px);
+    border-radius: 100px;
+}
+.dark .paranegro{
+    display: block !important;
+    float: right;
+    transform: translate(-10px, 20px);
+}

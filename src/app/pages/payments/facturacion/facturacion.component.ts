@@ -54,7 +54,7 @@ export class FacturacionComponent {
   }
 
   ngOnInit(): void {
-    // this.closeMenu();
+    this.userService.closeMenu();
 
     this.getFacturas();
     window.scrollTo(0, 0);

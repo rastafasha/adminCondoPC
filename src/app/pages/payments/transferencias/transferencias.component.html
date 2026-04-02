@@ -79,12 +79,16 @@
                                     <img [src]="(transferecia?.img || '')| imagenPipe: 'transferencias' " class="imagecircle shadow"
                                         alt="">
                                 </td>
-                                <th><a [routerLink]="['/dashboard/user/detail/', transferecia.user]">{{transferecia.user | slice:0:15}}...</a>
+                                <th><a [routerLink]="['/dashboard/user/', transferecia.user]">{{transferecia.user | slice:0:15}}...</a>
                                 </th>
                                 <th scope="row">
-                                    <a [routerLink]="['/dashboard/payment-detail', transferecia._id]">{{transferecia.referencia}}</a>
+                                    <a (click)="openViewModalPago(transferecia)" href="javascript:void(0)"
+                                            data-bs-toggle="modal" data-bs-target="#viewPago">{{transferecia.referencia}}</a>
                                 </th>
-                                <th><a [routerLink]="['/dashboard/padre/detail/', transferecia.factura]">{{transferecia.factura | slice:0:15}}...</a>
+                                <th>
+                                    <a (click)="openViewModal(transferecia)" href="javascript:void(0)" data-bs-toggle="modal"
+                                        data-bs-target="#viewFactura">{{transferecia.factura}}</a>
+                                    
                                 </th>
                                 
                                 <td>{{transferecia.bankName}}</td>
@@ -126,5 +130,8 @@
     </div>
 </div>
 <!-- End #main-->
+<app-modal-factura-detalle [facturaSeleccionado]="facturaSeleccionado"
+    (closeModal)="onCloseModal()"></app-modal-factura-detalle>
 
+<app-modal-pago-detalle [pagoSeleccionado]="pagoSeleccionado" (closeModal)="onCloseModal()"></app-modal-pago-detalle>
  <app-modalinfo-tipos-pago [info]="info"></app-modalinfo-tipos-pago>

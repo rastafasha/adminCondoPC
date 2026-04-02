@@ -14,6 +14,7 @@ import { TransferenciasComponent } from './payments/transferencias/transferencia
 import { FacturacionComponent } from './payments/facturacion/facturacion.component';
 import { TiposdepagoComponent } from './conf/tiposdepago/tiposdepago.component';
 import { TasabcvComponent } from './conf/tasabcv/tasabcv.component';
+import { AuthGuard } from '../guards/auth.guard';
 // import { CondicionesComponent } from './condiciones/condiciones.component';
 
 
@@ -21,7 +22,7 @@ import { TasabcvComponent } from './conf/tasabcv/tasabcv.component';
 
 const childRoutes: Routes = [
 
-    { path: '',  component: DashboardComponent, data:{title:'Dashboard'} },
+    { path: '', canActivate: [AuthGuard],  component: DashboardComponent, data:{title:'Dashboard'} },
     //auth
 
     //configuraciones

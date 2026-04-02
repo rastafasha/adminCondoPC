@@ -101,20 +101,14 @@ export class ProfileComponent implements OnInit {
     let USER = localStorage.getItem("user");
     this.user = USER ? JSON.parse(USER) : null;
     console.log('usuario',this.user);
-    this.closeMenu();
+    this.userService.closeMenu();
     this.validarFormularioPerfil();
     this.activatedRoute.params.subscribe( ({id}) => this.getUserProfile(id));
    
     // this.listar();
     
   }
-  closeMenu(){
-    var menuLateral = document.getElementsByClassName("sidebar");
-      for (var i = 0; i<menuLateral.length; i++) {
-         menuLateral[i].classList.remove("active");
-
-      }
-  }
+  
 
 
   getUserProfile(id:string){

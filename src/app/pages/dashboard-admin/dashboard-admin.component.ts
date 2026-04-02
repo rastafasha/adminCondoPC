@@ -55,7 +55,7 @@ export class DashboardAdminComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.closeMenu();
+    this.userService.closeMenu();
     this.getUser();
     this.getPPaymentsData();
     this.subscribeToFilteredPPayments();
@@ -87,13 +87,13 @@ export class DashboardAdminComponent implements OnInit {
     });
   }
 
-  closeMenu(){
-    var menuLateral = document.getElementsByClassName("sidebar");
-      for (var i = 0; i<menuLateral.length; i++) {
-         menuLateral[i].classList.remove("active");
+  // closeMenu(){
+  //   var menuLateral = document.getElementsByClassName("sidebar");
+  //     for (var i = 0; i<menuLateral.length; i++) {
+  //        menuLateral[i].classList.remove("active");
 
-      }
-  }
+  //     }
+  // }
 
   getUser(): void {
 

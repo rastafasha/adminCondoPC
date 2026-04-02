@@ -23,6 +23,7 @@ export class UserService {
 
   public auth2: any;
   public usuario!: User;
+  public estaAutenticado = false;
 
   constructor(
     private http: HttpClient,
@@ -56,16 +57,18 @@ export class UserService {
 
   guardarLocalStorage(token: string, user: any){
     localStorage.setItem('token', token);
-    // localStorage.setItem('user', user);
+    localStorage.setItem('estaAutenticado', 'true');
     localStorage.setItem('user', JSON.stringify(user));
+    this.estaAutenticado = true;
   }
 
 
     getLocalStorage(){
+       const authStr = localStorage.getItem('estaAutenticado');
+      this.estaAutenticado = authStr === 'true';
       if(localStorage.getItem('token') && localStorage.getItem('user')){
         let USER = localStorage.getItem('user');
         this.usuario = JSON.parse(USER ? USER: '');
-        // this.router.navigateByUrl('/start-meet');
       }
     }
 
@@ -90,6 +93,7 @@ export class UserService {
   logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('estaAutenticado');
     this.router.navigateByUrl('/login');
 
     // this.auth2.signOut().then(()=>{
@@ -238,9 +242,9 @@ export class UserService {
 
 
   closeMenu(){
-    var menuLateral = document.getElementsByClassName("sidebar");
+    var menuLateral = document.getElementsByClassName("mini-sidebar");
       for (var i = 0; i<menuLateral.length; i++) {
-         menuLateral[i].classList.remove("active");
+         menuLateral[i].classList.remove("show-sidebar");
 
       }
   }
@@ -266,5 +270,7 @@ export class UserService {
     const url = `${base_url}/usuarios/user_password/change/${data}`;
     return this.http.put<any>(url, this.headers)
   }
+
+  
 
 }
