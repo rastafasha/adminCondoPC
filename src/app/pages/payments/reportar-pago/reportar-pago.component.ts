@@ -1,19 +1,24 @@
-import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { CommonModule, Location, NgIf } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from '@angular/forms';
-import { environment } from '../../../../environments/environment';
-import { Payment } from '../../../models/payment';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
+// Modelos
 import { User } from '../../../models/user';
-import { PaymentService } from '../../../services/payment.service';
-import { UserService } from '../../../services/user.service';
-import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { PaymentMethod } from '../../../models/paymenthmethod.model';
-import Swal from 'sweetalert2';
-import { TransferenciaService } from '../../../services/transferencia.service';
-import { PagoEfectivoService } from '../../../services/pago-efectivo.service';
+import { Facturacion } from '../../../models/facturacion';
+
+// Servicios
+import { UserService } from '../../../services/user.service';
 import { TiposdepagoService } from '../../../services/tiposdepago.service';
 import { TasabcvService } from '../../../services/tasabcv.service';
+import { FacturacionService } from '../../../services/facturacion.service';
+import { TransferenciaService } from '../../../services/transferencia.service';
+import { PagoEfectivoService } from '../../../services/pago-efectivo.service';
+
+import { LoadingComponent } from '../../../shared/loading/loading.component';
+import Swal from 'sweetalert2';
+import { PaymentService } from '../../../services/payment.service';
+import { UserRolePipe } from '../../../pipes/user-role.pipe';
 
 interface HtmlInputEvent extends Event{
   target : HTMLInputElement & EventTarget;
@@ -25,275 +30,217 @@ declare var $:any;
 @Component({
   selector: 'app-reportar-pago',
   standalone: true,
-  imports: [
-    CommonModule,FormsModule,ReactiveFormsModule,
-    LoadingComponent
-  ],
+ imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingComponent, UserRolePipe],
   templateUrl: './reportar-pago.component.html',
   styleUrls: ['./reportar-pago.component.css']
 })
 export class ReportarPagoComponent implements OnInit {
-@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
-  public PaymentRegisterForm!: FormGroup;
+@Output() closeModal = new EventEmitter<boolean>();
 
-  title= 'Realizar un Pago';
+  // UI State
+  public title = 'Realizar un Pago';
+  public isLoading: boolean = false;
+  public selectedMethod: string = ''; // 'transferencia' | 'efectivo'
+  public habilitacionFormTransferencia: boolean = false;
+  public habilitacionFormEfectivo: boolean = false;
 
+  // Data Arrays
+  public usuarios: User[] = [];
+  public facturasPendientes: Facturacion[] = [];
+  public paymentMethods: PaymentMethod[] = []; // Cuentas bancarias de la administración
 
-  cartItems: any[] = [];
-  Item: any[] = [];
-  total= 0;
+  // Selections
+  public usuarioId: string = '';
+  public facturaId: string = '';
+  public facturaSeleccionada?: Facturacion;
+  public paymentSelected?: PaymentMethod; // Cuenta destino seleccionada
+  public bankSelected?: PaymentMethod; // Cuenta destino seleccionada
+  public tasaBCV: number = 0;
 
-  public usuario:any;
-  visible :boolean = false;
-  isLoading :boolean = false;
+  // Formularios Reactivos
+  public formTransferencia: FormGroup;
+  public formEfectivo: FormGroup;
 
-  metodo!:string;
-  error!: string;
-  pagoSeleccionado!: Payment;
-  pagoS!: Payment;
-
-  uploadError!: boolean;
-  imagePath!: string;
-  paymentSeleccionado!:Payment;
-
-  user:User;
-
-  public storage = environment.apiUrl;
-  public identity!: User;
-  public userId!: any;
-  public tasaBCV!: number;
-
-  selectedMethod: string = 'Selecciona un método de pago';
-  habilitacionFormTransferencia: boolean = false;
-  habilitacionFormEfectivo: boolean = false;
-
-  paymentMethods: PaymentMethod[] = []; //array metodos de pago para transferencia (dolares, bolivares, movil)
-  paymentSelected!: PaymentMethod; //metodo de pago seleccionado por el usuario para transferencia
-  paymentMethodinfo!: PaymentMethod; //metodo de pago seleccionado por el usuario para transferencia
-
-
-  formTransferencia = new FormGroup({
-    metodo_pago: new FormControl(this.paymentMethodinfo, Validators.required),
-    bankName: new FormControl('', Validators.required),
-    referencia: new FormControl('', Validators.required),
-    paymentday: new FormControl('', Validators.required),
-    amount: new FormControl('', Validators.required),
-    phone: new FormControl('', Validators.required),
-    tasaBCV: new FormControl(0, Validators.required),
-  });
-
-
-  formEfectivo = new FormGroup({
-    paymentday: new FormControl('', Validators.required),
-    amount: new FormControl('', Validators.required),
-    tasaBCV: new FormControl(0, Validators.required),
-  });
+  
 
   constructor(
     private fb: FormBuilder,
-    private trasnferenciaService: TransferenciaService,
-    private efectivoService: PagoEfectivoService,
     private usuarioService: UserService,
     private paymentMethodService: TiposdepagoService,
     private tasaService: TasabcvService,
+    private facturacionService: FacturacionService,
+    private paymentService: PaymentService,
+    private efectivoService: PagoEfectivoService
   ) {
-    this.user = this.usuarioService.usuario;
+    // Inicialización de formularios más limpia
+    this.formTransferencia = this.fb.group({
+      metodo_pago: ['', Validators.required], // ID de la cuenta bancaria destino
+      bank_destino: ['', Validators.required],    // Banco desde donde envía el vecino
+      referencia: ['', Validators.required],
+      paymentday: ['', Validators.required],
+      amount: ['', Validators.required],
+      phone: [''],                            // Opcional si no es Pago Móvil
+      tasaBCV: [0, Validators.required],
+      
+    });
+
+    this.formEfectivo = this.fb.group({
+      paymentday: [new Date().toISOString().substring(0, 10), Validators.required],
+      amount: ['', Validators.required],
+      tasaBCV: [0, Validators.required]
+    });
   }
 
 
   ngOnInit(): void {
-    window.scrollTo(0,0);
-    let USER = localStorage.getItem('user');
-    if (USER) {
-      this.identity = JSON.parse(USER);
-    }
-    this.userId = this.identity.uid;
-    this.visible= false;
-    this.getTiposdePago();
-    this.getTasadeldia();
-    this.total = this.getTotal();
+    this.cargarDatosIniciales();
   }
 
-  getTasadeldia(){
-    this.tasaService.getUltimaTasa().subscribe((rate:any) => {
-    this.tasaBCV = rate.precio_dia; // Carga automática para ahorrar tiempo
-    this.isLoading =false
-    this.formTransferencia.patchValue({ tasaBCV: this.tasaBCV });
-    this.formEfectivo.patchValue({ tasaBCV: this.tasaBCV });
-  });
+  cargarDatosIniciales() {
+    this.isLoading = true;
+    // Ejecutamos cargas paralelas
+    Promise.all([
+      this.getTasadeldia(),
+      this.getTiposdePago(),
+      this.getUsuariosaCobrar()
+    ]).finally(() => this.isLoading = false);
   }
 
-getTiposdePago(){
-  this.paymentMethodService.getPaymentsActives().subscribe((res:any)=>{
-    this.paymentMethods = res;
-    // console.log(this.paymentMethods)
-  })
-}
-  getTotal():number{
-    let total =  0;
-    this.cartItems.forEach(item => {
-      total += item.quantity * item.productPrice;
+ getTasadeldia() {
+    this.tasaService.getUltimaTasa().subscribe((rate: any) => {
+      this.tasaBCV = rate.precio_dia;
+      this.formTransferencia.patchValue({ tasaBCV: this.tasaBCV });
+      this.formEfectivo.patchValue({ tasaBCV: this.tasaBCV });
     });
-    return +total.toFixed(2);
   }
 
-
-
-
-  get image() {
-    return this.PaymentRegisterForm.get('image');
+getTiposdePago() {
+    this.paymentMethodService.getPaymentsActives().subscribe((res: any) => {
+      this.paymentMethods = res;
+    });
   }
 
-  avatarUpload(datos:any) {
-    const data = JSON.parse(datos.response);
-    this.PaymentRegisterForm.controls['image'].setValue(data.image);//almaceno el nombre de la imagen
+  getUsuariosaCobrar() {
+    this.usuarioService.getUsuarios().subscribe((resp: any) => {
+      this.usuarios = resp;
+    });
   }
 
+// --- LÓGICA DE SELECCIÓN ---
 
-  // Método que se llama cuando cambia el select
-  onPaymentMethodChange(event: any) {
-    this.selectedMethod = event.target.value;
-    console.log(this.selectedMethod)
-    this.renderTipos();
-  }
+  onUsuarioChange(event: any) {
+    this.usuarioId = event.target.value;
+    this.facturasPendientes = [];
+    this.facturaSeleccionada = undefined;
+    this.facturaId = '';
 
-  // metodo para el cambio del select 'tipo de transferencia'
-  onChangePayment(event: Event) {
-    const target = event.target as HTMLSelectElement; //obtengo el valor
-    // console.log(target.value)
-
-    // guardo el metodo seleccionado en la variable de clase paymentSelected
-    this.paymentSelected = this.paymentMethods.filter(method => method._id === target.value)[0]
-    console.log(this.paymentSelected)
-  }
-
-  private renderTipos() {
-    if (this.selectedMethod === 'card' || this.selectedMethod === 'paypal') {
-      this.habilitacionFormTransferencia = false;
-      this.habilitacionFormEfectivo = false;
-    }
-    else if (this.selectedMethod === 'transferencia') {
-      // transferencia bancaria => abrir formulario (en un futuro un modal con formulario)
-      this.habilitacionFormTransferencia = true;
-      this.habilitacionFormEfectivo = false;
-    }
-    else if (this.selectedMethod === 'efectivo') {
-      // transferencia bancaria => abrir formulario (en un futuro un modal con formulario)
-      this.habilitacionFormEfectivo = true;
-      this.habilitacionFormTransferencia = false;
-    }
-    else {
-      this.habilitacionFormTransferencia = false;
-      this.habilitacionFormEfectivo = false;
-    }
-  }
-
-
-
-  sendFormTransfer() {
-
-    if (this.formTransferencia.valid) {
-
-      const data = {
-        user: this.user.uid,
-        // name_person: this.identity.first_name + this.identity.last_name,
-        // phone: this.identity.telefono,
-        // amount: this.totalAmount,
-        ...this.formTransferencia.value
-      }
-
-
-      // llamo al servicio
-      this.trasnferenciaService.createTransfer(data).subscribe(resultado => {
-        // console.log('resultado: ',resultado);
-        // this.verify_dataComplete(Number(this.formTransferencia.value.amount));
-        // this.verify_dataComplete(Number(this.totalAmount));
-        if (resultado.ok || resultado.status === 200) {
-          // transferencia registrada con exito
-          // console.log(resultado.payment);
-          // alert('Transferencia registrada con exito');
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Transferencia registrada con exito',
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          // this.onItemRemoved();
-          // this._router.navigate(['/my-account/ordenes']);
-        }
-        else {
-          // error al registar la transferencia
-          // alert('Error al registrar la transferencia');
-          // console.log(resultado.msg);
-          Swal.fire({
-            position: 'top-end',
-            icon: 'warning',
-            title: 'Error al registrar la transferencia',
-            text: resultado.msg,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
+    if (this.usuarioId) {
+      this.isLoading = true;
+      this.facturacionService.obtenerFacturasPorUsuario(this.usuarioId).subscribe({
+        next: (facturas: any) => {
+          const data = Array.isArray(facturas) ? facturas : [facturas];
+          this.facturasPendientes = data.filter(f => f.estado === 'PENDIENTE');
+          this.isLoading = false;
+        },
+        error: () => this.isLoading = false
       });
     }
+  }
+
+  onFacturaChange(event: any) {
+    this.facturaId = event.target.value;
+    this.facturaSeleccionada = this.facturasPendientes.find(f => f._id === this.facturaId);
+
+    if (this.facturaSeleccionada?.totalPagar) {
+      const monto = this.facturaSeleccionada.totalPagar.toString();
+      this.formTransferencia.patchValue({ amount: monto });
+      this.formEfectivo.patchValue({ amount: monto });
+    }
+  }
+
+
+  // Se dispara desde las tarjetas del HTML
+  onPaymentMethodChange(event: any) {
+    const value = event.target ? event.target.value : event;
+    this.selectedMethod = value;
+
+    this.habilitacionFormTransferencia = (value === 'transferencia');
+    this.habilitacionFormEfectivo = (value === 'efectivo');
+  }
+
+  onChangePayment(event: any) {
+  const tipo = event.target.value;
+  this.paymentSelected = this.paymentMethods.find(m => m.tipo === tipo);
+}
+  onChangeBank(event: any) {
+    const id = event.target.value;
+    this.bankSelected = this.paymentMethods.find(m => m._id === id);
+  }
+
+
+// --- ENVÍO DE FORMULARIOS ---
+
+  sendFormTransfer() {
+    if (this.formTransferencia.invalid) {
+        // Opcional: Marcar campos como tocados para mostrar errores de validación
+        this.formTransferencia.markAllAsTouched();
+        return;
+    }
+
+    Swal.fire({ title: 'Procesando pago...', didOpen: () => Swal.showLoading() });
+
+    const metodoLimpio = this.paymentSelected?.tipo ? this.paymentSelected.tipo.toUpperCase() : 'TRANSFERENCIA';
+
+    const payload = {
+      ...this.formTransferencia.value, // Esto ya trae bankName, amount, referencia, paymentday Y bank_destino
+      cliente: this.usuarioId,
+      factura: this.facturaId,
+      // Asegúrate de que selectedMethod tenga el valor correcto (ej: 'TRANSFERENCIA')
+      metodo_pago: metodoLimpio,
+      status: 'Pendiente',
+      tasaBCV: this.tasaBCV,
+      fecha_reporte: new Date().toISOString() // Recomendado para auditoría
+    };
+
+    this.paymentService.createPayment(payload).subscribe({
+      next: () => {
+        Swal.fire('¡Éxito!', 'La transferencia ha sido reportada.', 'success');
+        this.onClose();
+      },
+      error: () => Swal.fire('Error', 'No se pudo registrar el pago', 'error')
+    });
   }
 
   sendFormEfectivo() {
+    if (this.formEfectivo.invalid) return;
 
-    if (this.formEfectivo.valid) {
+    Swal.fire({ title: 'Registrando efectivo...', didOpen: () => Swal.showLoading() });
 
-      const data = {
-        // localId: this.tiendaSelected._id,
-        // user: this.identity.uid,
-        // name_person: this.identity.first_name + this.identity.last_name,
-        // phone: this.identity.telefono,
-        // amount: this.totalAmount,
-        ...this.formEfectivo.value
-      }
+    const payload = {
+      ...this.formEfectivo.value,
+      cliente: this.usuarioId,
+      factura: this.facturaId,
+      bank_destino: this.facturaId,
+      status: 'Aprobado' // El efectivo suele ser inmediato
+    };
 
-      // llamo al servicio
-      this.efectivoService.registro(data).subscribe(resultado => {
-        // console.log('resultado: ',resultado);
-        // this.verify_dataComplete(Number(this.formEfectivo.value.amount));
-        // this.verify_dataComplete(Number(this.totalAmount));
-        if (resultado.ok || resultado.status === 200) {
-          // transferencia registrada con exito
-          // console.log(resultado.payment);
-          // alert('Transferencia registrada con exito');
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Pago registrada con exito',
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          // this.onItemRemoved();
-          // this._router.navigate(['/my-account/ordenes']);
-        }
-        else {
-          // error al registar la transferencia
-          // alert('Error al registrar la transferencia');
-          // console.log(resultado.msg);
-          Swal.fire({
-            position: 'top-end',
-            icon: 'warning',
-            title: 'Error al registrar el Pago',
-            text: resultado.msg,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-      });
-    }
+    this.efectivoService.registro(payload).subscribe({
+      next: () => {
+        Swal.fire('Cobrado', 'El pago en efectivo se procesó correctamente', 'success');
+        this.onClose(true);
+      },
+      error: () => Swal.fire('Error', 'Ocurrió un problema en la transacción', 'error')
+    });
   }
 
 
-  onClose() {
-    this.selectedMethod = 'Selecciona un método de pago';
-    this.habilitacionFormTransferencia = false;
-    this.habilitacionFormEfectivo = false;
-    this.closeModal.emit();
-  }
+  onClose(actualizar: boolean = false) {
+  this.formTransferencia.reset();
+  this.formEfectivo.reset();
+  this.selectedMethod = '';
+  this.paymentSelected = undefined; 
+  // Emitimos 'true' si queremos que el padre refresque la lista
+  this.closeModal.emit(actualizar); 
+}
 
 }

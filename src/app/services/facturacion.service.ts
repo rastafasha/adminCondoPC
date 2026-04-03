@@ -86,6 +86,13 @@ facturacionIndividual(facturacion: Facturacion) {
         map((resp: { ok: boolean, factura: Facturacion }) => resp.factura)
       );
   }
+  obtenerFacturasPorUsuario(_id: string) {
+    const url = `${baseUrl}/facturacion/user/${_id}`;
+    return this.http.get<any>(url, { headers: this.headers })
+      .pipe(
+        map((resp: any) => resp.facturas || resp.factura)
+      );
+  }
 
   getByStatus(status: string) {
       const url = `${baseUrl}/facturacion/status/${status}`;

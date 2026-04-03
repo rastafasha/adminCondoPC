@@ -209,9 +209,15 @@ private ejecutarUpdateStatus(id: string, nuevoEstado: string, observaciones: str
 
   }
 
-  onCloseModal(): void {
+ onCloseModal(actualizar?: boolean): void {
     this.pagoSeleccionado = null;
-  }
+
+    // Si recibimos 'true' desde el formulario hijo, recargamos la lista
+    if (actualizar) {
+        this.getPagos(); // <--- Sustituye con el nombre de tu función que carga la lista
+        console.log('Lista de pagos actualizada tras el registro');
+    }
+}
 
   abrirModalPago(): void {
     // Aquí puedes agregar lógica para abrir el modal de pago masivo
