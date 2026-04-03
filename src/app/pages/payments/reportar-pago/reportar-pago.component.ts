@@ -197,7 +197,7 @@ getTiposdePago() {
       factura: this.facturaId,
       // Asegúrate de que selectedMethod tenga el valor correcto (ej: 'TRANSFERENCIA')
       metodo_pago: metodoLimpio,
-      status: 'Pendiente',
+      status: 'PENDIENTE',
       tasaBCV: this.tasaBCV,
       fecha_reporte: new Date().toISOString() // Recomendado para auditoría
     };
@@ -220,11 +220,15 @@ getTiposdePago() {
       ...this.formEfectivo.value,
       cliente: this.usuarioId,
       factura: this.facturaId,
-      bank_destino: this.facturaId,
-      status: 'Aprobado' // El efectivo suele ser inmediato
+       metodo_pago: 'EFECTIVO',
+      bank_destino: 'CAJA',
+      referencia: 'CAJA',
+      tasaBCV: this.tasaBCV,
+      fecha_reporte: new Date().toISOString(),
+      status: 'APROBADO' // El efectivo suele ser inmediato
     };
 
-    this.efectivoService.registro(payload).subscribe({
+    this.paymentService.createPayment(payload).subscribe({
       next: () => {
         Swal.fire('Cobrado', 'El pago en efectivo se procesó correctamente', 'success');
         this.onClose(true);
