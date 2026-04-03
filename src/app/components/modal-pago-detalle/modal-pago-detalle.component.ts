@@ -9,7 +9,7 @@ import { ImagenPipe } from '../../pipes/imagen.pipe';
   selector: 'app-modal-pago-detalle',
   imports: [CommonModule,
     LoadingComponent,
-    // ImagenPipe,
+    ImagenPipe,
     ReactiveFormsModule],
   templateUrl: './modal-pago-detalle.component.html',
   styleUrl: './modal-pago-detalle.component.css'

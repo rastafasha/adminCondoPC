@@ -8,7 +8,7 @@
 
         <section class="section dashboard">
 
-            <div class="tab-content-set" >
+            <div class="tab-content-set">
                 <ul class="nav">
                     <li>
                         <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 1}"
@@ -47,13 +47,13 @@
                                     </select>
 
                                     <div class="input-group-append ">
-                                        <button id="button-addon1" type="submit" class="btn btn-link text-primary"
+                                        <button id="button-addon1" type="submit" class="btn btn-link text-primary "
                                             (click)="search()" name="submit" data-toggle="tooltip"
                                             title="mostrar todos">
                                             <i class="fas fa-search"></i>
                                         </button>
                                         <a href="javascript:;" (click)="PageSize()"
-                                            class="btn btn-primary doctor-refresh ms-2 "><i
+                                            class="btn btn-primary ms-2 " style="border-radius: 100px;"><i
                                                 class="fas fa-refresh"></i></a>
                                     </div>
 
@@ -83,7 +83,7 @@
                                     <th scope="col">Metodo</th>
                                     <th scope="col">Monto </th>
                                     <th scope="col">tasaBCV </th>
-                                    <th scope="col">fecha_pago </th>
+                                    <th scope="col">Fecha Pago </th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Creado</th>
                                     <th scope="col">Actualizado</th>
@@ -106,7 +106,7 @@
                                     <td>
                                         <span class="badge bg-success"
                                             *ngIf="pago.status === 'APROBADO'">Aprobado</span>
-                                        <span class="badge bg-primary"
+                                        <span class="badge bg-warning"
                                             *ngIf="pago.status === 'PENDIENTE'">Pendiente</span>
                                         <span class="badge bg-danger"
                                             *ngIf="pago.status === 'RECHAZADO'">Rechazado</span>
@@ -116,10 +116,12 @@
                                     <td>{{pago.updatedAt | date:'MMM d, y'}}</td>
 
                                     <td>
-                                        <select class="form-control form-select-solid fw-bolder" name="status"
-                                            [(ngModel)]="pago.status" (change)="cambiarStatus(pago)"
-                                            placeholder="status">
-                                            <option value="">Seleccione</option>
+                                        <select class="form-select fw-bolder" [(ngModel)]="pago.status"
+                                            (change)="cambiarStatus(pago)" [ngClass]="{
+                                                'border-success text-success': pago.status === 'APROBADO',
+                                                'border-warning text-warning': pago.status === 'PENDIENTE',
+                                                'border-danger text-danger': pago.status === 'RECHAZADO'
+                                            }">
                                             <option value="APROBADO">Aprobado</option>
                                             <option value="PENDIENTE">Pendiente</option>
                                             <option value="RECHAZADO">Rechazado</option>
@@ -138,12 +140,12 @@
             <div *ngIf="option_selectedd == 2">
                 <div class="row mb-5">
                     <div class="col-xs-12 col-sm-8">
-                    <app-bar-chart></app-bar-chart>
+                        <app-bar-chart></app-bar-chart>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <app-pie-chart2 [stats]="stats"></app-pie-chart2>
+                    </div>
                 </div>
-                <div class="col-xs-12 col-sm-4">
-                    <app-pie-chart2 [stats]="stats"></app-pie-chart2>
-                </div>
-            </div>
             </div>
 
         </section>
@@ -154,4 +156,4 @@
 <app-modal-pago-detalle [pagoSeleccionado]="pagoSeleccionado" (closeModal)="onCloseModal()"></app-modal-pago-detalle>
 
 <app-modalinfo-tipos-pago [info]="info" [style.display]="displaycomponent"></app-modalinfo-tipos-pago>
-<app-reportar-pago (closeModal)="onCloseModal($event)" ></app-reportar-pago>
+<app-reportar-pago (closeModal)="onCloseModal($event)"></app-reportar-pago>

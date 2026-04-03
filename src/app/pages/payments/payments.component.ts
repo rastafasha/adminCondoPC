@@ -147,7 +147,7 @@ export class PaymentsComponent implements OnInit {
     const nuevoEstado = data.status;
     const id = data._id;
 
-    // 1. Si es RECHAZADO, pedimos el motivo antes de enviar al backend
+    // 1. Caso: RECHAZADO (Pide motivo)
     if (nuevoEstado === 'RECHAZADO') {
       Swal.fire({
         title: 'Motivo del Rechazo',
@@ -155,6 +155,7 @@ export class PaymentsComponent implements OnInit {
         inputPlaceholder: 'Ej: Capture borroso, monto incompleto...',
         showCancelButton: true,
         confirmButtonText: 'Rechazar y Notificar',
+        confirmButtonColor: '#d33', // Rojo para peligro
         cancelButtonText: 'Cancelar',
         inputValidator: (value) => {
           if (!value) return '¡Debes escribir un motivo para el usuario!';
@@ -162,18 +163,36 @@ export class PaymentsComponent implements OnInit {
         }
       }).then((result) => {
         if (result.isConfirmed) {
-          // Enviamos con el motivo (observaciones)
           this.ejecutarUpdateStatus(id, nuevoEstado, result.value);
         } else {
-          // Si cancela, refrescamos para devolver el select a su estado previo
-          this.getPagos();
+          this.getPagos(); // Revierte el select si cancela
         }
       });
+
+    // 2. Caso: APROBADO (Confirmación de seguridad)
+    } else if (nuevoEstado === 'APROBADO') {
+      Swal.fire({
+        title: '¿Confirmar Pago?',
+        text: `¿Estás seguro de marcar como APROBADO el pago de ${data.amount}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, Aprobar',
+        confirmButtonColor: '#198754', // Verde para éxito
+        cancelButtonText: 'No, revisar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.ejecutarUpdateStatus(id, nuevoEstado);
+        } else {
+          this.getPagos(); // Revierte el select si se arrepiente
+        }
+      });
+
     } else {
-      // 2. Si es APROBADO o PENDIENTE, enviamos directo
+      // 3. Caso: PENDIENTE (Cambio directo)
       this.ejecutarUpdateStatus(id, nuevoEstado);
     }
 }
+
 
 // Función auxiliar para no repetir código del subscribe
 private ejecutarUpdateStatus(id: string, nuevoEstado: string, observaciones: string = '') {

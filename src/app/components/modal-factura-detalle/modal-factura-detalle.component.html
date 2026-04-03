@@ -28,7 +28,7 @@
                     <div class="col-md-4">
                         <strong>estado:</strong> &nbsp;
                         <span class="badge bg-success" *ngIf="facturaSeleccionado?.estado === 'PAGADO'">Pagado</span>
-                        <span class="badge bg-primary"
+                        <span class="badge bg-warning"
                             *ngIf="facturaSeleccionado?.estado === 'PENDIENTE'">Pendiente</span>
                         <span class="badge bg-danger" *ngIf="facturaSeleccionado?.estado === 'ANULADO'">Anulado</span>
                     </div>

@@ -41,8 +41,8 @@ export class Profile {
     } else if(this.img){
       return `${base_url}/profiles/${this.img}`;
     }else {
-      return `${base_url}/no-image.jpg`;
-      // return `./assets/img/no-image.jpg`;
+      // return `${base_url}/no-image.jpg`;
+      return `./assets/images/no-image.jpg`;
     }
   }
 }

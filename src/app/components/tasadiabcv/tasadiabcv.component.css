@@ -3,4 +3,6 @@
     flex-direction: row;
     gap: 13px;
     padding: 10px;
+    width: 260px;
+    background-color: #f9fafa;
 }
