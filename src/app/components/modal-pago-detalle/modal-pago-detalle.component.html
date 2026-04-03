@@ -8,39 +8,53 @@
             <app-loading *ngIf="isLoading"></app-loading>
             <div class="modal-body" *ngIf="!isLoading">
                 <div class="row mb-3">
-                    <div class="col-md-4">
-                        <strong>Cliente:</strong> {{ pagoSeleccionado?.cliente?.username }}
-                    </div>
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="row">
+                            <div class="col-md-4">
+                            <strong>Cliente:</strong> {{ pagoSeleccionado?.cliente?.username }}
+                        </div>
 
-                    <div class="col-md-4">
-                        <strong>metodo_pago:</strong> {{ pagoSeleccionado?.metodo_pago }}
+                        <div class="col-md-4">
+                            <strong>metodo_pago:</strong> {{ pagoSeleccionado?.metodo_pago }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>bank_destino:</strong> {{ pagoSeleccionado?.bank_destino }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>fecha_pago:</strong> {{ pagoSeleccionado?.fecha_pago| date:'MMM d, y, h:mm:ss a'}}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>tasa BCV:</strong> {{ pagoSeleccionado?.tasaBCV |currency:'Bs.' }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>estado:</strong> &nbsp;
+                            <span class="badge bg-success" *ngIf="pagoSeleccionado?.status === 'APROBADO'">Aprobado</span>
+                            <span class="badge bg-primary" *ngIf="pagoSeleccionado?.status === 'PENDIENTE'">Pendiente</span>
+                            <span class="badge bg-danger" *ngIf="pagoSeleccionado?.status === 'RECHAZADO'">Rechazado</span>
+                        </div>
+                        <div class="col-md-4" *ngIf="pagoSeleccionado?.status === 'RECHAZADO'">
+                            <strong>Observaciones:</strong> {{ pagoSeleccionado?.mes }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>mes:</strong> {{ pagoSeleccionado?.mes }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>anio:</strong> {{ pagoSeleccionado?.anio }}
+                        </div>
+                        </div>
+                        
                     </div>
-                    <div class="col-md-4">
-                        <strong>bank_destino:</strong> {{ pagoSeleccionado?.bank_destino }}
-                    </div>
-                    <div class="col-md-4">
-                        <strong>fecha_pago:</strong> {{ pagoSeleccionado?.fecha_pago| date:'MMM d, y, h:mm:ss a'}}
-                    </div>
-                    <div class="col-md-4">
-                        <strong>tasa BCV:</strong> {{ pagoSeleccionado?.tasaBCV |currency:'Bs.' }}
-                    </div>
-                    <div class="col-md-4">
-                        <strong>estado:</strong> &nbsp;
-                        <span class="badge bg-success" *ngIf="pagoSeleccionado?.status === 'APROBADO'">Aprobado</span>
-                        <span class="badge bg-primary" *ngIf="pagoSeleccionado?.status === 'PENDIENTE'">Pendiente</span>
-                        <span class="badge bg-danger" *ngIf="pagoSeleccionado?.status === 'RECHAZADO'">Rechazado</span>
-                    </div>
-                    <div class="col-md-4">
-                        <strong>mes:</strong> {{ pagoSeleccionado?.mes }}
-                    </div>
-                    <div class="col-md-4">
-                        <strong>anio:</strong> {{ pagoSeleccionado?.anio }}
-                    </div>
-                    <div class="col-md-4">
-                        <strong>Fecha:</strong> {{ pagoSeleccionado?.createdAt | date:'dd/MM/yyyy' }}
+                    <div class="col-xs-12 col-sm-4">
+                       <!-- <img [src]="pagoSeleccionado.img | imagenPipe: 'payments'" class="img-fluid rounded-3 shadow-sm border w-100"
+        style="max-height: 200px; object-fit: cover;"> -->
+                       <!-- <img [src]="pagoSeleccionado.img " class="img-fluid rounded-3 shadow-sm border w-100"
+        style="max-height: 200px; object-fit: cover;"> -->
                     </div>
                 </div>
                 <hr>
+
+
+
                 <!-- detalle factura -->
                 <div class="row mb-3">
                     <div class="col-md-4">
@@ -65,7 +79,10 @@
                         <span class="badge bg-success" *ngIf="pagoSeleccionado?.factura?.estado === 'PAGADO'">Pagado</span>
                         <span class="badge bg-primary"
                             *ngIf="pagoSeleccionado?.factura?.estado === 'PENDIENTE'">Pendiente</span>
-                        <span class="badge bg-danger" *ngIf="pagoSeleccionado?.factura?.estado === 'ANULADO'">Anulado</span>
+                        <span class="badge bg-danger" *ngIf="pagoSeleccionado?.factura?.estado === 'RECHAZADO'">Rechazado</span>
+                    </div>
+                    <div class="col-md-4" *ngIf="pagoSeleccionado?.estado === 'RECHAZADO'">
+                        <strong>Observaciones:</strong> {{ pagoSeleccionado?.observaciones }}
                     </div>
                     <div class="col-md-4">
                         <strong>mes:</strong> {{ pagoSeleccionado?.factura?.mes }}
@@ -73,12 +90,12 @@
                     <div class="col-md-4">
                         <strong>anio:</strong> {{ pagoSeleccionado?.factura?.anio }}
                     </div>
-                    <div class="col-md-4">
-                        <strong>Fecha:</strong> {{ pagoSeleccionado?.factura?.createdAt | date:'dd/MM/yyyy' }}
-                    </div>
                 </div>
+
+
                 <!-- detalles pago-->
-                <table class="table table-bordered table-responsive">
+                <div class="col-12">
+                    <table class="table table-bordered table-responsive w-100">
                     <thead class="table-light ">
                         <tr>
                             <th>Descripción</th>
@@ -98,6 +115,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
                 <div class="text-end mt-3">
                     <h5>Total: {{ pagoSeleccionado?.amount |currency:'Bs.' }}</h5>
                 </div>

@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit {
     }
 
     this.listar();
-    localStorage.setItem('dark', 'dark');
+    // localStorage.setItem('dark', 'dark');
     
     if (localStorage.getItem('dark')) {
       this.darkmode('dark');

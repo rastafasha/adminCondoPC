@@ -1,0 +1,22 @@
+.device-mockup {
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s;
+}
+
+.shadow-inner {
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.cursor-pointer:active {
+    transform: rotate(180deg); /* Un pequeño efecto visual de giro al clickear */
+}

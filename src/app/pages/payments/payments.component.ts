@@ -144,31 +144,64 @@ export class PaymentsComponent implements OnInit {
   }
 
   cambiarStatus(data: any) {
-    const VALUE = data.status;
-    console.log(VALUE);
-    console.log(data);
+    const nuevoEstado = data.status;
+    const id = data._id;
 
-    const payload ={
-      nuevoEstado: data.status,
-      usuario_validador: this.adminId,
-      _id:data._id
+    // 1. Si es RECHAZADO, pedimos el motivo antes de enviar al backend
+    if (nuevoEstado === 'RECHAZADO') {
+      Swal.fire({
+        title: 'Motivo del Rechazo',
+        input: 'text',
+        inputPlaceholder: 'Ej: Capture borroso, monto incompleto...',
+        showCancelButton: true,
+        confirmButtonText: 'Rechazar y Notificar',
+        cancelButtonText: 'Cancelar',
+        inputValidator: (value) => {
+          if (!value) return '¡Debes escribir un motivo para el usuario!';
+          return null;
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Enviamos con el motivo (observaciones)
+          this.ejecutarUpdateStatus(id, nuevoEstado, result.value);
+        } else {
+          // Si cancela, refrescamos para devolver el select a su estado previo
+          this.getPagos();
+        }
+      });
+    } else {
+      // 2. Si es APROBADO o PENDIENTE, enviamos directo
+      this.ejecutarUpdateStatus(id, nuevoEstado);
     }
+}
 
-    this.paymentService.validarPagoAdmin(payload).subscribe(
-      resp => {
+// Función auxiliar para no repetir código del subscribe
+private ejecutarUpdateStatus(id: string, nuevoEstado: string, observaciones: string = '') {
+    const payload = {
+      _id: id,
+      nuevoEstado: nuevoEstado,
+      usuario_validador: this.adminId,
+      observaciones: observaciones // Esto llegará a tu backend para el mensaje del Push/Toastr
+    };
 
-        console.log(resp);
+    this.paymentService.validarPagoAdmin(payload).subscribe({
+      next: (resp) => {
         Swal.fire({
           position: 'top-end',
           icon: 'success',
-          title: 'Actualizado',
+          title: nuevoEstado === 'APROBADO' ? '✅ Pago Aprobado' : '❌ Pago Rechazado',
+          color: 'gray',
           showConfirmButton: false,
           timer: 1500,
         });
         this.getPagos();
+      },
+      error: (err) => {
+        Swal.fire('Error', 'No se pudo actualizar el pago', 'error');
+        this.getPagos();
       }
-    )
-  }
+    });
+}
 
 
   openViewModal(pago: any): void {

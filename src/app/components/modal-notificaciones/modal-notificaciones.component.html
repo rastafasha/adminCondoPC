@@ -1,0 +1,277 @@
+<div class="modal fade" id="editNotificaciones" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    <i class="fas fa-bullhorn me-2"></i> Nuevo Comunicado - Cartelera Digital
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="cerrar()"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <div class="tab-content-set">
+                    <ul class="nav">
+                        <li>
+                            <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 1}"
+                                (click)="optionSelected(1)">
+                                <h3 class="btn btn-outline-info"> {{'Crear Notificaciones'}}</h3>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 2}"
+                                (click)="optionSelected(2)">
+                                <h3 class="btn btn-outline-info">{{'Previsualizar'}}</h3>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 2}"
+                                (click)="optionSelected(3)">
+                                <h3 class="btn btn-outline-info">{{'Historial'}}</h3>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- crear notificacion -->
+                <div *ngIf="option_selectedd == 1">
+                    <form [formGroup]="notificacionForm">
+                        <div class="row g-3">
+                            <!-- Título -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Título del Comunicado</label>
+                                <input type="text" class="form-control" formControlName="titulo"
+                                    placeholder="Ej: Corte programado de agua">
+                            </div>
+
+                            <!-- Tipo de Aviso -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Categoría</label>
+                                <select class="form-select" formControlName="tipo">
+                                    <option value=" ">Seleccione</option>
+                                    <option value="CARTELERA">Cartelera</option>
+                                    <option value="EVENTO">Evento</option>
+                                    <option value="MANTENIMIENTO">Mantenimiento</option>
+                                    <option value="REUNION">Reunión</option>
+                                    <option value="URGENTE">⚠️ Urgente</option>
+                                </select>
+                            </div>
+
+                            <!-- Residencia (Alcance) -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Residencia</label>
+                                <select class="form-select" formControlName="alcance_residencia">
+                                    <option value=" ">Seleccione</option>
+                                    <option value="TODOS">Todas las Residencias</option>
+                                    <option value="CATUCHE">Catuche</option>
+                                    <option value="TAJAMAR">Tajamar</option>
+                                    <option value="TACAGUA">Tacagua</option>
+                                    <option value="SAN_MARTIN">San Martín</option>
+                                    <option value="MOHEDANO">Mohedano</option>
+                                    <option value="CARUATA">Caruata</option>
+                                    <option value="EL_TEJAR">El Tejar</option>
+                                    <option value="MEZANINA">Mezanina</option>
+                                </select>
+                            </div>
+
+                            <!-- Torre -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Torre</label>
+                                <select class="form-select" formControlName="alcance_torre">
+                                    <option value=" ">Seleccione</option>
+                                    <option value="AMBAS">Ambas Torres</option>
+                                    <option value="TORRE_ESTE">Torre Este</option>
+                                    <option value="TORRE_OESTE">Torre Oeste</option>
+                                </select>
+                            </div>
+
+                            <!-- Mensaje -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Mensaje</label>
+                                <textarea class="form-control" formControlName="mensaje" rows="5"
+                                    placeholder="Escriba el detalle del comunicado..."></textarea>
+                            </div>
+
+                            <!-- Notificación Push -->
+                            <div class="col-12 mt-3">
+                                <div class="form-check form-switch p-3 bg-light rounded shadow-sm border">
+                                    <input class="form-check-input ms-0 me-3" type="checkbox" role="switch"
+                                        id="pushSwitch" formControlName="notificado_push">
+                                    <label class="form-check-label text-primary fw-bold" for="pushSwitch">
+                                        Enviar notificación push a dispositivos móviles
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-primary px-4" (click)="guardar()"
+                        [disabled]="notificacionForm.invalid">
+                        <i class="fas fa-paper-plane me-2"></i> Publicar Comunicado
+                    </button>
+                </div>
+
+                <!-- previsualizar notificacion -->
+
+                <div *ngIf="option_selectedd == 2">
+                    <div class="row">
+                        <div class="col-lg-7 border-end">
+                            <form [formGroup]="notificacionForm">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">Título</label>
+                                        <input type="text" class="form-control" formControlName="titulo"
+                                            placeholder="Ej: Mantenimiento Mayor">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Categoría</label>
+                                        <select class="form-select" formControlName="tipo">
+                                            <option value=" ">Seleccione</option>
+                                            <option value="CARTELERA">Cartelera</option>
+                                            <option value="URGENTE">⚠️ Urgente</option>
+                                            <option value="MANTENIMIENTO">Mantenimiento</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Residencia</label>
+                                        <select class="form-select" formControlName="alcance_residencia">
+                                            <option value=" ">Seleccione</option>
+                                            <option value="TODOS">Todas las Residencias</option>
+                                            <option value="CATUCHE">Catuche</option>
+                                            <option value="TAJAMAR">Tajamar</option>
+                                            <option value="TACAGUA">Tacagua</option>
+                                            <option value="SAN_MARTIN">San Martín</option>
+                                            <option value="MOHEDANO">Mohedano</option>
+                                            <option value="CARUATA">Caruata</option>
+                                            <option value="EL_TEJAR">El Tejar</option>
+                                            <option value="MEZANINA">Mezanina</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold">Torre</label>
+                                        <select class="form-select" formControlName="alcance_torre">
+                                            <option value=" ">Seleccione</option>
+                                            <option value="AMBAS">Ambas Torres</option>
+                                            <option value="TORRE_ESTE">Torre Este</option>
+                                            <option value="TORRE_OESTE">Torre Oeste</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">Mensaje</label>
+                                        <textarea class="form-control" formControlName="mensaje" rows="4"></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
+                        <!-- PREVISUALIZACIÓN MÓVIL (Derecha) -->
+
+
+                        <div class="col-lg-5 d-none d-lg-flex flex-column align-items-center justify-content-center bg-light rounded shadow-inner">
+                            <small class="text-muted mb-2 text-uppercase fw-bold">Vista previa en App</small>
+
+                            <!-- Simulador de Celular -->
+                            <div class="device-mockup shadow-lg"
+                                style="width: 260px; height: 500px; border: 12px solid #333; border-radius: 30px; background: #fff; overflow: hidden; position: relative;">
+                                <!-- Barra de estado -->
+                                <div class="status-bar d-flex justify-content-between px-3 py-1 bg-dark text-white"
+                                    style="font-size: 10px;">
+                                    <span>9:41</span>
+                                    <div><i class="fas fa-wifi mx-1"></i><i class="fas fa-battery-full"></i></div>
+                                </div>
+
+                                <!-- Contenido de la Notificación -->
+                                <div class="p-3">
+                                    <div class="badge rounded-pill mb-2" [ngClass]="{
+                                        'bg-danger': notificacionForm.get('tipo')?.value === 'URGENTE',
+                                        'bg-warning text-dark': notificacionForm.get('tipo')?.value === 'MANTENIMIENTO',
+                                        'bg-primary': notificacionForm.get('tipo')?.value === 'CARTELERA'  }">
+                                        {{ notificacionForm.get('tipo')?.value }}
+                                    </div>
+                                    <h6 class="fw-bold text-dark">{{ notificacionForm.get('titulo')?.value || 'Sin  Título' }}</h6>
+                                    <p class="text-muted" style="font-size: 0.85rem; line-height: 1.2;">
+                                        {{ notificacionForm.get('mensaje')?.value || 'Escribe un mensaje para previsualizarlo aquí...' }}
+                                    </p>
+                                    <hr>
+                                    <small class="text-primary d-block">📍 Dirigido a Residencia: {{
+                                        notificacionForm.get('alcance_residencia')?.value }}</small>
+                                    <small class="text-primary d-block">📍 Dirigido a Torre: {{
+                                        notificacionForm.get('alcance_torre')?.value }}</small>
+                                </div>
+
+                                <!-- Botón simulado de la App -->
+                                <div class="position-absolute bottom-0 w-100 p-3">
+                                    <button class="btn btn-dark btn-sm w-100 disabled"
+                                        style="border-radius: 20px;">Entendido</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- historial -->
+
+                <div *ngIf="option_selectedd == 3">
+                    <div class="card shadow-sm mt-4">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-bold cursor-pointer" (click)="actualizarHistorial()">
+                                <i class="fas fa-history me-2 text-primary"></i>
+                                Últimos Comunicados
+                            </h6>
+                            <span class="badge bg-secondary">{{ totalComunicados }} total</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Título</th>
+                                        <th>Categoría</th>
+                                        <th>Alcance</th>
+                                        <th>Estado Push</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (item of historial; track item._id) {
+                                    <tr>
+                                        <td class="small">{{ item.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                                            <td><strong>{{ item.titulo }}</strong></td>
+                                        <td>
+                                            <span class="badge" [ngClass]="{
+                                            'bg-danger': item.tipo === 'URGENTE',
+                                            'bg-warning text-dark': item.tipo === 'MANTENIMIENTO',
+                                            'bg-info text-dark': item.tipo === 'CARTELERA'
+                                        }">{{ item.tipo }}</span>
+                                        </td>
+                                        <td>
+                                            <small class="d-block text-muted">{{ item.alcance_residencia }}</small>
+                                            <small class="badge bg-light text-dark border">{{ item.alcance_torre
+                                                }}</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <i class="fas fa-check-circle" [class.text-success]="item.notificado_push"
+                                                [class.text-muted]="!item.notificado_push"></i>
+                                        </td>
+                                    </tr>
+                                    } @empty {
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">No hay comunicados
+                                            registrados aún.</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="cerrar()">
+                        Cancelar
+                    </button>
+
+                </div>
+            </div>
+        </div>

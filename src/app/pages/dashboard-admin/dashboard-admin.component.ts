@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Payment } from '../../models/payment';
 import { User } from '../../models/user';
 import { PaymentService } from '../../services/payment.service';
@@ -6,25 +6,23 @@ import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { MenuiconosComponent } from '../../shared/menuiconos/menuiconos.component';
 import { TasadiabcvComponent } from '../../components/tasadiabcv/tasadiabcv.component';
-import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pago/modalinfo-tipos-pago.component';
 import { ModalInicialComponent } from "../../components/modal-inicial/modal-inicial.component";
 import { PaymentsComponent } from "../payments/payments.component";
-import { PieChartComponent } from '../../components/charts/pie-chart/pie-chart.component';
-import { LineChartComponent } from '../../components/charts/line-chart/line-chart.component';
-import { PieChart2Component } from '../../components/charts/pie-chart2/pie-chart2.component';
-import { FacturacionService } from '../../services/facturacion.service';
+import { ModalNotificacionesComponent } from "../../components/modal-notificaciones/modal-notificaciones.component";
+import { ComunicadoService } from '../../services/comunicado.service';
 
 @Component({
   selector: 'app-dashboard-admin',
   imports: [CommonModule, MenuiconosComponent,
     TasadiabcvComponent, ModalInicialComponent,
-     PaymentsComponent, 
-    ],
+    PaymentsComponent, ModalNotificacionesComponent],
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css']
 })
 export class DashboardAdminComponent implements OnInit {
   @Input() payments: Payment[] = [];
+
+ 
 
   title = 'Panel Administrativo';
   public user: User;
@@ -39,27 +37,27 @@ export class DashboardAdminComponent implements OnInit {
   usuario!: User;
   query:string ='';
   selectedPayment!:Payment|null;
-  paymentSeleccionado!:Payment|null;
+  notificacionSeleccionado: any = null;
   
-  
+   private userService = inject(UserService); // Usas el servicio que creamos
+   private payentService = inject(PaymentService); // Usas el servicio que creamos
+   private _comunicadosService = inject(ComunicadoService); // Usas el servicio que creamos
 
   constructor(
-    private userService: UserService,
-    private payentService: PaymentService,
-    
-    
-
   ) {
-    this.user = userService.usuario;
+    this.user = this.userService.usuario;
   }
 
-  ngOnInit(): void {
+ 
 
+  ngOnInit(): void {
+    
+    window.scrollTo(0,0);
     this.userService.closeMenu();
     this.getUser();
     this.getPPaymentsData();
     this.subscribeToFilteredPPayments();
-    window.scrollTo(0,0);
+    
   }
 
   getPPaymentsData(){
@@ -87,13 +85,6 @@ export class DashboardAdminComponent implements OnInit {
     });
   }
 
-  // closeMenu(){
-  //   var menuLateral = document.getElementsByClassName("sidebar");
-  //     for (var i = 0; i<menuLateral.length; i++) {
-  //        menuLateral[i].classList.remove("active");
-
-  //     }
-  // }
 
   getUser(): void {
 
@@ -110,17 +101,19 @@ export class DashboardAdminComponent implements OnInit {
     );
   }
 
-  openEditModal(): void {
-    this.selectedPayment = null;
-  }
+  openNotificacionesModal(): void {
+  this.notificacionSeleccionado = null; // Para que el hijo sepa que es una NUEVA
+}
 
-  onCloseModal(): void {
-    this.paymentSeleccionado = null;
-  }
+ onCloseModal(): void {
+  this.notificacionSeleccionado = null;
+}
 
   PageSize() {
     this.getPPaymentsData();
 
   }
-  
+
+
+
 }

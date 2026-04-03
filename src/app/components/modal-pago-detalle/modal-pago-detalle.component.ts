@@ -3,11 +3,13 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 import { ReactiveFormsModule } from '@angular/forms';
 import { Facturacion, DetalleFactura } from '../../models/facturacion';
 import { LoadingComponent } from '../../shared/loading/loading.component';
+import { ImagenPipe } from '../../pipes/imagen.pipe';
 
 @Component({
   selector: 'app-modal-pago-detalle',
   imports: [CommonModule,
     LoadingComponent,
+    // ImagenPipe,
     ReactiveFormsModule],
   templateUrl: './modal-pago-detalle.component.html',
   styleUrl: './modal-pago-detalle.component.css'

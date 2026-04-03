@@ -75,9 +75,6 @@ export class BarChartComponent implements OnInit {
   }
 
   private createChart(): void {
-
-
-
     if (this.chart) {
       this.chart.destroy();
     }
@@ -86,9 +83,7 @@ export class BarChartComponent implements OnInit {
     if (!this.reportData || (!this.reportData.recaudado && !this.reportData.pendiente)) {
       return;
     }
-
-
-
+    
     setTimeout(() => {
       const el = document.getElementById('barChart') as HTMLCanvasElement;
       if (!el) return;
