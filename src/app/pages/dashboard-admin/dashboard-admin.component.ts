@@ -10,12 +10,13 @@ import { ModalInicialComponent } from "../../components/modal-inicial/modal-inic
 import { PaymentsComponent } from "../payments/payments.component";
 import { ModalNotificacionesComponent } from "../../components/modal-notificaciones/modal-notificaciones.component";
 import { ComunicadoService } from '../../services/comunicado.service';
+import { PwaNotifInstallerComponent } from "../../shared/pwa-notif-installer/pwa-notif-installer.component";
 
 @Component({
   selector: 'app-dashboard-admin',
   imports: [CommonModule, MenuiconosComponent,
     TasadiabcvComponent, ModalInicialComponent,
-    PaymentsComponent, ModalNotificacionesComponent],
+    PaymentsComponent, ModalNotificacionesComponent, PwaNotifInstallerComponent],
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css']
 })
