@@ -2,7 +2,7 @@
     <div class="main">
         <input type="checkbox" id="chk" aria-hidden="true">
         <!-- <img src="./assets/svg/logo-zlipmenu_logotipo.svg" alt=""> -->
-        <img src="./assets/images/logoCorpo.jpeg" alt="">
+        <img src="./assets/images/logoBuildPC.jpeg" style="border-radius: 100px;" alt="">
         <div class="signup">
             <app-loading *ngIf="isLoading"></app-loading>
             <form *ngIf="!isLoading" [formGroup]="loginForm" id="loginform" (ngSubmit)="login()" autocapitalize="off">
@@ -16,7 +16,11 @@
                 <div class="form-group ">
                     <div class="col-xs-12">
 
-                        <input type="password" formControlName="password" class="form-control" id="password" placeholder="Contraseña" required>
+                        <input type="password" [type]="hidePassword ? 'password' : 'text'" formControlName="password" class="form-control " id="password" placeholder="Contraseña" required>
+                        <!-- El icono del ojo -->
+                                        <span class="password-icon" (click)="togglePassword()">
+                                            <i [ngClass]="hidePassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                                        </span>
                     </div>
                 </div>
 
@@ -28,7 +32,7 @@
                     <br>
                     <div class="col-sm-12 text-center">
                         <a routerLink="/password-reset" id="to-recover" class="text-light ">
-                            <i class="fa fa-lock m-r-5"></i> Olvido Contraseña?</a>
+                            <i class="fas fa-lock m-r-5"></i> Olvido Contraseña?</a>
                         <br>
                         <!-- <br> Don't have an account? <a routerLink="/registro" class="text-primary m-l-5"><b>Sign Up</b></a> -->
                     </div>

@@ -53,9 +53,9 @@
                                         *ngIf="usuario.role === 'PARTNER'|| usuario.role === 'SUPERADMIN' || usuario.role === 'ADMIN'"
                                         data-bs-toggle="tab" data-bs-target="#blogs">Mis Blogs Creados</button>
                                 </li> -->
-                                <!-- <li class="nav-item">
+                                <li class="nav-item">
                                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">CambiarContraseña</button>
-                                </li> -->
+                                </li>
 
                             </ul>
                             <div class="tab-content pt-2">
@@ -180,16 +180,25 @@
                                 </div>
                                 <div class="tab-pane fade show  profile-change-password" id="profile-change-password">
                                     <!-- Change Password Form -->
-                                    <!-- <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()">
+                                    <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()">
                                         <div class="row mb-3">
                                             <h3>Cambiar contraseña</h3>
-                                            <p>La contraseña será cambiada al usuario <span> <b>{{userprofile.username}}</b></span>
+                                            <p>La contraseña será cambiada al usuario <span> <b>{{user.username}}</b></span>
                                             </p>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Email <span class="required">*</span></label>
+                                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Ingrese su Email Actual <span class="required">*</span></label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="email" type="email" class="form-control" formControlName="email" id="email" required>
+                                                <input name="email" type="email" class="form-control" formControlName="email" id="email" required readonly>
+                                                <div *ngIf="passwordForm.get('email')?.touched && passwordForm.get('email')?.invalid"
+                                                        class="text-danger">
+                                                        <div *ngIf="passwordForm.get('email')?.errors?.['required']">
+                                                            Campo Requerido
+                                                        </div>
+                                                        <div *ngIf="passwordForm.get('email')?.errors?.['emailCambiado']">
+                                                            Debe usar el email actual (no editable)
+                                                        </div>
+                                                    </div>
                                             </div>
                                         </div>
 
@@ -197,6 +206,12 @@
                                             <label for="password" class="col-md-4 col-lg-3 col-form-label">Nueva Contraseña</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <input name="password" type="password" class="form-control" autocomplete="false" id="password" formControlName="password" required>
+                                                <div *ngIf="passwordForm.get('password')?.touched && passwordForm.get('password')?.invalid"
+                                                        class="text-danger">
+                                                        <div *ngIf="passwordForm.get('password')?.errors?.['required']">
+                                                            Campo Requerido
+                                                        </div>
+                                                    </div>
                                             </div>
                                         </div>
 
@@ -204,14 +219,23 @@
                                             <label for="password2" class="col-md-4 col-lg-3 col-form-label">Reingresar Contraseña</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <input name="password2" type="password" class="form-control" autocomplete="false" id="password2" formControlName="password2" required>
+                                                <div *ngIf="passwordForm.get('password2')?.touched && passwordForm.get('password')?.invalid"
+                                                        class="text-danger">
+                                                        <div *ngIf="passwordForm.get('password2')?.errors?.['required']">
+                                                            Campo Requerido
+                                                        </div>
+                                                        <div *ngIf="passwordForm.get('password2')?.errors?.['noEsIgual']">
+                                                            Las contraseñas deben coincidir
+                                                        </div>
+                                                    </div>
                                             </div>
                                         </div>
-                                        <p *ngIf="passwordNoValido()">* El password deben ser iguales </p>
+<p *ngIf="passwordForm.invalid && passwordForm.get('password2')?.errors?.['noEsIgual']" class="text-danger">* Las contraseñas deben ser iguales</p>
                                         <div class="text-center">
                                             <input type="hidden" formControlName="id">
                                             <button class="btn btn-outline-success waves-effect waves-light m-r-10" type="submit">Cambiar Contraseña</button>
                                         </div>
-                                    </form> -->
+                                    </form>
                                     <!-- End Change Password Form -->
                                 </div>
 

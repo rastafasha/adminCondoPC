@@ -65,7 +65,7 @@
                 </div>
 
                 <!-- 3. RESUMEN DE LA DEUDA (Aparece al elegir factura) -->
-                <div class="card border-0 bg-light mb-4 animate__animated animate__fadeIn" *ngIf="facturaSeleccionada">
+                <div class="card border-0  mb-4 animate__animated animate__fadeIn" *ngIf="facturaSeleccionada">
                     <div class="card-body p-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="badge bg-danger">PENDIENTE</span>
@@ -90,8 +90,8 @@
 
 
                 <!-- 2. Selector de Método de Pago (Cards en lugar de Select) -->
-                <label class="form-label fw-bold text-secondary mb-3">¿Cómo se realizó el pago?</label>
-                <div class="row g-3 mb-4">
+                <label class="form-label fw-bold text-secondary mb-3" *ngIf="facturaSeleccionada">¿Cómo se realizó el pago?</label>
+                <div class="row g-3 mb-4" *ngIf="facturaSeleccionada">
                     <div class="col-6">
                         <div class="card h-100 border-2 cursor-pointer transition-all payment-card"
                             [class.active-method]="selectedMethod === 'transferencia'"

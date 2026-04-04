@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
-import { LoadingComponent } from '../../shared/loading/loading.component';
 @Component({
   selector: 'app-newpassword',
   imports:[CommonModule,  ReactiveFormsModule],

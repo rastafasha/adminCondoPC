@@ -35,6 +35,7 @@ export class ModalInicialComponent implements AfterViewInit {
     $('#inicialModal').modal('hide');
     $('.modal-backdrop').remove();
     $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
+    this.closeModal.emit();
   }
 
   nextStep() {

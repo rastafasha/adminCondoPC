@@ -1,7 +1,7 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
@@ -13,7 +13,7 @@ import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-login',
-  imports:[CommonModule, LoadingComponent, ReactiveFormsModule],
+  imports:[CommonModule, LoadingComponent, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
 
   public auth2: any;
   isLoading: boolean = false;
+  hidePassword: boolean = true;
 
   user!: User;
   loginForm: FormGroup;
@@ -80,20 +81,23 @@ export class LoginComponent implements OnInit {
         } else {
           localStorage.removeItem('email');
         }
-
+        
         this.router.navigateByUrl('/dashboard');
 
 
         // this.router.navigateByUrl('/my-account');
       }, (err) => {
         Swal.fire('Error', err.error.msg, 'error');
+        this.isLoading = false;
       }
     )
 
 
   }
 
-
+togglePassword() {
+  this.hidePassword = !this.hidePassword;
+}
 
 
 

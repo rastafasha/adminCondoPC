@@ -69,14 +69,28 @@ export class RolesViewComponent implements OnInit {
   }
 
   cambiarRole(user: User) {
-    this.userService.editarRole(user).subscribe(
-      resp => {
-        console.log(resp);
-        Swal.fire('Actualizado', `actualizado rol correctamente`, 'success');
+    Swal.fire({
+      title: '¿Confirmar Role?',
+      text: `¿Estás seguro de cambiar el role de: ${user.username}?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, Aprobar',
+      confirmButtonColor: '#198754', // Verde para éxito
+      cancelButtonText: 'No, revisar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.editarRole(user).subscribe(
+          (resp: any) => {
+            Swal.fire('Actualizado', `actualizado rol correctamente`, 'success');
+          }
+        )
+        this.getUsers();
+      } else {
         this.getUsers();
       }
-    )
+    });
   }
+
 
 
 

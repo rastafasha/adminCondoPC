@@ -17,8 +17,8 @@ import { ModalinfoTiposPagoComponent } from '../../components/modalinfo-tipos-pa
 
 @Component({
   selector: 'app-profile',
-  imports:[CommonModule, ImagenPipe, ReactiveFormsModule, 
-    BackButtnComponent, LoadingComponent, ModalinfoTiposPagoComponent  ],
+  imports: [CommonModule, ImagenPipe, ReactiveFormsModule,
+    BackButtnComponent, LoadingComponent, ModalinfoTiposPagoComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -33,29 +33,29 @@ export class ProfileComponent implements OnInit {
   profileSeleccionado!: Profile;
   pageTitle!: string;
 
-  userProfile!:User;
-  profile:Profile;
+  userProfile!: User;
+  profile: Profile;
   profileId!: string;
-  _id!:string;
-  uid!:string;
+  _id!: string;
+  uid!: string;
 
   p: number = 1;
   count: number = 8;
 
 
   passwordForm!: FormGroup;
-  errors:any = null;
+  errors: any = null;
   infoProfile: any;
 
   public formSumitted = false;
 
   public storage = environment.apiUrlMedia
 
-  public url:any;
-  public user : any = {};
-  public file !:File;
+  public url: any;
+  public user: any = {};
+  public file !: File;
   public imgSelect !: String | ArrayBuffer;
-  public data_paises : any = [];
+  public data_paises: any = [];
   public msm_error = false;
   public msm_success = false;
   public pass_error = false;
@@ -66,7 +66,7 @@ export class ProfileComponent implements OnInit {
   public imagenSubir!: File;
   public imgTemp: any = null;
 
-  public direcciones! : Profile[];
+  public direcciones!: Profile[];
 
   //DATA
   public new_password = '';
@@ -86,7 +86,7 @@ export class ProfileComponent implements OnInit {
     private location: Location,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
-    private _router : Router,
+    private _router: Router,
     private profileService: ProfileService,
     private fb: FormBuilder,
     private fileUploadService: FileUploadService,
@@ -97,51 +97,52 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     let USER = localStorage.getItem("user");
     this.user = USER ? JSON.parse(USER) : null;
-    console.log('usuario',this.user);
+    console.log('usuario', this.user);
     this.userService.closeMenu();
     this.validarFormularioPerfil();
-    this.activatedRoute.params.subscribe( ({id}) => this.getUserProfile(id));
-   
+    this.activatedRoute.params.subscribe(({ id }) => this.getUserProfile(id));
+    this.iniciarFormularioPassword(this.user?.uid || '');
+
     // this.listar();
-    
+
   }
-  
 
 
-  getUserProfile(id:string){
+
+  getUserProfile(id: string) {
     this.isLoading = true;
     this.userService.getUserById(id).subscribe(
-      res =>{
+      res => {
         this.usuario = res;
         this.isLoading = false;
       }
     );
-    
-    this.activatedRoute.params.subscribe( ({id}) => this.listar(id));
-    this.activatedRoute.params.subscribe( ({id}) => this.iniciarFormularioPerfil(id));
+
+    this.activatedRoute.params.subscribe(({ id }) => this.listar(id));
+    this.activatedRoute.params.subscribe(({ id }) => this.iniciarFormularioPerfil(id));
 
   }
 
-  listar(id:string){
-    if(!id == null || !id == undefined || id){
+  listar(id: string) {
+    if (!id == null || !id == undefined || id) {
       this.profileService.listarUsuario(id).subscribe(
-        response =>{
+        response => {
           this.profile = response;
         }
       );
-    }else{
+    } else {
       console.log('no hay registro')
     }
-    
+
   }
 
-  
 
 
-  iniciarFormularioPerfil(id:string){
+
+  iniciarFormularioPerfil(id: string) {
     this.isLoading = true;
     if (!id == null || !id == undefined || id) {
       this.profileService.getByUser(id).subscribe(
@@ -169,7 +170,7 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  validarFormularioPerfil(){
+  validarFormularioPerfil() {
     this.perfilForm = this.fb.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
@@ -177,7 +178,7 @@ export class ProfileComponent implements OnInit {
       telmovil: ['', Validators.required],
       // usuario: [this.usuario.uid],
       id: [''],
-      img: [ ''],
+      img: [''],
     });
   }
 
@@ -192,9 +193,9 @@ export class ProfileComponent implements OnInit {
   get telmovil() {
     return this.perfilForm.get('telmovil');
   }
-  
-  
-cambiarImagen(file: File) {
+
+
+  cambiarImagen(file: File) {
     this.imagenSubir = file;
 
     // if (!file) {
@@ -211,26 +212,26 @@ cambiarImagen(file: File) {
 
   subirImagen() {
     this.isLoading = true;
-        this.fileUploadService
-          .actualizarFoto(this.imagenSubir, 'profiles', this.profileSeleccionado._id || '')
-          .then(img => {
-            this.profile.img = img;
-            Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
-            this.isLoading = false;
-            this.ngOnInit()
-          }).catch(err => {
-            Swal.fire('Error', 'No se pudo subir la imagen', 'error');
-            this.isLoading = false;
-            this.ngOnInit()
-          })
+    this.fileUploadService
+      .actualizarFoto(this.imagenSubir, 'profiles', this.profileSeleccionado._id || '')
+      .then(img => {
+        this.profile.img = img;
+        Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
+        this.isLoading = false;
+        this.ngOnInit()
+      }).catch(err => {
+        Swal.fire('Error', 'No se pudo subir la imagen', 'error');
+        this.isLoading = false;
+        this.ngOnInit()
+      })
   }
 
 
 
   guardarPerfil() {
 
-    
-    if (this.profile ) {
+
+    if (this.profile) {
       const data = {
         ...this.perfilForm.value,
         _id: this.profile._id,
@@ -238,8 +239,8 @@ cambiarImagen(file: File) {
       }
       this.profileService.updateProfile(data).subscribe(
         res => {
-            Swal.fire('Guardado', 'Los cambios fueron actualizados', 'success');
-            this.ngOnInit();
+          Swal.fire('Guardado', 'Los cambios fueron actualizados', 'success');
+          this.ngOnInit();
         },
         error => this.errors = error
       );
@@ -250,8 +251,8 @@ cambiarImagen(file: File) {
       }
       this.profileService.createProfile(data).subscribe(
         res => {
-            Swal.fire('Guardado', 'Los cambios fueron creados', 'success');
-            this.ngOnInit();
+          Swal.fire('Guardado', 'Los cambios fueron creados', 'success');
+          this.ngOnInit();
         },
         error => this.errors = error
       );
@@ -262,74 +263,92 @@ cambiarImagen(file: File) {
 
   //Cambiar contraseña
 
-iniciarFormularioPassword(uid:string){
-  // const id = this.route.snapshot.paramMap.get('id');
-  if (!uid == null || !uid == undefined || uid) {
+  originalEmail: string = '';
 
-    this.userService.getUserById(uid).subscribe(
-      res => {
-        this.passwordForm.patchValue({
-          id: res.uid,
-          email: res.email,
-        });
-      }
-    );
-  } else {
-    this.pageTitle = 'Crear Directorio';
+  iniciarFormularioPassword(uid: string) {
+    // const id = this.route.snapshot.paramMap.get('id');
+    if (uid && uid.trim() !== '') {
+      this.userService.getUserById(uid).subscribe(
+        res => {
+          this.passwordForm.patchValue({
+            id: res.uid,
+            email: res.email,
+          });
+          this.originalEmail = res.email;
+        }
+      );
+    } else {
+      this.pageTitle = 'Crear Directorio';
+    }
+    this.validarFormularioPassword();
+
   }
-  this.validarFormularioPassword();
 
-}
+  validarFormularioPassword() {
+    this.passwordForm = this.fb.group({
+      id: [''],
+      email: ['', [Validators.required]],
+      password: ['', Validators.required],
+      password2: ['', Validators.required],
+    }, {
+      validators: [this.passwordsIguales('password', 'password2'), this.emailNoCambiado()]
 
-validarFormularioPassword(){
-  this.passwordForm = this.fb.group({
-    id: [''],
-    email: ['', Validators.required],
-    password: ['', Validators.required],
-  password2: ['', Validators.required],
-  }, {
-    validators: this.passwordsIguales('password', 'password2')
-
-  });
-}
-
-passwordNoValido(){
-  const pass1 = this.passwordForm.get('password')?.value;
-  const pass2 = this.passwordForm.get('password2')?.value;
-
-  if((pass1 !== pass2) && this.formSumitted){
-    return true;
-  }else{
-    return false;
+    });
   }
-}
 
-passwordsIguales(pass1Name: string, pass2Name: string){
-  return (formGroup: FormGroup) =>{
-    const pass1Control = formGroup.get(pass1Name);
-    const pass2Control = formGroup.get(pass2Name);
+  passwordNoValido() {
+    const pass1 = this.passwordForm.get('password')?.value;
+    const pass2 = this.passwordForm.get('password2')?.value;
 
-    if(pass1Control?.value === pass2Control?.value){
-      pass2Control?.setErrors(null)
-    }else{
-      pass2Control?.setErrors({noEsIgual: true});
+    if ((pass1 !== pass2) && this.formSumitted) {
+      return true;
+    } else {
+      return false;
     }
   }
-}
 
-cambiarPassword(){
-  this.formSumitted = true;
-  const {name } = this.passwordForm.value;
-    if(this.usuario){
-      //actualizar
+  emailNoCambiado() {
+    return (formGroup: FormGroup) => {
+      const emailControl = formGroup.get('email');
+      if (emailControl?.value !== this.originalEmail) {
+        emailControl?.setErrors({ emailCambiado: true });
+      } else {
+        emailControl?.setErrors(null);
+      }
+    };
+  }
+
+  passwordsIguales(pass1Name: string, pass2Name: string) {
+    return (formGroup: FormGroup) => {
+      const pass1Control = formGroup.get(pass1Name);
+      const pass2Control = formGroup.get(pass2Name);
+
+      if (pass1Control?.value === pass2Control?.value) {
+        pass2Control?.setErrors(null)
+      } else {
+        pass2Control?.setErrors({ noEsIgual: true });
+      }
+    }
+  }
+
+  cambiarPassword() {
+
+    this.formSumitted = true;
+    if (this.passwordForm.invalid || this.passwordForm.get('email')?.value !== this.originalEmail) {
+      Swal.fire('Error', 'No puedes cambiar el email. Usa el email actual.', 'error');
+      this.passwordForm.markAllAsTouched();
+      return;
+    }
+    if (this.passwordForm.get('password')?.value === this.passwordForm.get('password2')?.value) {
       const data = {
         ...this.passwordForm.value,
-        id: this.usuario.uid
-      }
-      // this.accountService.resetPassword(data).subscribe(
-      //   resp =>{
-      //     Swal.fire('Cambiado', `${name}  Password Cambiado correctamente`, 'success');
-      //   });
+        id: this.usuario?.uid || this.user.uid
+      };
+      // TODO: Implement actual password change API call, e.g.:
+      // this.userService.changePassword(data.email, data).subscribe(...);
+      Swal.fire('Éxito', 'Contraseña actualizada (simulada - completa API call).', 'success');
+    } else {
+      Swal.fire('Error', 'Las contraseñas no coinciden.', 'error');
     }
   }
 
