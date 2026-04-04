@@ -103,6 +103,9 @@ export class UsersComponent implements OnInit {
 
 
   eliminarUser(user: User) {
+    if (user.role === 'SUPERADMIN_ROLE') {
+    return; // No hace nada si es superadmin
+  }
     Swal.fire({
       title: 'Estas Seguro?',
       text: "No podras recuperarlo!",

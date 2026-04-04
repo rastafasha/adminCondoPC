@@ -40,6 +40,10 @@
     }
 }
 
+.botonpagos{
+    display: none;
+}
+
 .btn-outline-primary.rounded-circle {
   width: 32px;
   height: 32px;

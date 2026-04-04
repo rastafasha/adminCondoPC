@@ -29,8 +29,6 @@
                             (click)="abrirModalMasivo()"> Generar Mes
                         </button>
                     </li>
-
-
                 </ul>
             </div>
             <div *ngIf="option_selectedd == 1">
@@ -102,8 +100,8 @@
                                                 data-toggle="tooltip" data-original-title="Edit">
                                                 <div class="btn btn-success"><i class="fa fa-edit"></i></div>
                                             </a>
-                                            <a (click)="eliminarUser(user)" class="cursor" data-toggle="tooltip"
-                                                data-original-title="Borrar">
+                                            <a (click)="eliminarUser(user)" *ngIf="user.role === 'SUPERADMIN_ROLE'"
+                                                class="cursor" data-toggle="tooltip" data-original-title="Borrar">
                                                 <div class="btn btn-danger"><i class="fa fa-trash"></i></div>
                                             </a>
                                         </td>
@@ -191,8 +189,9 @@
                                                 data-toggle="tooltip" data-original-title="Edit">
                                                 <div class="btn btn-success"><i class="fa fa-edit"></i></div>
                                             </a>
-                                            <a (click)="eliminarUser(user)" class="cursor" data-toggle="tooltip"
-                                                data-original-title="Borrar">
+                                            <a (click)="eliminarUser(user)"
+                                                *ngIf="user.role === 'SUPERADMIN_ROLE' && user.uid !== '69cafdbaaa6b8c81375e4249'"
+                                                class="cursor" data-toggle="tooltip" data-original-title="Borrar">
                                                 <div class="btn btn-danger"><i class="fa fa-trash"></i></div>
                                             </a>
                                         </td>

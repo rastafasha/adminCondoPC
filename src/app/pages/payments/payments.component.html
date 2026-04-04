@@ -1,11 +1,14 @@
 <!-- =======| Main |======= -->
 <div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
-    <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
+    <app-backButtn [displaycomponent]="displaycomponent" *ngIf="displaycomponent !== 'resumen'" [title]="title"></app-backButtn>
     <div class="clear"></div>
-    <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="instruccionesModal.open()"
+    <button *ngIf="displaycomponent !== 'resumen'" 
+        class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" 
+        [ngClass]="botonpagos"  
+        (click)="instruccionesModal.open()"
         title="Ayuda de la sección">
-        <i class="fas fa-question"></i>
-    </button>
+    <i class="fas fa-question"></i>
+</button>
     <app-loading *ngIf="isLoading"></app-loading>
     <div class="row animated fadeInUp" *ngIf="!isLoading">
 

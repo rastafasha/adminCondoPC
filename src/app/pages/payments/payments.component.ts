@@ -32,6 +32,7 @@ import { FacturacionService } from '../../services/facturacion.service';
 })
 export class PaymentsComponent implements OnInit {
   @Input() displaycomponent: string = 'block';
+  botonpagos!: string;
   @Input() limit!: number;
   title = 'Pagos';
 

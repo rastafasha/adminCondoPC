@@ -13,12 +13,12 @@
                 </nav>
             </div>
             <app-tasadiabcv></app-tasadiabcv>
-            <div class="right shadow animated fadeIn">
+            <div class="right shadow animated fadeIn ">
                 <p>Bienvenido: {{user.username}}!</p>
 
                 <span class="badge bg-dark" *ngIf="user.role === 'SUPERADMIN_ROLE'">SuperAdmin</span>
                 <span class="badge bg-primary" *ngIf="user.role === 'ADMIN_ROLE'">Admin</span>
-                <p>Ten un Excelente y Productivo día!</p>
+                <h5 style="text-align: right; padding-top: 10px;">Ten un Excelente y Productivo día!</h5>
             </div>
         </div>
         <div class="clear"></div>
@@ -29,10 +29,10 @@
                     data-bs-target="#editNotificaciones">
                     <i class="fas fa-bullhorn"></i>
                 </div>
-                <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
-                    (click)="instruccionesModal.open()" title="Ayuda de la sección">
-                    <i class="fas fa-question"></i>
-                </button>
+                <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="instruccionesModal.open()"
+            title="Ayuda de la sección">
+            <i class="fas fa-question"></i>
+        </button>
             </div>
         </div>
         <div class="clear"></div>
@@ -41,7 +41,7 @@
         <app-menuiconos></app-menuiconos>
         <!-- acceso iconos -->
         <!-- <app-project-list [displaycomponent]="displaycomponent" [limit]="limit"></app-project-list> -->
-        <app-payments [displaycomponent]="displaycomponent" [limit]="limit"></app-payments>
+        <app-payments [displaycomponent]="displaycomponent" [limit]="limit" [ngClass]="botonpagos" [displaycomponent]="'resumen'"  ></app-payments>
         <!-- End Page Title -->
 
 

@@ -30,6 +30,7 @@ export class DashboardAdminComponent implements OnInit {
   public profile!: User;
   displaycomponent: string = 'none';
   limit = 3;
+  botonpagos:string = 'none'
 
   error!: string;
   uid:any;
