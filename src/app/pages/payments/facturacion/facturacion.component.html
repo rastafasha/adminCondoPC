@@ -2,6 +2,10 @@
 <div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
     <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
     <div class="clear"></div>
+    <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="instruccionesModal.open()"
+        title="Ayuda de la sección">
+        <i class="fas fa-question"></i>
+    </button>
     <app-loading *ngIf="isLoading"></app-loading>
     <div class="row animated fadeInUp" *ngIf="!isLoading">
 
@@ -116,4 +120,4 @@
 <app-modal-factura-detalle [facturaSeleccionado]="facturaSeleccionado"
     (closeModal)="onCloseModal()"></app-modal-factura-detalle>
 
-<app-modalinfo-tipos-pago [info]="info"></app-modalinfo-tipos-pago>
+<app-modalinfo-tipos-pago [info]="info" sectionId="facturacion" #instruccionesModal></app-modalinfo-tipos-pago>

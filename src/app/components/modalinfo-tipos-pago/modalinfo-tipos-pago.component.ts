@@ -9,39 +9,82 @@ declare var bootstrap: any;
   styleUrls: ['./modalinfo-tipos-pago.component.css']
 })
 export class ModalinfoTiposPagoComponent implements AfterViewInit {
+  @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
   @Input() displaycomponent: string = 'block';
   @Input() info!:string;
-  @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
+  @Input() sectionId!: string; 
   isLogued: boolean = false;
-
-  currentStep = 1;
 
   ngAfterViewInit() {
     const USER = localStorage.getItem("user");
     this.isLogued = !!USER;
-    if (localStorage.getItem('modalInfoTiposPagoDismissed')) {
+
+    // USAMOS EL ID DE LA SECCIÓN PARA COMPROBAR
+    if (localStorage.getItem(`modalDismissed_${this.sectionId}`)) {
       return;
     }
+
     setTimeout(() => {
-      const modalElement = $('#infoModal');
-      if (modalElement.length) {
-        modalElement.modal('show');
+      const modalElement = document.getElementById('infoModal') as HTMLElement;
+      if (modalElement) {
+        const bootstrapModal = (window as any).bootstrap?.Modal?.getInstance(modalElement) || 
+                               new (window as any).bootstrap.Modal(modalElement);
+        bootstrapModal.show();
       }
     }, 500);
   }
 
+  // onNoShowMore() {
+  //   localStorage.setItem('modalInfoTiposPagoDismissed', 'true');
+  //   $('#infoModal').modal('hide');
+  //   $('.modal-backdrop').remove();
+  //   $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
+  // }
+
+  // onClose() {
+  //   $('#infoModal').modal('hide');
+  //   $('.modal-backdrop').remove();
+  //   $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
+  //   this.closeModal.emit();
+  // }
+
   onNoShowMore() {
-    localStorage.setItem('modalInfoTiposPagoDismissed', 'true');
-    $('#infoModal').modal('hide');
-    $('.modal-backdrop').remove();
-    $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
+    // GUARDAMOS CON EL ID ESPECÍFICO
+    localStorage.setItem(`modalDismissed_${this.sectionId}`, 'true');
+    this.closeAndCleanup();
   }
 
   onClose() {
-    $('#infoModal').modal('hide');
-    $('.modal-backdrop').remove();
-    $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
+    this.closeAndCleanup();
     this.closeModal.emit();
+  }
+
+  // Función auxiliar para no repetir el código de limpieza de Bootstrap
+  private closeAndCleanup() {
+    const modalElement = document.getElementById('infoModal') as HTMLElement;
+    if (modalElement) {
+      const bootstrapModal = (window as any).bootstrap?.Modal?.getInstance(modalElement);
+      if (bootstrapModal) bootstrapModal.hide();
+    }
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) backdrop.remove();
+    document.body.classList.remove('modal-open');
+    document.body.style.paddingRight = '';
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    document.documentElement.style.overflowX = 'auto';
+  }
+
+  // Método público para abrir el modal manualmente (ignorando el bloqueo)
+  public open() {
+    setTimeout(() => {
+      const modalElement = document.getElementById('infoModal') as HTMLElement;
+      if (modalElement) {
+        const bootstrapModal = (window as any).bootstrap?.Modal?.getInstance(modalElement) || 
+                               new (window as any).bootstrap.Modal(modalElement);
+        bootstrapModal.show();
+      }
+    }, 100);
   }
 }
 

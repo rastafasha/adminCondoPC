@@ -6,7 +6,9 @@
         <div class="left">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a routerLink="/"><i class="fa fa-home"></i> Inicio</a></li>
+                    <li class="breadcrumb-item"><a routerLink="/">
+                        <i class="fas fa-home"></i> Inicio</a>
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -39,7 +41,8 @@
                                 <h6>Operaciones</h6>
                             </li>
 
-                            <li><a class="dropdown-item" [routerLink]="['/dashboard/profile/', user.uid]">Mi Cuenta</a></li>
+                            <li><a class="dropdown-item" [routerLink]="['/dashboard/profile/', user.uid]">Mi Cuenta</a>
+                            </li>
 
                         </ul>
                     </div>
@@ -58,34 +61,11 @@
                 <div class="card  animated fadeInUp shadow">
                     <div class="card-body pt-3">
                         <!-- Bordered Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-bordered">
-                            <li class="nav-item" *ngIf="user.role == 'ADMIN_ROLE'">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#verifyProfile">Bienvenido</button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link " data-bs-toggle="tab" data-bs-target="#news">Actualidad</button>
-                            </li>
-
-                            <!-- <div *ngIf="user.role === 'MEMBER'">
-
-                            </div> -->
-
-
-                        </ul>
+                       
                         <div class="tab-content pt-2">
                             <div class="tab-pane fade show  active verifyProfile" id="verifyProfile">
                                 <div>
-                                    <h4>Bienvenido!</h4>
-                                    <div *ngIf="user.profile === null ">
-                                        <p>Por favor rellena la iformación para saber mas de tí</p>
-                                        <!-- <a [routerLink]="['/dashboard/condiciones/', user.uid]">
-                                            <button class="btn btn-outline-success">Llenar Perfil</button>
-                                        </a> -->
-                                    </div>
-                                    <div *ngIf="user.profile">
-                                        <p>Puedes Editar!</p>
-                                    </div>
-
+                                    <p>Por favor rellena la información para saber mas de tí, así podrás acceder a tu sección de administrador, autorizado por el administrador de roles</p>
                                 </div>
                             </div>
                             <div class="tab-pane fade show  news" id="news">
@@ -103,11 +83,11 @@
 
             </div>
         </div>
-        
-        
+
+
     </section>
 
 
 </div>
 <!--/main-->
-<app-modalinfo-tipos-pago [info]="info"></app-modalinfo-tipos-pago>
+<app-modalinfo-tipos-pago [info]="info" sectionId="dashuser"></app-modalinfo-tipos-pago>

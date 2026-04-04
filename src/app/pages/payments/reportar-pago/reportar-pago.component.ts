@@ -20,22 +20,22 @@ import Swal from 'sweetalert2';
 import { PaymentService } from '../../../services/payment.service';
 import { UserRolePipe } from '../../../pipes/user-role.pipe';
 
-interface HtmlInputEvent extends Event{
-  target : HTMLInputElement & EventTarget;
+interface HtmlInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
 }
 
-declare var jQuery:any;
-declare var $:any;
+declare var jQuery: any;
+declare var $: any;
 
 @Component({
   selector: 'app-reportar-pago',
   standalone: true,
- imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingComponent, UserRolePipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingComponent, UserRolePipe],
   templateUrl: './reportar-pago.component.html',
   styleUrls: ['./reportar-pago.component.css']
 })
 export class ReportarPagoComponent implements OnInit {
-@Output() closeModal = new EventEmitter<boolean>();
+  @Output() closeModal = new EventEmitter<boolean>();
 
   // UI State
   public title = 'Realizar un Pago';
@@ -61,7 +61,7 @@ export class ReportarPagoComponent implements OnInit {
   public formTransferencia: FormGroup;
   public formEfectivo: FormGroup;
 
-  
+
 
   constructor(
     private fb: FormBuilder,
@@ -81,7 +81,7 @@ export class ReportarPagoComponent implements OnInit {
       amount: ['', Validators.required],
       phone: [''],                            // Opcional si no es Pago Móvil
       tasaBCV: [0, Validators.required],
-      
+
     });
 
     this.formEfectivo = this.fb.group({
@@ -106,7 +106,7 @@ export class ReportarPagoComponent implements OnInit {
     ]).finally(() => this.isLoading = false);
   }
 
- getTasadeldia() {
+  getTasadeldia() {
     this.tasaService.getUltimaTasa().subscribe((rate: any) => {
       this.tasaBCV = rate.precio_dia;
       this.formTransferencia.patchValue({ tasaBCV: this.tasaBCV });
@@ -114,7 +114,7 @@ export class ReportarPagoComponent implements OnInit {
     });
   }
 
-getTiposdePago() {
+  getTiposdePago() {
     this.paymentMethodService.getPaymentsActives().subscribe((res: any) => {
       this.paymentMethods = res;
     });
@@ -126,7 +126,7 @@ getTiposdePago() {
     });
   }
 
-// --- LÓGICA DE SELECCIÓN ---
+  // --- LÓGICA DE SELECCIÓN ---
 
   onUsuarioChange(event: any) {
     this.usuarioId = event.target.value;
@@ -169,22 +169,22 @@ getTiposdePago() {
   }
 
   onChangePayment(event: any) {
-  const tipo = event.target.value;
-  this.paymentSelected = this.paymentMethods.find(m => m.tipo === tipo);
-}
+    const tipo = event.target.value;
+    this.paymentSelected = this.paymentMethods.find(m => m.tipo === tipo);
+  }
   onChangeBank(event: any) {
     const id = event.target.value;
     this.bankSelected = this.paymentMethods.find(m => m._id === id);
   }
 
 
-// --- ENVÍO DE FORMULARIOS ---
+  // --- ENVÍO DE FORMULARIOS ---
 
   sendFormTransfer() {
     if (this.formTransferencia.invalid) {
-        // Opcional: Marcar campos como tocados para mostrar errores de validación
-        this.formTransferencia.markAllAsTouched();
-        return;
+      // Opcional: Marcar campos como tocados para mostrar errores de validación
+      this.formTransferencia.markAllAsTouched();
+      return;
     }
 
     Swal.fire({ title: 'Procesando pago...', didOpen: () => Swal.showLoading() });
@@ -220,7 +220,7 @@ getTiposdePago() {
       ...this.formEfectivo.value,
       cliente: this.usuarioId,
       factura: this.facturaId,
-       metodo_pago: 'EFECTIVO',
+      metodo_pago: 'EFECTIVO',
       bank_destino: 'CAJA',
       referencia: 'CAJA',
       tasaBCV: this.tasaBCV,
@@ -239,12 +239,12 @@ getTiposdePago() {
 
 
   onClose(actualizar: boolean = false) {
-  this.formTransferencia.reset();
-  this.formEfectivo.reset();
-  this.selectedMethod = '';
-  this.paymentSelected = undefined; 
-  // Emitimos 'true' si queremos que el padre refresque la lista
-  this.closeModal.emit(actualizar); 
-}
+    this.formTransferencia.reset();
+    this.formEfectivo.reset();
+    this.selectedMethod = '';
+    this.paymentSelected = undefined;
+    // Emitimos 'true' si queremos que el padre refresque la lista
+    this.closeModal.emit(actualizar);
+  }
 
 }

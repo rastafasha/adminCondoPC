@@ -2,12 +2,14 @@
 <div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
     <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
     <div class="clear"></div>
+    <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="instruccionesModal.open()"
+        title="Ayuda de la sección">
+        <i class="fas fa-question"></i>
+    </button>
     <app-loading *ngIf="isLoading"></app-loading>
     <div class="row animated fadeInUp" *ngIf="!isLoading">
 
-
         <section class="section dashboard">
-
             <div class="tab-content-set">
                 <ul class="nav">
                     <li>
@@ -52,9 +54,8 @@
                                             title="mostrar todos">
                                             <i class="fas fa-search"></i>
                                         </button>
-                                        <a href="javascript:;" (click)="PageSize()"
-                                            class="btn btn-primary ms-2 " style="border-radius: 100px;"><i
-                                                class="fas fa-refresh"></i></a>
+                                        <a href="javascript:;" (click)="PageSize()" class="btn btn-primary ms-2 "
+                                            style="border-radius: 100px;"><i class="fas fa-refresh"></i></a>
                                     </div>
 
 
@@ -155,5 +156,6 @@
 
 <app-modal-pago-detalle [pagoSeleccionado]="pagoSeleccionado" (closeModal)="onCloseModal()"></app-modal-pago-detalle>
 
-<app-modalinfo-tipos-pago [info]="info" [style.display]="displaycomponent"></app-modalinfo-tipos-pago>
+<app-modalinfo-tipos-pago [info]="info" [style.display]="displaycomponent" sectionId="payments"
+    #instruccionesModal></app-modalinfo-tipos-pago>
 <app-reportar-pago (closeModal)="onCloseModal($event)"></app-reportar-pago>

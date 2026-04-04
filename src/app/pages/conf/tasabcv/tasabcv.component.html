@@ -1,6 +1,6 @@
 <div class="container">
-   <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
-        <div class="clear"></div>
+    <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
+    <div class="clear"></div>
     <app-loading *ngIf="isLoading"></app-loading>
     <div class="row animated fadeInUp" *ngIf="!isLoading">
         <div class="tab-pane" id="address" role="tabpanel" aria-labelledby="address-tab">
@@ -46,7 +46,7 @@
                                                 <td>{{tipodepago.createdAt|date}}</td>
 
                                                 <td>
-                                                    
+
                                                     <a class="btn btn-outline-danger btn-sm" href="#"
                                                         onclick="return false;" (click)="deleteTipoPago(tipodepago)"
                                                         title="Edit"><i class="fa fa-trash pl--0"></i></a>
@@ -63,11 +63,6 @@
                 </div>
 
             </div>
-
-            <!-- Start Profile Row  -->
-
-            <!-- End Profile Row  -->
         </div>
     </div>
-
 </div>

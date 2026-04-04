@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, AfterViewInit, EventEmitter, Output } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/core';
 
 declare var $: any;
 declare var bootstrap: any;
@@ -12,6 +12,7 @@ declare var bootstrap: any;
 })
 export class ModalInicialComponent implements AfterViewInit {
   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
+  @Input() sectionId!: string; 
   isLogued: boolean = false;
 
   currentStep = 1;
@@ -19,23 +20,33 @@ export class ModalInicialComponent implements AfterViewInit {
   ngAfterViewInit() {
     const USER = localStorage.getItem("user");
     this.isLogued = !!USER;
-    if (localStorage.getItem('modalInicialDismissed')) {
+
+    // USAMOS EL ID DE LA SECCIÓN PARA COMPROBAR
+    if (localStorage.getItem(`modalDismissed_${this.sectionId}`)) {
       return;
     }
+
     setTimeout(() => {
-      const modalElement = $('#inicialModal');
-      if (modalElement.length) {
-        modalElement.modal('show');
+      const modalElement = document.getElementById('inicialModal') as HTMLElement;
+      if (modalElement) {
+        const bootstrapModal = (window as any).bootstrap?.Modal?.getInstance(modalElement) || 
+                               new (window as any).bootstrap.Modal(modalElement);
+        bootstrapModal.show();
       }
     }, 500);
   }
 
+  // onNoShowMore() {
+  //   localStorage.setItem('modalInicialDismissed', 'true');
+  //   $('#inicialModal').modal('hide');
+  //   $('.modal-backdrop').remove();
+  //   $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
+  //   this.closeModal.emit();
+  // }
   onNoShowMore() {
-    localStorage.setItem('modalInicialDismissed', 'true');
-    $('#inicialModal').modal('hide');
-    $('.modal-backdrop').remove();
-    $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
-    this.closeModal.emit();
+    // GUARDAMOS CON EL ID ESPECÍFICO
+    localStorage.setItem(`modalDismissed_${this.sectionId}`, 'true');
+    this.closeAndCleanup();
   }
 
   nextStep() {
@@ -46,11 +57,44 @@ export class ModalInicialComponent implements AfterViewInit {
     this.currentStep = 1;
   }
 
+  // onClose() {
+  //   $('#inicialModal').modal('hide');
+  //   $('.modal-backdrop').remove();
+  //   $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
+  //   this.closeModal.emit();
+  // }
+
   onClose() {
-    $('#inicialModal').modal('hide');
-    $('.modal-backdrop').remove();
-    $('body, html').removeClass('modal-open').css({'padding-right': '', 'overflow': '', 'overflow-x': 'auto'});
+    this.closeAndCleanup();
     this.closeModal.emit();
+  }
+
+  // Función auxiliar para no repetir el código de limpieza de Bootstrap
+  private closeAndCleanup() {
+    const modalElement = document.getElementById('inicialModal') as HTMLElement;
+    if (modalElement) {
+      const bootstrapModal = (window as any).bootstrap?.Modal?.getInstance(modalElement);
+      if (bootstrapModal) bootstrapModal.hide();
+    }
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) backdrop.remove();
+    document.body.classList.remove('modal-open');
+    document.body.style.paddingRight = '';
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    document.documentElement.style.overflowX = 'auto';
+  }
+
+  // Método público para abrir el modal manualmente (ignorando el bloqueo)
+  public open() {
+    setTimeout(() => {
+      const modalElement = document.getElementById('inicialModal') as HTMLElement;
+      if (modalElement) {
+        const bootstrapModal = (window as any).bootstrap?.Modal?.getInstance(modalElement) || 
+                               new (window as any).bootstrap.Modal(modalElement);
+        bootstrapModal.show();
+      }
+    }, 100);
   }
 }
 
