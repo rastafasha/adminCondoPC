@@ -8,6 +8,11 @@ import { Local } from '../models/local';
 import { Oficina } from '../models/oficina';
 import { Residencia } from '../models/residencia';
 import { Facturacion } from '../models/facturacion';
+import { Payment } from '../models/payment'; 
+import { of } from 'rxjs';
+
+
+
 
 const base_url = environment.apiUrl;
 
@@ -60,27 +65,42 @@ export class BusquedasService {
   }
   
   private trasnformarFacturaciones(resultados: any[]): Facturacion[] {
-    return resultados;
-  }
+  // Aquí podrías agregar lógica de fechas si tu modelo Facturacion la requiere
+  return resultados; 
+}
+  private trasnformarPayments(resultados: any[]): Payment[] {
+  // Aquí podrías agregar lógica de fechas si tu modelo Facturacion la requiere
+  return resultados; 
+}
+
   
 
-  buscar(tipo: 'usuarios' | 'oficinas' | 'locales'| 'residencias'|'facturaciones', termino: string) {
+ buscar(
+    tipo: 'usuarios' | 'oficinas' | 'locales' | 'residencias' | 'facturaciones' | 'payments' , 
+    termino: string = ''
+  ) {
+    // Si el término está vacío, podrías retornar un array vacío o manejarlo según tu UX
+   if (!termino || termino.trim().length === 0) { 
+        return of([]); 
+    }
+
     const url = `${base_url}/todo/coleccion/${tipo}/${termino}`;
-    return this.http.get<any[]>(url, this.headers).pipe(
+    
+    return this.http.get<any>(url, this.headers).pipe(
       map((resp: any) => {
         switch (tipo) {
           case 'usuarios':
             return this.trasnformarUsuarios(resp.resultados);
-
           case 'locales':
-            return this.trasnformarLocales(resp.resultados);
+            return this.trasnformarLocales(resp.resultados); // Puedes simplificar si no necesitas lógica extra
           case 'oficinas':
-            return this.trasnformarOficinas(resp.resultados);
+            return this.trasnformarOficinas(resp.resultados); 
           case 'residencias':
-            return this.trasnformarResidencias(resp.resultados);
+            return this.trasnformarResidencias(resp.resultados); 
           case 'facturaciones':
             return this.trasnformarFacturaciones(resp.resultados);
-
+          case 'payments':
+            return this.trasnformarPayments(resp.resultados);
           default:
             return [];
         }

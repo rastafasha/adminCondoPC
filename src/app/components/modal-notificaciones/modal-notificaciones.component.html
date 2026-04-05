@@ -230,6 +230,7 @@
                                         <th>Categoría</th>
                                         <th>Alcance</th>
                                         <th>Estado Push</th>
+                                        <!-- <th>Acciones</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -253,6 +254,13 @@
                                             <i class="fas fa-check-circle" [class.text-success]="item.notificado_push"
                                                 [class.text-muted]="!item.notificado_push"></i>
                                         </td>
+                                        <!-- <td class="text-center">
+                                            <a (click)="eliminarComunicado(item)"
+                                                
+                                                class="cursor" data-toggle="tooltip" data-original-title="Borrar">
+                                                <div class="btn btn-danger"><i class="fas fa-trash"></i></div>
+                                            </a>
+                                        </td> -->
                                     </tr>
                                     } @empty {
                                     <tr>

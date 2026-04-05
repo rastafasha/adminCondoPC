@@ -82,11 +82,11 @@ export class RolesViewComponent implements OnInit {
         this.userService.editarRole(user).subscribe(
           (resp: any) => {
             Swal.fire('Actualizado', `actualizado rol correctamente`, 'success');
+            this.ngOnInit();
           }
         )
-        this.getUsers();
       } else {
-        this.getUsers();
+        this.ngOnInit();
       }
     });
   }

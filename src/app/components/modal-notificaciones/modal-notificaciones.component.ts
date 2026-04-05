@@ -3,6 +3,7 @@ import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChange
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ComunicadoService } from '../../services/comunicado.service';
 import Swal from 'sweetalert2';
+import { Comunicado } from '../../models/comunicado';
 
 
 @Component({
@@ -94,7 +95,6 @@ export class ModalNotificacionesComponent implements OnChanges {
     // Si tu backend devuelve { ok: true, comunicados: [] }
     this.historial = resp.comunicados || resp; 
     this.totalComunicados = resp.total;
-    console.log('Historial cargado:', this.historial);
   });
 }
 
@@ -115,5 +115,34 @@ export class ModalNotificacionesComponent implements OnChanges {
       this.solicitud_selectedd = null;
     }
   }
+
+  
+
+  eliminarComunicado(item: Comunicado) {
+     
+      Swal.fire({
+        title: 'Estas Seguro?',
+        text: "No podras recuperarlo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, Borrar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.comunicadoService.deleteComunicado(item._id).subscribe(
+            response => {
+              this.actualizarHistorial();
+            }
+          );
+          Swal.fire(
+            'Borrado!',
+            'El Archivo fue borrado.',
+            'success'
+          )
+          this.actualizarHistorial();
+        }
+      });
+    }
 
 }

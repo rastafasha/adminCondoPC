@@ -6,7 +6,12 @@
         <div class="clear"></div>
         <app-loading *ngIf="isLoading"></app-loading>
 
-        <section class="section profile">
+        <div class="alert alert-info" *ngIf="!profile && !isLoading">
+            <h4>Usuario sin Perfil</h4>
+            <p>Este Usuario no tiene ó no ha completado su perfil</p>
+        </div>
+
+        <section class="section profile" *ngIf="profile">
             <div class="row">
                 <div class="col-xl-3" *ngIf="!isLoading">
 
@@ -38,27 +43,26 @@
 
                     <div class="card">
                         <div class="card-body pt-3">
-                            <!-- Bordered Tabs -->
-                            <ul class="nav nav-tabs nav-tabs-bordered">
 
-                                <li class="nav-item">
-                                    <button class="nav-link active" data-bs-toggle="tab"
-                                        data-bs-target="#detalle">Detalles</button>
-                                </li>
-                                <!-- <li class="nav-item">
-                                    <button class="nav-link " data-bs-toggle="tab" data-bs-target="#historial">Historial
-                                        Compras</button>
-                                </li> -->
-
-
-
-
-                            </ul>
-                            <div class="tab-content pt-2">
-                                <div class="tab-pane fade show active detail  pt-3" id="detalle">
-
-
-                                    <div *ngIf="!profile">
+                            <div class="tab-content-set">
+                                <ul class="nav">
+                                    <li>
+                                        <a href="#" onclick="return false;"
+                                            [ngClass]="{'active': option_selectedd == 1}" (click)="optionSelected(1)">
+                                            <h3 class="btn btn-outline-info"> {{'Detalles'}}</h3>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" onclick="return false;"
+                                            [ngClass]="{'active': option_selectedd == 2}" (click)="optionSelected(2)">
+                                            <h3 class="btn btn-outline-info">{{'Historial Facturas'}}</h3>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- perfil de usuario -->
+                            <div *ngIf="option_selectedd == 1">
+                                 <div *ngIf="!profile">
                                         <p>Complete su perfil</p>
                                     </div>
                                     <div class="col-xs-12">
@@ -102,11 +106,12 @@
                                             <!-- Estatus Financiero -->
                                             <div class="row">
 
-                                                <div class="col-xs-6 col-sm-6 col-md-3 b-r" *ngIf="user.role === 'USER_ROLE'">
+                                                <div class="col-xs-6 col-sm-6 col-md-3 b-r"
+                                                    *ngIf="user.role === 'USER_ROLE'">
                                                     <div class="col-12  label">
                                                         <i class="bi bi-telephone"></i> Estatus Financiero
                                                     </div>
-                                                    <div class="col-12  info" >
+                                                    <div class="col-12  info">
                                                         <span class="badge bg-success"
                                                             *ngIf="profile.statusFinanciero === 'AL_DIA'">Al día</span>
                                                         <span class="badge bg-danger"
@@ -136,13 +141,13 @@
                                                         Residencia(s)
                                                     </div>
                                                     <div class="col-12 ">
-                                                        <table class="table table-borderless datatable table-responsive">
+                                                        <table
+                                                            class="table table-borderless datatable table-responsive">
                                                             <thead>
                                                                 <tr>
                                                                     <th scope="col">Edificio</th>
                                                                     <th scope="col">Letra</th>
                                                                     <th scope="col">Piso</th>
-                                                                    <th scope="col">Monto M</th>
                                                                     <th scope="col">Acciones</th>
                                                                 </tr>
                                                             </thead>
@@ -151,15 +156,13 @@
                                                                     <th scope="row">{{res.edificio}}</th>
                                                                     <td>{{res.letra}}</td>
                                                                     <td>{{res.piso}}</td>
-                                                                    <td>{{res.montoMensual |
-                                                                        currency:'Bs.':'symbol':'1.2-2'}}</td>
                                                                     <td>
                                                                         <div class="btn btn-outline-primary btn-sm"
                                                                             (click)="openEditModal(res, 'residencia')"
                                                                             href="javascript:void(0)"
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#editFactura">
-                                                                           Facturar
+                                                                            Facturar
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -177,13 +180,13 @@
                                                         Oficina(s)
                                                     </div>
                                                     <div class="col-12 ">
-                                                        <table class="table table-borderless datatable table-responsive">
+                                                        <table
+                                                            class="table table-borderless datatable table-responsive">
                                                             <thead>
                                                                 <tr>
                                                                     <th scope="col">Edificio</th>
                                                                     <th scope="col">Letra</th>
                                                                     <th scope="col">Piso</th>
-                                                                    <th scope="col">Monto M</th>
                                                                     <th scope="col">Acciones</th>
                                                                 </tr>
                                                             </thead>
@@ -192,15 +195,13 @@
                                                                     <th scope="row">{{res.edificio}}</th>
                                                                     <td>{{res.letra}}</td>
                                                                     <td>{{res.piso}}</td>
-                                                                    <td>{{res.montoMensual |
-                                                                        currency:'Bs.':'symbol':'1.2-2'}}</td>
                                                                     <td>
                                                                         <div class="btn btn-outline-primary btn-sm"
                                                                             (click)="openEditModal(res, 'oficina')"
                                                                             href="javascript:void(0)"
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#editFactura">
-                                                                           Facturar
+                                                                            Facturar
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -218,13 +219,13 @@
                                                         Local(s)
                                                     </div>
                                                     <div class="col-12 ">
-                                                        <table class="table table-borderless datatable table-responsive">
+                                                        <table
+                                                            class="table table-borderless datatable table-responsive">
                                                             <thead>
                                                                 <tr>
                                                                     <th scope="col">Edificio</th>
                                                                     <th scope="col">Letra</th>
                                                                     <th scope="col">Piso</th>
-                                                                    <th scope="col">Monto M</th>
                                                                     <th scope="col">Acciones</th>
                                                                 </tr>
                                                             </thead>
@@ -233,15 +234,13 @@
                                                                     <th scope="row">{{res.edificio}}</th>
                                                                     <td>{{res.letra}}</td>
                                                                     <td>{{res.piso}}</td>
-                                                                    <td>{{res.montoMensual |
-                                                                        currency:'Bs.':'symbol':'1.2-2'}}</td>
                                                                     <td>
                                                                         <div class="btn btn-outline-primary btn-sm"
                                                                             (click)="openEditModal(res, 'local')"
                                                                             href="javascript:void(0)"
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#editFactura">
-                                                                           Facturar
+                                                                            Facturar
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -254,10 +253,60 @@
                                             <hr *ngIf="profile.haveLocal === true ">
                                         </div>
                                     </div>
-                                    <div class="clear"></div>
-                                </div>
                             </div>
-                            <!-- End Bordered Tabs -->
+                            <!-- historial de factuas -->
+                            <div *ngIf="option_selectedd == 2">
+                                <div class="table-responsive">
+                                        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                                        <table class="table table-borderless datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Nro Factura</th>
+                                                    <th scope="col">Mes</th>
+                                                    <th scope="col">Año</th>
+                                                    <th scope="col">Aplica Retención </th>
+                                                    <th scope="col">Monto Retención </th>
+                                                    <th scope="col">Monto Pagar </th>
+                                                    <th scope="col">Estado</th>
+                                                    <th scope="col">Creado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr
+                                                    *ngFor="let factura of facturas |  paginate: { itemsPerPage: count, currentPage: p }">
+
+                                                    <th scope="row">
+                                                        <a (click)="openViewModalFactura(factura)"
+                                                            href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#viewFactura">{{factura.nroFactura}}</a>
+                                                    </th>
+
+                                                    <td>{{factura.mes}}</td>
+                                                    <td>{{factura.anio}}</td>
+                                                    <td>
+                                                        <span class="badge bg-success"
+                                                            *ngIf="factura.aplicaRetencion === true">Si</span>
+                                                        <span class="badge bg-danger"
+                                                            *ngIf="factura.aplicaRetencion === false">No</span>
+                                                    </td>
+                                                    <td>{{factura.montoRetencion|currency:'Bs.'}}</td>
+                                                    <td>{{factura.totalPagar|currency:'Bs.'}}</td>
+                                                    <td>
+                                                        <span class="badge bg-success"
+                                                            *ngIf="factura.estado === 'PAGADO'">Pagado</span>
+                                                        <span class="badge bg-warning"
+                                                            *ngIf="factura.estado === 'PENDIENTE'">Pendiente</span>
+                                                        <span class="badge bg-danger"
+                                                            *ngIf="factura.estado === 'ANULADO'">Anulado</span>
+                                                    </td>
+                                                    <td>{{factura.createdAt | date:'MMM d, y, h:mm:ss a'}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                                    </div>
+                            </div>
+                            
 
                         </div>
                     </div>
@@ -269,4 +318,7 @@
 
 </div>
 <!--/main-->
-<app-modal-info-factura [paymentSeleccionado]="paymentSeleccionado" (closeModal)="onCloseModal()"></app-modal-info-factura>
+<app-modal-info-factura [paymentSeleccionado]="paymentSeleccionado"
+    (closeModal)="onCloseModal()"></app-modal-info-factura>
+<app-modal-factura-detalle [facturaSeleccionado]="facturaSeleccionado"
+    (closeModal)="onCloseModalFactura()"></app-modal-factura-detalle>

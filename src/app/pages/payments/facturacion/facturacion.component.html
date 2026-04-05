@@ -29,7 +29,7 @@
                             class="p-1 bg-light rounded rounded-pill shadow-sm mb-4 d-flex justify-content-center gap-3">
                             <div class="input-group busc">
                                 <input type="search" name="search" type="text" class="form-control inputb "
-                                    placeholder="Buscar Factura" aria-describedby="button-addon1" [(ngModel)]="query"
+                                    placeholder="Buscar por Nro Factura ó Año" aria-describedby="button-addon1" [(ngModel)]="query"
                                     class="form-control border-0 bg-light" />
 
                                 <select class="form-control form-select-solid fw-bolder" name="status"
@@ -61,18 +61,19 @@
             <div class="card recent-sales overflow-auto border-radio">
                 <div class="card-body">
                     <pagination-controls (pageChange)="p = $event"></pagination-controls>
-                    <table class="table table-borderless datatable">
+                    <div class="table-responsive">
+                        <table class="table table-borderless datatable">
                         <thead>
                             <tr>
-                                <th scope="col">nroFactura</th>
-                                <th scope="col">mes</th>
-                                <th scope="col">anio</th>
+                                <th scope="col">Nro Factura</th>
+                                <th scope="col">Mes</th>
+                                <th scope="col">Año</th>
                                 <th scope="col">Aplica Retención </th>
-                                <th scope="col">monto Retencion </th>
-                                <th scope="col">tasaBCV </th>
-                                <th scope="col">otros Cargos </th>
-                                <th scope="col">total Pagado </th>
-                                <th scope="col">estado</th>
+                                <th scope="col">Monto Retención </th>
+                                <th scope="col">Tasa BCV </th>
+                                <th scope="col">Otros Cargos </th>
+                                <th scope="col">Monto Pagar </th>
+                                <th scope="col">Estado</th>
                                 <th scope="col">Creado</th>
                             </tr>
                         </thead>
@@ -108,6 +109,7 @@
 
                         </tbody>
                     </table>
+                    </div>
                     <pagination-controls (pageChange)="p = $event"></pagination-controls>
                 </div>
 

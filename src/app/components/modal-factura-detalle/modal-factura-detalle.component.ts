@@ -3,6 +3,9 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { DetalleFactura, Facturacion } from '../../models/facturacion';
+import { User } from '../../models/user';
+import { UserService } from '../../services/user.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-modal-factura-detalle',
@@ -17,6 +20,15 @@ export class ModalFacturaDetalleComponent implements OnChanges {
   @Input() facturaSeleccionado: any | null = null;
   isLoading: boolean = false;
   title: string = 'Detalle Factura';
+  usuario!:User;
+  usuarioID!:string;
+
+  constructor(
+      private userService: UserService,
+      private router: Router,
+  
+    ) {
+    }
 
   ngOnInit() {
     this.facturaSeleccionado;
@@ -25,8 +37,10 @@ export class ModalFacturaDetalleComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['facturaSeleccionado'] && this.facturaSeleccionado) {
       const data = this.facturaSeleccionado;
-      console.log(this.facturaSeleccionado);
-
+      this.usuarioID = this.facturaSeleccionado.usuario;
+      this.userService.getUserById(this.usuarioID).subscribe((resp:any)=>{
+        this.usuario = resp;
+      })
     }
   }
 
@@ -34,4 +48,7 @@ export class ModalFacturaDetalleComponent implements OnChanges {
   onClose() {
     this.closeModal.emit();
   }
+
+
+
 }

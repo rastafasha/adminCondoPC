@@ -122,9 +122,9 @@ export class PaymentsComponent implements OnInit {
       } 
       // Case 2: Query is provided (with or without category)
       else {
-        this.busquedasService.searchGlobal(this.query).subscribe(
+        this.busquedasService.buscar('payments',this.query).subscribe(
           (resp: any) => {
-            let filteredProjects = resp.payments;
+            let filteredProjects = resp;
             if (this.status) {
               filteredProjects = filteredProjects.filter(
                 (payment: Payment) => payment.referencia === this.status

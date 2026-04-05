@@ -1,5 +1,5 @@
 <!-- =======| Main |======= -->
-<div class="container animated fadeInUp" id="main" class="main" role="main" name="users">
+<div class="container animated fadeInUp" style="height: calc(73vh);" id="main" class="main" role="main" name="users">
 
     <div class="col-xs-12">
         <app-backButtn [displaycomponent]="displaycomponent" [title]="title"></app-backButtn>
@@ -8,19 +8,16 @@
             title="Ayuda de la sección">
             <i class="fas fa-question"></i>
         </button>
-        <section class="section configuraciones">
+        <section class="section configuraciones mt-3">
 
 
             <!-- Recent Pagos -->
             <div class="container">
-
                 <div class="row">
-
-
-                    <div class="col-xs-12 col-sm-6  col-md-4">
-                        <div class="card">
+                    <div class="col-xs-12 col-sm-6  col-md-4 ">
+                        <div class="card shadow-sm">
                             <div class="card-body ">
-                                <i class="fas fa-landmark fa-2x"></i>
+                                <i class="fas fa-landmark fa-2x mb-2"></i>
                                 <h4> Roles</h4>
                                 <a routerLink="/dashboard/rolesconf">
                                     <button class="btn btn-outline-success btn-block">Ver todos</button>
@@ -31,10 +28,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-6  col-md-4">
-                        <div class="card">
+                    <div class="col-xs-12 col-sm-6  col-md-4 ">
+                        <div class="card shadow-sm">
                             <div class="card-body ">
-                                <i class="fas fa-tasks fa-2x"></i>
+                                <i class="fas fa-tasks fa-2x mb-2"></i>
                                 <h4> Metodos de pago</h4>
                                 <a routerLink="/dashboard/metodos_de_pago">
                                     <button class="btn btn-outline-success btn-block">Ver todos</button>
@@ -45,10 +42,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-6  col-md-4">
-                        <div class="card">
+                    <div class="col-xs-12 col-sm-6  col-md-4 ">
+                        <div class="card shadow-sm">
                             <div class="card-body ">
-                                <i class="fas fa-dollar fa-2x"> </i>
+                                <i class="fas fa-dollar fa-2x mb-2"> </i>
                                 <h4> Tasa BCV</h4>
                                 <a routerLink="/dashboard/tasaBCV">
                                     <button class="btn btn-outline-success btn-block">Ver todos</button>

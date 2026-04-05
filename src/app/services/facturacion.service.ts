@@ -42,15 +42,6 @@ export class FacturacionService {
       
       // 3. Opción A: Abrir en pestaña nueva
       window.open(url);
-
-      // 4. Opción B: Descarga automática con nombre (opcional)
-      /*
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Factura_${datos.mes}_${datos.anio}.pdf`;
-      link.click();
-      */
-      
       // Limpiamos la memoria
       window.URL.revokeObjectURL(url);
     },

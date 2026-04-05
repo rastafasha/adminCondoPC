@@ -34,7 +34,7 @@ export class FacturacionComponent {
 
   public user: any;
   query: string = '';
-  facturaSeleccionado!: any | null;
+  facturaSeleccionado!: Facturacion | null;
 
   estado!: string
   info = `
@@ -86,9 +86,9 @@ export class FacturacionComponent {
       }
     }
     // Case 2: Query provided - global search + optional estado filter
-    this.busquedasService.searchGlobal(this.query).subscribe(
+    this.busquedasService.buscar('facturaciones',this.query).subscribe(
       (resp: any) => {
-        let filteredProjects = resp.facturas;
+        let filteredProjects = resp;
         if (this.estado) {
           filteredProjects = filteredProjects.filter(
             (factura: Facturacion) => factura.estado === this.estado
@@ -105,7 +105,7 @@ export class FacturacionComponent {
     this.query = '';
   }
 
-  openViewModal(factura: any): void {
+  openViewModal(factura: Facturacion): void {
     this.facturaSeleccionado = factura;
   }
 

@@ -9,10 +9,13 @@
             <div class="modal-body" *ngIf="!isLoading">
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <strong>Cliente:</strong> {{ facturaSeleccionado?.usuario?.username }}
+                        <strong>Cliente:</strong> &nbsp; {{ usuario?.username }}
                     </div>
                     <div class="col-md-4">
-                        <strong>aplica Retención:</strong> &nbsp;
+                        <strong>Cliente ID:</strong> {{ usuario?.numdoc }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>¿Aplica Retención?:</strong> &nbsp;
                         <span class="badge bg-success" *ngIf="facturaSeleccionado?.aplicaRetencion === true">Si</span>
                         <span class="badge bg-danger" *ngIf="facturaSeleccionado?.aplicaRetencion === false">No</span>
                     </div>
@@ -42,7 +45,8 @@
                         <strong>Fecha:</strong> {{ facturaSeleccionado?.createdAt | date:'dd/MM/yyyy' }}
                     </div>
                 </div>
-                <table class="table table-bordered table-responsive w-100">
+                <div class="table-responsive">
+                    <table class="table table-bordered w-100">
                     <thead class="table-light">
                         <tr>
                             <th>Descripción</th>
@@ -62,6 +66,8 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
+                
                 <div class="text-end mt-3">
                     <h5>Total: {{ facturaSeleccionado?.totalPagar |currency:'Bs.' }}</h5>
                 </div>

@@ -11,7 +11,7 @@ export interface DetalleFactura {
 
 export class Facturacion {
     _id?: string;
-    usuario?: User;
+    usuario!: User;
     nroFactura?: string;
     mes!: number;
     anio!: number;

@@ -44,6 +44,11 @@ comunicado!: Comunicado
     return this.http.get<any>(url,  this.headers); 
   }
 
+  deleteComunicado(tasa: any) {
+      const url = `${this.apiUrl}/delete/${tasa}`;
+      return this.http.delete(url, this.headers);
+    }
+
 
   
 }

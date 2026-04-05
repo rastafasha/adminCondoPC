@@ -12,8 +12,6 @@ import { UserService } from '../../../services/user.service';
 import { TiposdepagoService } from '../../../services/tiposdepago.service';
 import { TasabcvService } from '../../../services/tasabcv.service';
 import { FacturacionService } from '../../../services/facturacion.service';
-import { TransferenciaService } from '../../../services/transferencia.service';
-import { PagoEfectivoService } from '../../../services/pago-efectivo.service';
 
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import Swal from 'sweetalert2';
@@ -70,7 +68,6 @@ export class ReportarPagoComponent implements OnInit {
     private tasaService: TasabcvService,
     private facturacionService: FacturacionService,
     private paymentService: PaymentService,
-    private efectivoService: PagoEfectivoService
   ) {
     // Inicialización de formularios más limpia
     this.formTransferencia = this.fb.group({

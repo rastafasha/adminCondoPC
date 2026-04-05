@@ -11,36 +11,41 @@
                     <div class="col-xs-12 col-sm-8">
                         <div class="row">
                             <div class="col-md-4">
-                            <strong>Cliente:</strong> {{ pagoSeleccionado?.cliente?.username }}
+                                <strong>Cliente:</strong> {{ pagoSeleccionado?.cliente?.username }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <strong>Método de Pago:</strong> {{ pagoSeleccionado?.metodo_pago }}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Banco Destino:</strong> {{ pagoSeleccionado?.bank_destino }}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Fecha Pago:</strong> {{ pagoSeleccionado?.fecha_pago| date:'MMM d, y, h:mm:ss
+                                a'}}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Tasa BCV:</strong> {{ pagoSeleccionado?.tasaBCV |currency:'Bs.' }}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Estado:</strong> &nbsp;
+                                <span class="badge bg-success"
+                                    *ngIf="pagoSeleccionado?.status === 'APROBADO'">Aprobado</span>
+                                <span class="badge bg-warning"
+                                    *ngIf="pagoSeleccionado?.status === 'PENDIENTE'">Pendiente</span>
+                                <span class="badge bg-danger"
+                                    *ngIf="pagoSeleccionado?.status === 'RECHAZADO'">Rechazado</span>
+                            </div>
+                            <div class="col-md-4" *ngIf="pagoSeleccionado?.status === 'RECHAZADO'">
+                                <strong>Observaciones:</strong> {{ pagoSeleccionado?.observaciones }}
+                            </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <strong>Método de Pago:</strong> {{ pagoSeleccionado?.metodo_pago }}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>Banco Destino:</strong> {{ pagoSeleccionado?.bank_destino }}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>Fecha Pago:</strong> {{ pagoSeleccionado?.fecha_pago| date:'MMM d, y, h:mm:ss a'}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>Tasa BCV:</strong> {{ pagoSeleccionado?.tasaBCV |currency:'Bs.' }}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>Estado:</strong> &nbsp;
-                            <span class="badge bg-success" *ngIf="pagoSeleccionado?.status === 'APROBADO'">Aprobado</span>
-                            <span class="badge bg-warning" *ngIf="pagoSeleccionado?.status === 'PENDIENTE'">Pendiente</span>
-                            <span class="badge bg-danger" *ngIf="pagoSeleccionado?.status === 'RECHAZADO'">Rechazado</span>
-                        </div>
-                        <div class="col-md-4" *ngIf="pagoSeleccionado?.status === 'RECHAZADO'">
-                            <strong>Observaciones:</strong> {{ pagoSeleccionado?.observaciones }}
-                        </div>
-                        </div>
-                        
                     </div>
-<div class="col-xs-12 col-sm-4" *ngIf="pagoSeleccionado">
-                       <img [src]="(pagoSeleccionado.img || '')| imagenPipe: 'payments'" class="img-fluid rounded-3 shadow-sm border w-100"
-        style="max-height: 200px; object-fit: cover;">
+                    <div class="col-xs-12 col-sm-4" *ngIf="pagoSeleccionado">
+                        <img [src]="(pagoSeleccionado.img || '')| imagenPipe: 'payments'"
+                            class="img-fluid rounded-3 shadow-sm border w-100"
+                            style="max-height: 200px; object-fit: cover;">
                     </div>
                 </div>
                 <hr>
@@ -54,8 +59,10 @@
                     </div>
                     <div class="col-md-4">
                         <strong>¿Aplica Retención?:</strong> &nbsp;
-                        <span class="badge bg-success" *ngIf="pagoSeleccionado?.factura?.aplicaRetencion === true">Si</span>
-                        <span class="badge bg-danger" *ngIf="pagoSeleccionado?.factura?.aplicaRetencion === false">No</span>
+                        <span class="badge bg-success"
+                            *ngIf="pagoSeleccionado?.factura?.aplicaRetencion === true">Si</span>
+                        <span class="badge bg-danger"
+                            *ngIf="pagoSeleccionado?.factura?.aplicaRetencion === false">No</span>
                     </div>
                     <div class="col-md-4">
                         <strong>Retención:</strong> {{ pagoSeleccionado?.factura?.montoRetencion |currency:'Bs.' }}
@@ -68,10 +75,12 @@
                     </div>
                     <div class="col-md-4">
                         <strong>Estado:</strong> &nbsp;
-                        <span class="badge bg-success" *ngIf="pagoSeleccionado?.factura?.estado === 'PAGADO'">Pagado</span>
+                        <span class="badge bg-success"
+                            *ngIf="pagoSeleccionado?.factura?.estado === 'PAGADO'">Pagado</span>
                         <span class="badge bg-warning"
                             *ngIf="pagoSeleccionado?.factura?.estado === 'PENDIENTE'">Pendiente</span>
-                        <span class="badge bg-danger" *ngIf="pagoSeleccionado?.factura?.estado === 'RECHAZADO'">Rechazado</span>
+                        <span class="badge bg-danger"
+                            *ngIf="pagoSeleccionado?.factura?.estado === 'RECHAZADO'">Rechazado</span>
                     </div>
                     <div class="col-md-4" *ngIf="pagoSeleccionado?.estado === 'RECHAZADO'">
                         <strong>Observaciones:</strong> {{ pagoSeleccionado?.observaciones }}
@@ -87,26 +96,29 @@
 
                 <!-- detalles pago-->
                 <div class="col-12">
-                    <table class="table table-bordered table-responsive w-100">
-                    <thead class="table-light ">
-                        <tr>
-                            <th>Descripción</th>
-                            <th>Origen</th>
-                            <th>Monto Base</th>
-                            <th>% IVA</th>
-                            <th>Monto IVA</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let detalle of pagoSeleccionado?.factura.detalles">
-                            <td>{{ detalle.descripcion}}</td>
-                            <td>{{ detalle.origen }}</td>
-                            <td>{{ detalle.montoBase |currency:'Bs.' }}</td>
-                            <td>{{ detalle.ivaPorcentaje }}</td>
-                            <td>{{ detalle.montoIva |currency:'Bs.' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered ">
+                            <thead class="table-light ">
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Origen</th>
+                                    <th>Monto Base</th>
+                                    <th>% IVA</th>
+                                    <th>Monto IVA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let detalle of pagoSeleccionado?.factura.detalles">
+                                    <td>{{ detalle.descripcion}}</td>
+                                    <td>{{ detalle.origen }}</td>
+                                    <td>{{ detalle.montoBase |currency:'Bs.' }}</td>
+                                    <td>{{ detalle.ivaPorcentaje }}</td>
+                                    <td>{{ detalle.montoIva |currency:'Bs.' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
                 <div class="text-end mt-3">
                     <h5>Total: {{ pagoSeleccionado?.amount |currency:'Bs.' }}</h5>

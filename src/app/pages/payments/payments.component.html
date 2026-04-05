@@ -1,14 +1,12 @@
 <!-- =======| Main |======= -->
 <div class="container animated fadeInUp" id="main" class="main" role="main" name="profile">
-    <app-backButtn [displaycomponent]="displaycomponent" *ngIf="displaycomponent !== 'resumen'" [title]="title"></app-backButtn>
+    <app-backButtn [displaycomponent]="displaycomponent" *ngIf="displaycomponent !== 'resumen'"
+        [title]="title"></app-backButtn>
     <div class="clear"></div>
-    <button *ngIf="displaycomponent !== 'resumen'" 
-        class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" 
-        [ngClass]="botonpagos"  
-        (click)="instruccionesModal.open()"
-        title="Ayuda de la sección">
-    <i class="fas fa-question"></i>
-</button>
+    <button *ngIf="displaycomponent !== 'resumen'" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
+        [ngClass]="botonpagos" (click)="instruccionesModal.open()" title="Ayuda de la sección">
+        <i class="fas fa-question"></i>
+    </button>
     <app-loading *ngIf="isLoading"></app-loading>
     <div class="row animated fadeInUp" *ngIf="!isLoading">
 
@@ -40,8 +38,8 @@
                                 class="p-1 bg-light rounded rounded-pill shadow-sm mb-4 d-flex justify-content-center gap-3">
                                 <div class="input-group busc">
                                     <input type="search" name="search" type="text" class="form-control inputb "
-                                        placeholder="Buscar Pago" aria-describedby="button-addon1" [(ngModel)]="query"
-                                        class="form-control border-0 bg-light" />
+                                        placeholder="Buscar por Referencia, Banco ó Monto..." aria-describedby="button-addon1"
+                                        [(ngModel)]="query" class="form-control border-0 bg-light" />
 
                                     <select class="form-control form-select-solid fw-bolder" name="status"
                                         [(ngModel)]="status" (change)="search()" placeholder="status">
@@ -78,63 +76,67 @@
                     <div class="card-body">
                         <pagination-controls (pageChange)="p = $event"
                             [style.display]="displaycomponent"></pagination-controls>
-                        <table class="table table-borderless datatable">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Referencia</th>
-                                    <th scope="col">Cliente</th>
-                                    <th scope="col">Banco Destino</th>
-                                    <th scope="col">Metodo</th>
-                                    <th scope="col">Monto </th>
-                                    <th scope="col">tasaBCV </th>
-                                    <th scope="col">Fecha Pago </th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Creado</th>
-                                    <th scope="col">Actualizado</th>
-                                    <th scope="col">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let pago of payments |  paginate: { itemsPerPage: count, currentPage: p }">
+                        <div class="table-responsive">
+                            <table class="table table-borderless datatable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Referencia</th>
+                                        <th scope="col">Cliente</th>
+                                        <th scope="col">Destino</th>
+                                        <th scope="col">Metodo</th>
+                                        <th scope="col">Monto </th>
+                                        <th scope="col">tasaBCV </th>
+                                        <th scope="col">Pagado </th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Creado</th>
+                                        <th scope="col">Actualizado</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let pago of payments |  paginate: { itemsPerPage: count, currentPage: p }">
 
-                                    <th scope="row">
-                                        <a (click)="openViewModal(pago)" href="javascript:void(0)"
-                                            data-bs-toggle="modal" data-bs-target="#viewPago">{{pago.referencia}}</a>
-                                    </th>
-                                    <th>{{pago.cliente?.username}}</th>
-                                    <td>{{pago.bank_destino}}</td>
-                                    <td>{{pago.metodo_pago}}</td>
-                                    <td>{{pago.amount|currency:'Bs.'}} </td>
-                                    <td>{{pago.tasaBCV|currency:'Bs.'}}</td>
-                                    <td>{{pago.fecha_pago | date:'MMM d, y'}}</td>
-                                    <td>
-                                        <span class="badge bg-success"
-                                            *ngIf="pago.status === 'APROBADO'">Aprobado</span>
-                                        <span class="badge bg-warning"
-                                            *ngIf="pago.status === 'PENDIENTE'">Pendiente</span>
-                                        <span class="badge bg-danger"
-                                            *ngIf="pago.status === 'RECHAZADO'">Rechazado</span>
-                                    </td>
+                                        <th scope="row">
+                                            <a (click)="openViewModal(pago)" href="javascript:void(0)"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#viewPago">{{pago.referencia}}</a>
+                                        </th>
+                                        <th>{{pago.cliente?.username}}</th>
+                                        <td>{{pago.bank_destino}}</td>
+                                        <td>{{pago.metodo_pago|slice:0:8}}...</td>
+                                        <td>{{pago.amount|currency:'Bs.'}} </td>
+                                        <td>{{pago.tasaBCV|currency:'Bs.'}}</td>
+                                        <td>{{pago.fecha_pago | date:'MMM d, y'}}</td>
+                                        <td>
+                                            <span class="badge bg-success"
+                                                *ngIf="pago.status === 'APROBADO'">Aprobado</span>
+                                            <span class="badge bg-warning"
+                                                *ngIf="pago.status === 'PENDIENTE'">Pendiente</span>
+                                            <span class="badge bg-danger"
+                                                *ngIf="pago.status === 'RECHAZADO'">Rechazado</span>
+                                        </td>
 
-                                    <td>{{pago.createdAt | date:'MMM d, y'}}</td>
-                                    <td>{{pago.updatedAt | date:'MMM d, y'}}</td>
+                                        <td>{{pago.createdAt | date:'MMM d, y'}}</td>
+                                        <td>{{pago.updatedAt | date:'MMM d, y'}}</td>
 
-                                    <td>
-                                        <select class="form-select fw-bolder" [(ngModel)]="pago.status"
-                                            (change)="cambiarStatus(pago)" [ngClass]="{
+                                        <td>
+                                            <select class="form-select fw-bolder" [(ngModel)]="pago.status"
+                                                (change)="cambiarStatus(pago)" [ngClass]="{
                                                 'border-success text-success': pago.status === 'APROBADO',
                                                 'border-warning text-warning': pago.status === 'PENDIENTE',
                                                 'border-danger text-danger': pago.status === 'RECHAZADO'
                                             }">
-                                            <option value="APROBADO">Aprobado</option>
-                                            <option value="PENDIENTE">Pendiente</option>
-                                            <option value="RECHAZADO">Rechazado</option>
-                                        </select>
+                                                <option value="APROBADO">Aprobado</option>
+                                                <option value="PENDIENTE">Pendiente</option>
+                                                <option value="RECHAZADO">Rechazado</option>
+                                            </select>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <pagination-controls (pageChange)="p = $event"
                             [style.display]="displaycomponent"></pagination-controls>
                     </div>
