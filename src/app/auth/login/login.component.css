@@ -185,6 +185,7 @@ button:hover {
     transition: .8s ease-in-out;
     justify-content: center;
     align-content: center;
+    z-index: 9999;
 }
 
 .login label {
@@ -221,6 +222,8 @@ button:hover {
 #chk:checked~.login label {
     transform: scale(1);
 }
+
+
 
 #chk:checked~.login label h1 {
     transform: translate(0px, 30px);
@@ -298,7 +301,7 @@ button:hover {
     }
     .login {
         height: 100vh;
-        transform: translateY(20px);
+        transform: translateY(60px);
         border-radius: 140% / 10%;
     }
     #chk:checked~.login {
