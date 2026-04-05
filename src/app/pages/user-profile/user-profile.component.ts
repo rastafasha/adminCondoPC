@@ -17,6 +17,9 @@ import { ModalInfoFacturaComponent } from '../../components/modal-info-factura/m
 import { FacturacionService } from '../../services/facturacion.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ModalFacturaDetalleComponent } from '../../components/modal-factura-detalle/modal-factura-detalle.component';
+import { ResidenciaService } from '../../services/residencia.service';
+import { LocalService } from '../../services/local.service';
+import { OficinaService } from '../../services/oficina.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -57,6 +60,9 @@ export class UserProfileComponent implements OnInit {
     private userService: UserService,
     private profileService: ProfileService,
     private facturacionService: FacturacionService,
+    private residenciaService: ResidenciaService,
+    private localService: LocalService,
+    private oficinaService: OficinaService,
     private activatedRoute: ActivatedRoute,
 
   ) {
@@ -126,7 +132,6 @@ export class UserProfileComponent implements OnInit {
       tipo: this.tipoSeleccionado = tipo,
       usuarioId: this.usuario?.uid // "69c864171a472a6c0ff761b8"
     };
-    console.log(this.paymentSeleccionado)
 
   }
 
@@ -152,5 +157,44 @@ export class UserProfileComponent implements OnInit {
       this.solicitud_selectedd = null;
     }
   }
+
+ 
+  eliminarPropiedad(unidad: any, tipo: string) {
+  this.tipoSeleccionado = tipo;
+  console.log('Datos de la unidad:', unidad);
+  const idADeliminar = unidad._id;
+
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: "¡No podrás recuperar este registro!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, ¡borrar!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Definimos qué servicio usar según el tipo
+      let servicio;
+      if (tipo === 'residencia') servicio = this.residenciaService.deleteResidencia(idADeliminar);
+      if (tipo === 'oficina') servicio = this.oficinaService.deleteOficina(idADeliminar);
+      if (tipo === 'local') servicio = this.localService.deleteLocal(idADeliminar);
+
+      // Ejecutamos la eliminación
+      if (servicio) {
+        servicio.subscribe({
+          next: () => {
+            Swal.fire('¡Borrado!', 'El registro ha sido eliminado.', 'success');
+            this.ngOnInit(); // O tu método para refrescar la lista
+          },
+          error: (err) => {
+            Swal.fire('Error', 'No se pudo eliminar el registro', 'error');
+          }
+        });
+      }
+    }
+  });
+}
+
 
 }
