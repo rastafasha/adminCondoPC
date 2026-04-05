@@ -96,13 +96,13 @@
 
                                         <td class="text-nowrap text-center">
 
-                                            <a [routerLink]="['/dashboard/user/edit', user.uid]" class="cursor"
+                                            <a [routerLink]="['/dashboard/user/', user.uid]" class="cursor"
                                                 data-toggle="tooltip" data-original-title="Edit">
-                                                <div class="btn btn-success"><i class="fa fa-edit"></i></div>
+                                                <div class="btn btn-success"><i class="fas fa-eye"></i></div>
                                             </a>
-                                            <a (click)="eliminarUser(user)" *ngIf="user.role === 'SUPERADMIN_ROLE'"
+                                            <a (click)="eliminarUser(user)" 
                                                 class="cursor" data-toggle="tooltip" data-original-title="Borrar">
-                                                <div class="btn btn-danger"><i class="fa fa-trash"></i></div>
+                                                <div class="btn btn-danger"><i class="fas fa-trash"></i></div>
                                             </a>
                                         </td>
 
@@ -185,14 +185,14 @@
 
                                         <td class="text-nowrap text-center">
 
-                                            <a [routerLink]="['/dashboard/user/edit', user.uid]" class="cursor"
+                                            <a [routerLink]="['/dashboard/user/', user.uid]" class="cursor"
                                                 data-toggle="tooltip" data-original-title="Edit">
-                                                <div class="btn btn-success"><i class="fa fa-edit"></i></div>
+                                                <div class="btn btn-success"><i class="fas fa-eye"></i></div>
                                             </a>
                                             <a (click)="eliminarUser(user)"
                                                 *ngIf="user.role === 'SUPERADMIN_ROLE' && user.uid !== '69cafdbaaa6b8c81375e4249'"
                                                 class="cursor" data-toggle="tooltip" data-original-title="Borrar">
-                                                <div class="btn btn-danger"><i class="fa fa-trash"></i></div>
+                                                <div class="btn btn-danger"><i class="fas fa-trash"></i></div>
                                             </a>
                                         </td>
 

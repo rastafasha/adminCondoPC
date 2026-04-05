@@ -20,7 +20,7 @@ export class Facturacion {
     detalles: DetalleFactura[];
 
     // --- Campos de Impuestos ---
-    porcentajeIva: number;
+    ivaPorcentaje: number;
     aplicaRetencion: boolean;
     montoRetencion: number;
     otrosCargos: number;
@@ -36,7 +36,7 @@ export class Facturacion {
         this.estado = 'PENDIENTE';
         this.detalles = [];
         this.aplicaRetencion = false;
-        this.porcentajeIva = 16;
+        this.ivaPorcentaje = 16;
         this.otrosCargos = 0;
         this.montoRetencion = 0;
     }

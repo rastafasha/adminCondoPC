@@ -7,11 +7,11 @@ import { Residencia } from '../../models/residencia';
 import { FacturacionService } from '../../services/facturacion.service';
 import Swal from 'sweetalert2';
 import { TasabcvService } from '../../services/tasabcv.service';
-
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-modal-info-factura',
   imports: [CommonModule,
-     LoadingComponent, 
+    LoadingComponent,
     ReactiveFormsModule],
   templateUrl: './modal-info-factura.component.html',
   styleUrl: './modal-info-factura.component.css'
@@ -27,13 +27,15 @@ export class ModalInfoFacturaComponent implements OnChanges {
   factura!: Facturacion;
   isLoading: boolean = false;
   residencia: Residencia | null = null;
-  tipoInmueble!:string;
-  tipoSeleccionado!:string;
-  tasaBCV!:number;
-  
+  tipoInmueble!: string;
+  tipoSeleccionado!: string;
+  tasaBCV!: number;
+  pdfUrl: SafeResourceUrl | null = null;
+
   constructor(private fb: FormBuilder,
     private facturaService: FacturacionService,
-    private tasaService: TasabcvService
+    private tasaService: TasabcvService,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -42,8 +44,8 @@ export class ModalInfoFacturaComponent implements OnChanges {
     this.getTasadia();
   }
 
-  getTasadia(){
-     this.tasaService.getUltimaTasa().subscribe((rate:any) => {
+  getTasadia() {
+    this.tasaService.getUltimaTasa().subscribe((rate: any) => {
       this.tasaBCV = rate.precio_dia; // Carga automática para ahorrar tiempo
       this.facturaForm.patchValue({ tasaBCV: this.tasaBCV });
     });
@@ -52,7 +54,7 @@ export class ModalInfoFacturaComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['paymentSeleccionado'] && this.paymentSeleccionado) {
       const data = this.paymentSeleccionado;
-
+      console.log(this.paymentSeleccionado)
       if (this.facturaForm && data) {
         this.facturaForm.patchValue({
           // 1. El ID del Propietario (importante para el modelo Facturacion)
@@ -91,7 +93,7 @@ export class ModalInfoFacturaComponent implements OnChanges {
       usuarioId: ['', Validators.required],
       mes: [new Date().getMonth() + 1, [Validators.required, Validators.min(1), Validators.max(12)]],
       anio: [new Date().getFullYear(), Validators.required],
-      porcentajeIva: [16, Validators.required],
+      ivaPorcentaje: [16, Validators.required],
       aplicaRetencion: [false],
       montoRetencion: [0],
       otrosCargos: [0],
@@ -101,8 +103,8 @@ export class ModalInfoFacturaComponent implements OnChanges {
       montoBase: [0, [Validators.required, Validators.min(0)]],
       descripcion: ['', Validators.required],
       origen: [''], // Lo dejamos vacío inicialmente
-      tasaBCV: [0,[Validators.required, Validators.min(0)]] // Lo dejamos vacío inicialmente
-      
+      tasaBCV: [0, [Validators.required, Validators.min(0)]] // Lo dejamos vacío inicialmente
+
     });
   }
 
@@ -125,7 +127,7 @@ export class ModalInfoFacturaComponent implements OnChanges {
 
   get totalCalculado(): number {
     const base = this.facturaForm.get('montoBase')?.value || 0;
-    const iva = this.facturaForm.get('porcentajeIva')?.value || 0;
+    const iva = this.facturaForm.get('ivaPorcentaje')?.value || 0;
     const otros = this.facturaForm.get('otrosCargos')?.value || 0;
     const retencion = this.facturaForm.get('montoRetencion')?.value || 0;
 
@@ -138,15 +140,18 @@ export class ModalInfoFacturaComponent implements OnChanges {
       this.facturaForm.markAllAsTouched();
       return;
     }
-
+    this.isLoading = true;
     const val = this.facturaForm.value;
+
+    const montoBase = Number(val.montoBase) || 0;
+    const porc = Number(val.ivaPorcentaje) || 0;
 
     // Mapeo al modelo Facturacion 
     const payload: Facturacion = {
       usuario: val.usuarioId,
       mes: val.mes,
       anio: val.anio,
-      porcentajeIva: val.porcentajeIva,
+      ivaPorcentaje: val.ivaPorcentaje,
       aplicaRetencion: val.aplicaRetencion,
       montoRetencion: val.montoRetencion,
       otrosCargos: val.otrosCargos,
@@ -157,8 +162,8 @@ export class ModalInfoFacturaComponent implements OnChanges {
         propiedadId: val.propiedadId,
         montoBase: val.montoBase,
         descripcion: val.descripcion,
-        ivaPorcentaje: val.porcentajeIva,
-        montoIva: val.porcentajeIva,
+        ivaPorcentaje: val.ivaPorcentaje,
+        montoIva: (montoBase * (porc / 100)) 
       }]
     };
 
@@ -166,21 +171,57 @@ export class ModalInfoFacturaComponent implements OnChanges {
 
     // 2. Llamamos al servicio (asumiendo que se llama facturaService)
     this.facturaService.facturacionIndividual(payload).subscribe({
-      next: (res:any) => {
-        console.log('Factura generada con éxito', res);
-        //abrimos el pdf
+      next: (res: any) => {
+        this.isLoading = false;
         const file = new Blob([res], { type: 'application/pdf' });
         const fileURL = URL.createObjectURL(file);
-        window.open(fileURL);
+        
+        // Creamos una URL segura para Angular
+        const safeURL = this.sanitizer.bypassSecurityTrustResourceUrl(fileURL);
         // Aquí puedes redirigir o mostrar un mensaje de éxito
-        Swal.fire('¡Éxito!', 'La factura ha sido generada correctamente.', 'success');  
-        this.refreshProjectList.emit(); // Para que el padre actualice la lista de facturas
-        this.onClose(); // Cerrar el modal después de generar la factura
+        Swal.fire({
+          title: '¡Factura Generada!',
+          html: `
+            <iframe src="${fileURL}" width="100%" height="500px" style="border: none;"></iframe>
+            <div class="mt-3">La factura se ha guardado correctamente.</div>
+        `,
+          width: '80%',
+          confirmButtonText: 'Cerrar y Finalizar',
+          confirmButtonColor: '#3085d6',
+          allowOutsideClick: false
+        }).then(() => {
+          // Limpiamos la memoria del navegador al cerrar
+          // Limpieza y reset
+          URL.revokeObjectURL(fileURL);
+          // Guardamos los valores que NO queremos perder
+  const { usuarioId, anio, tasaBCV, ivaPorcentaje, propiedadId, origen } = this.facturaForm.value;
+  const mesActual = Number(this.facturaForm.get('mes')?.value) || 0;
+const proximoMes = mesActual < 12 ? mesActual + 1 : 1;
+          // Reseteamos el formulario pero REINYECTAMOS los valores fijos
+          this.facturaForm.reset({
+            usuarioId,
+            anio,
+            tasaBCV,
+            ivaPorcentaje,
+            propiedadId,
+            origen,
+            mes: proximoMes, 
+            montoRetencion: 0,
+            otrosCargos: 0
+          });
+          
+          // Aseguramos que las validaciones visuales de error se quiten
+          this.facturaForm.markAsPristine();
+          this.facturaForm.markAsUntouched();
+
+          this.refreshProjectList.emit();
+        });
 
       },
       error: (err) => {
+        this.isLoading = false; // <--- CRÍTICO: Desbloquea el botón si falla la red
         console.error('Error al generar la factura', err);
-        console.error('Error al generar el PDF', err);
+        Swal.fire('Error', 'No se pudo conectar con el servidor para generar el PDF', 'error');
       }
     });
   }
@@ -188,6 +229,8 @@ export class ModalInfoFacturaComponent implements OnChanges {
   onClose() {
     this.facturaForm.reset();
     this.closeModal.emit();
+    // this.ngOnInit();
+
   }
 }
 

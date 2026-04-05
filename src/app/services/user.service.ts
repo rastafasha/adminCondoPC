@@ -230,7 +230,7 @@ export class UserService {
   }
 
 
-  deleteById(usuario: User){
+  deleteById(usuario: any){
     const url = `${base_url}/usuarios/delete/${usuario}`;
     return this.http.delete(url, this.headers)
   }

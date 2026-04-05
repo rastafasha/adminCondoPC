@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
 import { HttpBackend, HttpClient, HttpHandler } from '@angular/common/http';
-
 import { CommonModule, Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
@@ -9,7 +7,6 @@ import { User } from '../../models/user';
 import { BusquedasService } from '../../services/busqueda.service';
 import { UserService } from '../../services/user.service';
 import { RouterLink } from '@angular/router';
-import { ImagenPipe } from '../../pipes/imagen.pipe';
 import { BackButtnComponent } from '../../shared/backButtn/backButtn.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -116,7 +113,7 @@ export class UsersComponent implements OnInit {
       confirmButtonText: 'Si, Borrar!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userService.deleteById(user).subscribe(
+        this.userService.deleteById(user.uid).subscribe(
           response => {
             this.getUsers();
           }

@@ -115,6 +115,7 @@ unidadSeleccionada: any = null;
 
   onCloseModal(): void {
     this.paymentSeleccionado = null;
+    this.ngOnInit();
   }
 
   
